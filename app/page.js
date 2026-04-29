@@ -1,4 +1,100 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { SiteChrome } from "../components/site-chrome";
+import {
+  CTASection,
+  LinkGrid,
+  SectionHead,
+  StatusBadge,
+} from "../components/site-sections";
+import { LiveStats } from "../components/live-stats";
+import {
+  capabilityCards,
+  featuredProjects,
+  profileLinks,
+  siteMeta,
+  projectArchive,
+} from "../lib/site-data";
+import { useState } from "react";
+import { ProjectModal } from "../components/project-modal";
+
+function HeroVisual() {
+  return (
+    <div className="hero-visual" aria-hidden="true">
+      <div className="visual-core">
+        <div className="core-ring core-ring--1" />
+        <div className="core-ring core-ring--2" />
+        <div className="core-ring core-ring--3" />
+      </div>
+
+      <div className="visual-orbit visual-orbit--slow">
+        <div
+          className="orbit-node node--coral"
+          style={{ top: "0", left: "50%" }}
+        />
+      </div>
+
+      <div className="visual-orbit visual-orbit--fast">
+        <div
+          className="orbit-node node--mint"
+          style={{ bottom: "20%", right: "10%" }}
+        />
+        <div
+          className="orbit-node node--gold"
+          style={{ top: "20%", left: "10%" }}
+        />
+      </div>
+
+      <svg className="visual-lines" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="transparent" />
+            <stop offset="50%" stopColor="var(--forest)" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="transparent" />
+          </linearGradient>
+        </defs>
+        <circle
+          cx="100"
+          cy="100"
+          r="80"
+          stroke="url(#line-grad)"
+          strokeWidth="0.5"
+          fill="none"
+        />
+        <line
+          x1="100"
+          y1="100"
+          x2="180"
+          y2="40"
+          stroke="var(--forest)"
+          strokeWidth="0.5"
+          strokeDasharray="4 4"
+        />
+        <line
+          x1="100"
+          y1="100"
+          x2="20"
+          y2="150"
+          stroke="var(--forest)"
+          strokeWidth="0.5"
+          strokeDasharray="4 4"
+        />
+        <line
+          x1="100"
+          y1="100"
+          x2="160"
+          y2="160"
+          stroke="var(--forest)"
+          strokeWidth="0.5"
+          strokeDasharray="4 4"
+        />
+      </svg>
+
+      <div className="visual-data-label">SYS_READY: A-001</div>
+    </div>
+  );
+}
 
 export default function Home() {
   return (

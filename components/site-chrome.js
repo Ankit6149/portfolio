@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { primaryNav, profileLinks, siteMeta } from "../lib/site-data";
+import { useEffect, useState } from "react";
+import { primaryNav, profileLinks, resumeData, siteMeta } from "../lib/site-data";
+import { ResumePreview, ResumeToolbar } from "./resume-preview";
 import { ThemeToggle } from "./theme-toggle";
+import { FloatingTerminal } from "./floating-terminal";
 
 function LogoGlyph() {
   return (
@@ -55,8 +58,48 @@ function ArrowUpRightIcon() {
   );
 }
 
+function CloseIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      aria-hidden="true"
+    >
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
 export function SiteChrome({ children }) {
   const pathname = usePathname();
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isResumeOpen) {
+      return;
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === "Escape") {
+        setIsResumeOpen(false);
+      }
+    }
+
+    document.documentElement.classList.add("modal-open");
+    document.body.classList.add("modal-open");
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.documentElement.classList.remove("modal-open");
+      document.body.classList.remove("modal-open");
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isResumeOpen]);
 
   return (
     <main className="page-shell">
@@ -79,7 +122,8 @@ export function SiteChrome({ children }) {
                   href={href}
                   className={`nav-link${isActive ? " is-active" : ""}`}
                 >
-                  <span>{index}</span> {label}
+                  <span>{index}</span>
+                  <b>{label}</b>
                 </Link>
               );
             })}
@@ -87,9 +131,16 @@ export function SiteChrome({ children }) {
 
           <div className="nav-actions">
             <ThemeToggle />
-            <Link href="/credentials" className="button">
-              Open Archive
-            </Link>
+            <button
+              type="button"
+              className={`button${isResumeOpen ? " is-active" : ""}`}
+              aria-expanded={isResumeOpen}
+              aria-controls="resume-modal"
+              onClick={() => setIsResumeOpen((isOpen) => !isOpen)}
+            >
+              <span>{isResumeOpen ? "Close" : "Resume"}</span>
+              {isResumeOpen ? <CloseIcon /> : <LogoGlyph />}
+            </button>
             <Link href="/contact" className="button button-solid">
               Start Project
             </Link>
@@ -150,6 +201,48 @@ export function SiteChrome({ children }) {
           clarity.
         </p>
       </footer>
+      <FloatingTerminal />
+
+      {isResumeOpen ? (
+        <div
+          id="resume-modal"
+          className="resume-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="resume-modal-title"
+        >
+          <button
+            type="button"
+            className="resume-modal-backdrop"
+            aria-label="Close resume preview"
+            onClick={() => setIsResumeOpen(false)}
+          />
+
+          <div className="container resume-modal-panel resume-layout">
+            <button
+              type="button"
+              className="resume-modal-close"
+              aria-label="Close resume preview"
+              onClick={() => setIsResumeOpen(false)}
+            >
+              <CloseIcon />
+            </button>
+
+            <aside className="resume-side resume-modal-side">
+              <div className="section-kicker">Resume</div>
+              <h2 id="resume-modal-title" className="resume-side-title">
+                Resume
+              </h2>
+              <p>Preview the resume here, then download it in your preferred format.</p>
+              <ResumeToolbar resume={resumeData} />
+            </aside>
+
+            <article className="resume-preview-frame" aria-label="Resume preview">
+              <ResumePreview resume={resumeData} />
+            </article>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }

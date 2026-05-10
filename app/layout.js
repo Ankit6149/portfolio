@@ -1,54 +1,99 @@
-import {
-  JetBrains_Mono,
-  Plus_Jakarta_Sans,
-  Space_Grotesk,
-} from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono, Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
 const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
   variable: "--font-space",
+  subsets: ["latin"],
 });
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-body",
-});
-
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-body",
+  subsets: ["latin"],
 });
 
 export const metadata = {
-  title: "Ankit Bhardwaj | Portfolio",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "SYSTEM_ALPHA | Ankit Bhardwaj",
+    template: "%s | Ankit Bhardwaj",
+  },
   description:
-    "Technical minimalist portfolio foundation with structural precision and blueprint-inspired layout.",
+    "Portfolio of Ankit Bhardwaj, a software engineer building full-stack systems, AI integrations, and research-driven web applications.",
+  keywords: [
+    "Ankit Bhardwaj",
+    "Software Engineer",
+    "Full Stack Developer",
+    "Next.js",
+    "React",
+    "AI Researcher",
+    "Portfolio",
+  ],
+  authors: [{ name: "Ankit Bhardwaj" }],
+  creator: "Ankit Bhardwaj",
+  openGraph: {
+    title: "SYSTEM_ALPHA | Ankit Bhardwaj",
+    description:
+      "Full-stack systems, AI integrations, research work, credentials, and project archive.",
+    url: "/",
+    siteName: "SYSTEM_ALPHA",
+    images: [
+      {
+        url: "/system-alpha-core.png",
+        width: 1200,
+        height: 630,
+        alt: "SYSTEM_ALPHA portfolio preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SYSTEM_ALPHA | Ankit Bhardwaj",
+    description:
+      "Full-stack systems, AI integrations, research work, credentials, and project archive.",
+    images: ["/system-alpha-core.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} ${jetBrainsMono.variable}`}
-      >
+      <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('portfolio-theme');
-                  var theme = stored;
-                  if (theme !== 'light' && theme !== 'dark') {
-                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                  }
-                  document.documentElement.dataset.theme = theme;
-                } catch (e) {}
-              })();
+              try {
+                var stored = localStorage.getItem("portfolio-theme");
+                var theme = stored === "light" || stored === "dark"
+                  ? stored
+                  : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                document.documentElement.dataset.theme = theme;
+              } catch (_) {}
             `,
           }}
         />
+      </head>
+      <body
+        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${inter.variable} antialiased`}
+      >
         {children}
+        <Analytics />
       </body>
     </html>
   );

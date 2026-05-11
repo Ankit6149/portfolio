@@ -66,7 +66,7 @@ export function TechStrip() {
 
         {/* Right label */}
         <div className="tech-strip-label tech-strip-label--right">
-          <span>[ {techIcons.length}+ Technologies ]</span>
+          <span>[ 43+ TECHNOLOGIES ]</span>
         </div>
       </div>
     </section>

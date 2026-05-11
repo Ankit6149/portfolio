@@ -61,7 +61,7 @@ export default function ExperiencePage() {
               kicker="Professional snapshot"
               code="[A] ROLE [B] FOCUS [C] LOCALE"
             />
-            <div className="panel panel--bordered">
+            <div className="panel panel--plain">
               <InfoList items={quickFacts} />
             </div>
           </div>

@@ -114,7 +114,8 @@ export function InfoList({ items }) {
 }
 
 export function CTASection() {
-  const [status, setStatus] = useState("idle"); // idle, loading, success
+  const [status, setStatus] = useState("idle"); // idle, loading, success, error
+  const [statusMessage, setStatusMessage] = useState("");
   const [environment, setEnvironment] = useState("Professional Inquiry");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -126,22 +127,36 @@ export function CTASection() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const form = e.currentTarget;
     setStatus("loading");
+    setStatusMessage("");
     
-    const formData = new FormData(e.target);
+    const formData = new FormData(form);
     formData.append("environment", environment);
-    const result = await submitIntegrationRequest(formData);
+    const result = await submitIntegrationRequest(formData).catch((error) => {
+      console.error("[SYSTEM_ALPHA] Client action failed:", error);
+      return {
+        success: false,
+        message: "SYSTEM ERROR. INITIALIZATION FAILED.",
+      };
+    });
     
     if (result.success) {
       setStatus("success");
+      setStatusMessage(result.message);
+      form.reset();
+      return;
     }
+
+    setStatus("error");
+    setStatusMessage(result.message || "MAIL RELAY FAILED. CHECK SERVER MAIL LOGS.");
   }
 
   if (status === "success") {
     return (
       <section className="cta-section">
         <div className="container">
-          <div className="cta-card success-state" style={{ borderRadius: 0, border: '1px solid var(--forest)', position: 'relative' }}>
+          <div className="cta-card success-state" style={{ borderRadius: 0, border: "1px solid rgba(58, 58, 56, 0.2)", position: "relative" }}>
             <div className="corner-marker top-left" /><div className="corner-marker top-right" /><div className="corner-marker bottom-left" /><div className="corner-marker bottom-right" />
             <div className="cta-head">
               <div className="status-dot success" style={{ background: 'var(--mint)', boxShadow: '0 0 15px var(--mint)' }} />
@@ -196,6 +211,14 @@ export function CTASection() {
             <p>Ready To Initialize Collaboration?</p>
           </div>
           <form className="form-stack" onSubmit={handleSubmit} style={{ opacity: status === "loading" ? 0.7 : 1, pointerEvents: status === "loading" ? 'none' : 'auto' }}>
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              style={{ display: "none" }}
+            />
             <div className="field">
               <label htmlFor="operator">Operator Identification</label>
               <input 
@@ -203,6 +226,7 @@ export function CTASection() {
                 name="operator" 
                 type="text" 
                 placeholder="Enter name or ID" 
+                maxLength={80}
                 required 
                 disabled={status === "loading"}
               />
@@ -214,6 +238,7 @@ export function CTASection() {
                 name="email" 
                 type="email" 
                 placeholder="address@network.org" 
+                maxLength={120}
                 required 
                 disabled={status === "loading"}
               />
@@ -223,7 +248,7 @@ export function CTASection() {
               <div className="custom-select-container" style={{ pointerEvents: status === "loading" ? 'none' : 'auto' }}>
                 <div 
                   className={`custom-select-trigger ${isDropdownOpen ? 'open' : ''}`} 
-                  onClick={() => !isDropdownOpen && status !== "loading" && setIsDropdownOpen(true)}
+                  onClick={() => status !== "loading" && setIsDropdownOpen(!isDropdownOpen)}
                   style={{ cursor: status === "loading" ? 'not-allowed' : 'pointer' }}
                 >
                   {options.find(opt => opt.value === environment).label}
@@ -251,6 +276,7 @@ export function CTASection() {
                 name="message" 
                 placeholder="Initialize message sequence (Optional)..." 
                 rows={4} 
+                maxLength={2000}
                 style={{ resize: 'none' }} 
                 disabled={status === "loading"}
               />
@@ -259,8 +285,22 @@ export function CTASection() {
               {status === "loading" ? "Executing Sequence..." : "Execute Initialization Sequence"}
             </button>
           </form>
+          {status === "error" ? (
+            <p className="cta-error" role="alert">
+              {statusMessage}
+            </p>
+          ) : null}
           <div className="cta-status">
-            <StatusBadge text={status === "loading" ? "Syncing Terminal..." : "All Systems Nominal"} signalColor={status === "loading" ? "#FFC107" : "#9EFFBF"} />
+            <StatusBadge
+              text={
+                status === "loading"
+                  ? "Syncing Terminal..."
+                  : status === "error"
+                    ? "Relay Requires Attention"
+                    : "All Systems Nominal"
+              }
+              signalColor={status === "loading" ? "#FFC107" : status === "error" ? "#FF6B6B" : "#9EFFBF"}
+            />
           </div>
         </div>
       </div>

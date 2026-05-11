@@ -56,7 +56,7 @@ export default function AboutPage() {
             <div className="panel panel--bordered">
               <p className="bento-body">
                 I believe in shipping software that not only works flawlessly but is built to scale. 
-                Whether I'm optimizing database queries, integrating machine learning capabilities, or crafting 
+                Whether I&apos;m optimizing database queries, integrating machine learning capabilities, or crafting 
                 responsive user interfaces, my goal is always to deliver clean, maintainable, and 
                 efficient code. I thrive in environments that challenge me to solve complex problems 
                 while keeping the end-user experience paramount.

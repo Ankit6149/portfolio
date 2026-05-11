@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 const STORAGE_KEY = "portfolio-theme";
 
 function SunIcon() {
@@ -21,55 +19,20 @@ function MoonIcon() {
   );
 }
 
-function getInitialTheme() {
-  if (typeof window === "undefined") {
-    return "light";
-  }
-
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark") {
-    return stored;
+function resolveTheme() {
+  const current = document.documentElement.dataset.theme;
+  if (current === "light" || current === "dark") {
+    return current;
   }
 
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 export function ThemeToggle() {
-  const [mounted, setMounted] = useState(false);
-  const [theme, setTheme] = useState("light");
-
-  useEffect(() => {
-    setMounted(true);
-    setTheme(getInitialTheme());
-  }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      document.documentElement.dataset.theme = theme;
-      window.localStorage.setItem(STORAGE_KEY, theme);
-    }
-  }, [theme, mounted]);
-
   function toggleTheme() {
-    setTheme((current) => (current === "dark" ? "light" : "dark"));
-  }
-
-  // Prevent hydration mismatch
-  if (!mounted) {
-    return (
-      <button
-        type="button"
-        className="button theme-toggle"
-        aria-label="Switch to dark mode"
-        title="Switch to dark mode"
-        suppressHydrationWarning
-      >
-        <span className="theme-toggle__icon">
-          <MoonIcon />
-        </span>
-        <span>Night</span>
-      </button>
-    );
+    const nextTheme = resolveTheme() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = nextTheme;
+    window.localStorage.setItem(STORAGE_KEY, nextTheme);
   }
 
   return (
@@ -77,14 +40,15 @@ export function ThemeToggle() {
       type="button"
       className="button theme-toggle"
       onClick={toggleTheme}
-      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      suppressHydrationWarning
+      aria-label="Toggle color theme"
+      title="Toggle color theme"
     >
-      <span className="theme-toggle__icon">
-        {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+      <span className="theme-toggle__icon theme-toggle__icon--moon">
+        <MoonIcon />
       </span>
-      <span>{theme === "dark" ? "Light" : "Night"}</span>
+      <span className="theme-toggle__icon theme-toggle__icon--sun">
+        <SunIcon />
+      </span>
     </button>
   );
 }

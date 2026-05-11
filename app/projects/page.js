@@ -42,6 +42,18 @@ export default function ProjectsPage() {
                     <h2 className="project-title">{project.name}</h2>
                     <p className="project-stack">{project.stack}</p>
                     <p className="bento-body">{project.summary}</p>
+                    <div className="feature-links" style={{ marginTop: '1.5rem', display: 'flex', gap: '1.5rem' }}>
+                      {project.live && (
+                        <a href={project.live} target="_blank" rel="noreferrer" className="inline-link" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--forest)', fontWeight: 700 }}>
+                          [ LIVE_DEPLOYMENT ]
+                        </a>
+                      )}
+                      {project.github && (
+                        <a href={project.github} target="_blank" rel="noreferrer" className="inline-link" style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '2px', color: 'var(--forest)', fontWeight: 700 }}>
+                          [ SOURCE_VAULT ]
+                        </a>
+                      )}
+                    </div>
                   </div>
                   <div className="feature-side">
                     <div className="info-row">
@@ -60,7 +72,6 @@ export default function ProjectsPage() {
         </section>
 
         <section className="section section-divider">
-          <ProjectBackgroundIcons />
           <div className="container">
             <SectionHead
               title="Project Archive"

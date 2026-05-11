@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export function ProjectModal({ project, onClose }) {
   if (!project) return null;
 
@@ -15,17 +17,18 @@ export function ProjectModal({ project, onClose }) {
         <div className="modal-corner corner-br" />
 
         <button
+          type="button"
           className="project-modal-close"
           onClick={onClose}
           aria-label="Close"
         >
-          ✕
+          x
         </button>
 
         <div className="project-modal-info">
           <div className="project-modal-header">
             <div className="bento-label" style={{ color: project.color || "var(--coral)" }}>
-              {project.status || "Active"} · {project.id || "FT"}
+              {project.status || "Active"} | {project.id || "FT"}
             </div>
             <h2 className="project-modal-title">{project.name}</h2>
             <p className="project-stack">{project.stack}</p>
@@ -43,7 +46,7 @@ export function ProjectModal({ project, onClose }) {
                 rel="noreferrer"
                 className="button button-solid"
               >
-                View Code →
+                View Code -&gt;
               </a>
             )}
             {project.live && (
@@ -53,7 +56,7 @@ export function ProjectModal({ project, onClose }) {
                 rel="noreferrer"
                 className="button"
               >
-                Open Live Site →
+                Open Live Site -&gt;
               </a>
             )}
           </div>
@@ -62,7 +65,13 @@ export function ProjectModal({ project, onClose }) {
         <div className={`project-modal-preview ${project.live && !project.previewImage ? 'is-live' : 'is-static'}`}>
           {project.previewImage ? (
             <div className="preview-image-wrap">
-              <img src={project.previewImage} alt={`${project.name} preview`} />
+              <Image
+                src={project.previewImage}
+                alt={`${project.name} preview`}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="preview-image"
+              />
             </div>
           ) : project.live ? (
             <div className="iframe-wrapper">
@@ -71,7 +80,14 @@ export function ProjectModal({ project, onClose }) {
                 title={`${project.name} preview`}
                 loading="lazy"
               />
-              <div className="iframe-overlay-click" onClick={() => window.open(project.live, '_blank')} />
+              <button
+                type="button"
+                className="iframe-overlay-click"
+                aria-label={`Open ${project.name} live preview in a new tab`}
+                onClick={() =>
+                  window.open(project.live, "_blank", "noopener,noreferrer")
+                }
+              />
             </div>
           ) : (
             <div className="project-modal-placeholder">

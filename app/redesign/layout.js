@@ -1,13 +1,14 @@
 import "lenis/dist/lenis.css";
 import "./redesign.css";
 import "./refinements.css";
+import "./continuous.css";
 
 export const metadata = {
   title: {
-    absolute: "Portfolio Redesign Study | Ankit Bhardwaj",
+    absolute: "Portfolio Preview | Ankit Bhardwaj",
   },
   description:
-    "A motion-led portfolio design study for Ankit Bhardwaj. This route is an isolated prototype and does not replace the current portfolio.",
+    "An interactive portfolio preview for Ankit Bhardwaj. This review route remains separate from the production portfolio.",
   robots: {
     index: false,
     follow: false,

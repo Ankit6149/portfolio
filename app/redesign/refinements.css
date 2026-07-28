@@ -1,0 +1,44 @@
+.origin,
+.observations,
+.work-intro,
+.project-story,
+.practice,
+.beyond,
+.closing {
+  scroll-margin-top: 4.5rem;
+}
+
+/* Keep the verified LeetCode count truthful at every scroll position. */
+.practice-number__value {
+  position: relative;
+  display: inline-block;
+  min-width: 3.05ch;
+  color: transparent;
+}
+
+.practice-number__value::after {
+  position: absolute;
+  inset: 0 auto auto 0;
+  color: var(--paper-light);
+  content: "806";
+}
+
+@media (max-width: 800px) {
+  .project-story__sticky {
+    min-height: 56rem;
+  }
+
+  .project-story__visual {
+    top: 15%;
+    height: 40%;
+  }
+
+  .project-story__copy {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .project-story__copy > p {
+    line-height: 1.52;
+  }
+}

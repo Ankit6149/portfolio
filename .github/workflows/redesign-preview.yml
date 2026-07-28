@@ -1,4 +1,4 @@
-name: Redesign Preview Validation
+name: Connected Portfolio Validation
 
 on:
   push:
@@ -31,14 +31,14 @@ jobs:
       - name: Build portfolio
         run: npm run build
 
-      - name: Run redesign browser checks
+      - name: Run connected portfolio browser checks
         run: npm run test:redesign
 
-      - name: Upload redesign screenshots
+      - name: Upload portfolio scene captures
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: redesign-browser-screenshots
+          name: connected-portfolio-scenes
           path: |
             test-results/*.png
             playwright-report/

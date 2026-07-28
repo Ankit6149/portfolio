@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:redesign": "playwright test tests/redesign.spec.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -22,6 +23,7 @@
     "resend": "^6.12.2"
   },
   "devDependencies": {
+    "@playwright/test": "1.61.1",
     "@tailwindcss/postcss": "^4",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",

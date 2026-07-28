@@ -12,14 +12,35 @@ const requiredSections = [
   ".closing",
 ];
 
+const ignoredLocalResources = ["/_vercel/insights/script.js"];
+
+function isIgnoredLocalResource(url) {
+  return ignoredLocalResources.some((resource) => url.includes(resource));
+}
+
+async function captureScene(page, testInfo, name) {
+  await page.waitForTimeout(350);
+  await page.screenshot({
+    path: `test-results/redesign-${testInfo.project.name}-${name}.png`,
+    fullPage: false,
+  });
+}
+
 test("redesign renders its story and scroll layers without browser errors", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
+  const failedResponses = [];
 
   page.on("pageerror", (error) => pageErrors.push(error.message));
   page.on("console", (message) => {
-    if (message.type() === "error") {
-      consoleErrors.push(message.text());
+    const locationUrl = message.location().url || "";
+    if (message.type() === "error" && !isIgnoredLocalResource(locationUrl)) {
+      consoleErrors.push(`${message.text()}${locationUrl ? ` (${locationUrl})` : ""}`);
+    }
+  });
+  page.on("response", (response) => {
+    if (response.status() >= 400 && !isIgnoredLocalResource(response.url())) {
+      failedResponses.push(`${response.status()} ${response.url()}`);
     }
   });
 
@@ -36,20 +57,33 @@ test("redesign renders its story and scroll layers without browser errors", asyn
     await expect(page.locator(selector)).toHaveCount(1);
   }
 
+  await captureScene(page, testInfo, "hero");
+
+  await page.locator(".origin").scrollIntoViewIfNeeded();
+  await captureScene(page, testInfo, "origin");
+
   await page.locator(".project-story--skribli").scrollIntoViewIfNeeded();
   await expect(page.locator(".project-story--skribli .project-story__statement")).toBeVisible();
+  await captureScene(page, testInfo, "skribli");
+
+  await page.locator(".project-story--signalflow").scrollIntoViewIfNeeded();
+  await captureScene(page, testInfo, "signalflow");
+
+  await page.locator(".project-story--emotion").scrollIntoViewIfNeeded();
+  await captureScene(page, testInfo, "research");
 
   await page.locator(".practice").scrollIntoViewIfNeeded();
   await expect(page.locator(".practice-number__value")).toBeVisible();
+  await captureScene(page, testInfo, "practice");
+
+  await page.locator(".beyond").scrollIntoViewIfNeeded();
+  await captureScene(page, testInfo, "beyond");
 
   await page.locator(".closing").scrollIntoViewIfNeeded();
   await expect(page.locator(".closing__links a")).toHaveCount(4);
-
-  await page.screenshot({
-    path: `test-results/redesign-${testInfo.project.name}.png`,
-    fullPage: true,
-  });
+  await captureScene(page, testInfo, "closing");
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);
+  expect(failedResponses).toEqual([]);
 });

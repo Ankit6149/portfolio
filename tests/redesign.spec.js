@@ -26,7 +26,7 @@ async function captureScene(page, testInfo, name) {
   });
 }
 
-test("redesign renders its story and scroll layers without browser errors", async ({ page }, testInfo) => {
+test("redesign renders its connected story without browser errors", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -46,12 +46,14 @@ test("redesign renders its story and scroll layers without browser errors", asyn
 
   await page.goto("/redesign", { waitUntil: "networkidle" });
 
-  await expect(page).toHaveTitle(/Portfolio Redesign Study/);
+  await expect(page).toHaveTitle(/Portfolio Preview/);
   await expect(page.locator(".hero-word--systems")).toContainText("SYSTEMS");
   await expect(page.locator(".hero-word--thinking")).toContainText("THINKING");
   await expect(page.locator(".hero-depth-plane--front")).toContainText(
     "expressed through software",
   );
+  await expect(page.locator(".world__thread")).toHaveCount(1);
+  await expect(page.locator(".section-rail")).toHaveCount(1);
 
   for (const selector of requiredSections) {
     await expect(page.locator(selector)).toHaveCount(1);
@@ -73,15 +75,20 @@ test("redesign renders its story and scroll layers without browser errors", asyn
   await captureScene(page, testInfo, "research");
 
   await page.locator(".practice").scrollIntoViewIfNeeded();
-  await expect(page.locator(".practice-number__value")).toBeVisible();
+  await expect(page.locator(".practice-number__value")).toHaveText("806");
   await captureScene(page, testInfo, "practice");
 
   await page.locator(".beyond").scrollIntoViewIfNeeded();
   await captureScene(page, testInfo, "beyond");
 
   await page.locator(".closing").scrollIntoViewIfNeeded();
-  await expect(page.locator(".closing__links a")).toHaveCount(4);
+  await expect(page.locator(".closing__links > *")).toHaveCount(4);
   await captureScene(page, testInfo, "closing");
+
+  await page.locator(".alpha-entry").click();
+  await expect(page.locator(".alpha-panel")).toBeVisible();
+  await page.locator(".alpha-panel__close").click();
+  await expect(page.locator(".alpha-panel")).toHaveCount(0);
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);

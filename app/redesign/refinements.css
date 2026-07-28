@@ -5,22 +5,14 @@
 .practice,
 .beyond,
 .closing {
-  scroll-margin-top: 4.5rem;
+  scroll-margin-top: 4.75rem;
 }
 
-/* Keep the verified LeetCode count truthful at every scroll position. */
+/* Preserve the verified LeetCode count at every scroll position. */
 .practice-number__value {
   position: relative;
   display: inline-block;
   min-width: 3.05ch;
-  color: transparent;
-}
-
-.practice-number__value::after {
-  position: absolute;
-  inset: 0 auto auto 0;
-  color: var(--paper-light);
-  content: "806";
 }
 
 @media (max-width: 800px) {

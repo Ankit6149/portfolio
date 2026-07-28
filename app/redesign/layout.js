@@ -2,6 +2,7 @@ import "lenis/dist/lenis.css";
 import "./redesign.css";
 import "./refinements.css";
 import "./continuous.css";
+import "./continuous-fixes.css";
 
 export const metadata = {
   title: {

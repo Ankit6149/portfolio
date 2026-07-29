@@ -3,6 +3,8 @@ import "./redesign.css";
 import "./refinements.css";
 import "./continuous.css";
 import "./continuous-fixes.css";
+import "./world-hero.css";
+import RedesignWorldProvider from "./components/world/RedesignWorldProvider";
 
 export const metadata = {
   title: {
@@ -17,5 +19,5 @@ export const metadata = {
 };
 
 export default function RedesignLayout({ children }) {
-  return children;
+  return <RedesignWorldProvider>{children}</RedesignWorldProvider>;
 }

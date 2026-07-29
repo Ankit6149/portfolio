@@ -5,23 +5,11 @@ import { useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { heroWorldAssets as layers } from "../../data/hero-world-assets";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
-
-const layers = {
-  farMountains: "/portfolio-world/scenery/mountains/far-snow.webp",
-  midMountains: "/portfolio-world/scenery/mountains/mid-green.webp",
-  forest: "/portfolio-world/scenery/midground/forest-line.webp",
-  mist: "/portfolio-world/scenery/mist/mist-band.webp",
-  meadow: "/portfolio-world/scenery/ground/meadow.webp",
-  clouds: "/portfolio-world/scenery/sky/clouds.webp",
-  river: "/portfolio-world/water/winding-river.webp",
-  arch: "/portfolio-world/architecture/arches/side-arch.webp",
-  flowerBed: "/portfolio-world/flora/foreground/flower-bed.webp",
-  hangingVines: "/portfolio-world/flora/hanging/hanging-vines.webp",
-};
 
 function DecorativeImage({ className, src, priority = false, sizes = "100vw" }) {
   return (
@@ -34,6 +22,7 @@ function DecorativeImage({ className, src, priority = false, sizes = "100vw" }) 
       sizes={sizes}
       draggable={false}
       aria-hidden="true"
+      unoptimized
     />
   );
 }
@@ -77,44 +66,44 @@ export default function HeroWorld() {
   }, { scope: scene });
 
   return (
-    <div ref={scene} className="hero-world" aria-hidden="true">
-      <div className="hero-world__sky" />
-      <div className="hero-world__light" />
+    <div ref={scene} className="hero-world">
+      <div className="hero-world__sky" aria-hidden="true" />
+      <div className="hero-world__light" aria-hidden="true" />
 
-      <div className="hero-world__layer hero-world__clouds">
+      <div className="hero-world__layer hero-world__clouds" aria-hidden="true">
         <DecorativeImage src={layers.clouds} className="hero-world__image" priority />
       </div>
-      <div className="hero-world__layer hero-world__far-mountains">
+      <div className="hero-world__layer hero-world__far-mountains" aria-hidden="true">
         <DecorativeImage src={layers.farMountains} className="hero-world__image" priority />
       </div>
-      <div className="hero-world__layer hero-world__mid-mountains">
+      <div className="hero-world__layer hero-world__mid-mountains" aria-hidden="true">
         <DecorativeImage src={layers.midMountains} className="hero-world__image" priority />
       </div>
-      <div className="hero-world__layer hero-world__forest">
+      <div className="hero-world__layer hero-world__forest" aria-hidden="true">
         <DecorativeImage src={layers.forest} className="hero-world__image" priority />
       </div>
-      <div className="hero-world__layer hero-world__mist">
+      <div className="hero-world__layer hero-world__mist" aria-hidden="true">
         <DecorativeImage src={layers.mist} className="hero-world__image" priority />
       </div>
-      <div className="hero-world__layer hero-world__arch">
+      <div className="hero-world__layer hero-world__arch" aria-hidden="true">
         <DecorativeImage src={layers.arch} className="hero-world__image" priority sizes="40vw" />
       </div>
-      <div className="hero-world__layer hero-world__river">
+      <div className="hero-world__layer hero-world__river" aria-hidden="true">
         <DecorativeImage src={layers.river} className="hero-world__image hero-world__river-base" priority sizes="70vw" />
         <div className="hero-world__water-light hero-world__water-light--one" />
         <div className="hero-world__water-light hero-world__water-light--two" />
       </div>
-      <div className="hero-world__layer hero-world__meadow">
+      <div className="hero-world__layer hero-world__meadow" aria-hidden="true">
         <DecorativeImage src={layers.meadow} className="hero-world__image" priority />
       </div>
-      <div className="hero-world__layer hero-world__flowers">
+      <div className="hero-world__layer hero-world__flowers" aria-hidden="true">
         <DecorativeImage src={layers.flowerBed} className="hero-world__image" priority sizes="70vw" />
       </div>
-      <div className="hero-world__layer hero-world__vines">
+      <div className="hero-world__layer hero-world__vines" aria-hidden="true">
         <DecorativeImage src={layers.hangingVines} className="hero-world__image" priority sizes="35vw" />
       </div>
 
-      <div className="hero-world__veil" />
+      <div className="hero-world__veil" aria-hidden="true" />
 
       <button
         type="button"

@@ -1,0 +1,77 @@
+name: Build scrub master video
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - portfolio-world-base
+    paths:
+      - .github/workflows/build-scrub-master.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build-master:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: portfolio-world-base
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Build one continuous scrub-optimized master
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public/portfolio-world/master
+
+          cat > /tmp/portfolio-concat.txt <<'EOF'
+          file '${{ github.workspace }}/public/portfolio-world/videos/stone-balcony-enter.mp4'
+          file '${{ github.workspace }}/public/portfolio-world/videos/rustic-study-track.mp4'
+          file '${{ github.workspace }}/public/portfolio-world/videos/study-window.mp4'
+          file '${{ github.workspace }}/public/portfolio-world/videos/art-studio-enter.mp4'
+          file '${{ github.workspace }}/public/portfolio-world/videos/art-studio-glide.mp4'
+          file '${{ github.workspace }}/public/portfolio-world/videos/ancient-library-reverse.mp4'
+          file '${{ github.workspace }}/public/portfolio-world/videos/library-dolly.mp4'
+          EOF
+
+          ffmpeg -y \
+            -f concat -safe 0 -i /tmp/portfolio-concat.txt \
+            -an \
+            -vf "scale=1920:1080:flags=lanczos,fps=24" \
+            -c:v libx264 \
+            -preset veryfast \
+            -crf 20 \
+            -pix_fmt yuv420p \
+            -profile:v high \
+            -level 4.1 \
+            -g 12 \
+            -keyint_min 12 \
+            -sc_threshold 0 \
+            -bf 0 \
+            -movflags +faststart \
+            public/portfolio-world/master/master-scroll-1080p.mp4
+
+          ffprobe -v error \
+            -show_entries stream=width,height,r_frame_rate,codec_name \
+            -show_entries format=duration,size,bit_rate \
+            -of default=noprint_wrappers=1 \
+            public/portfolio-world/master/master-scroll-1080p.mp4
+
+      - name: Commit generated master
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f public/portfolio-world/master/master-scroll-1080p.mp4
+          if git diff --cached --quiet; then
+            echo "Master is already current"
+            exit 0
+          fi
+          git commit -m "assets: build 1080p scrub-optimized portfolio master"
+          git push origin HEAD:portfolio-world-base

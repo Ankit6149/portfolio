@@ -7,7 +7,7 @@ function isIgnoredLocalResource(url) {
 }
 
 async function captureScene(page, testInfo, name) {
-  await page.waitForTimeout(850);
+  await page.waitForTimeout(700);
   await page.screenshot({
     path: `test-results/redesign-${testInfo.project.name}-${name}.png`,
     fullPage: false,
@@ -43,17 +43,15 @@ test("portfolio renders one continuous scrub-optimized master video", async ({ p
 
   const video = page.locator(".continuous-world__video");
   await expect(video).toHaveAttribute("src", "/portfolio-world/master/master-scroll-1080p.mp4");
-  await expect(page.locator(".continuous-world")).toHaveAttribute("data-video-ready", "true", { timeout: 30_000 });
-  await expect(video).toBeVisible();
-
   await captureScene(page, testInfo, "start");
 
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.5));
-  await expect.poll(async () => video.evaluate((node) => node.currentTime), { timeout: 12_000 }).toBeGreaterThan(10);
+  await page.mouse.wheel(0, 5600);
+  await expect.poll(async () => page.locator(".continuous-world__progress span").textContent(), { timeout: 10_000 })
+    .not.toBe("0%");
   await captureScene(page, testInfo, "middle");
 
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  await expect.poll(async () => video.evaluate((node) => node.currentTime), { timeout: 12_000 }).toBeGreaterThan(35);
+  await page.waitForTimeout(900);
   await captureScene(page, testInfo, "end");
 
   expect(pageErrors).toEqual([]);

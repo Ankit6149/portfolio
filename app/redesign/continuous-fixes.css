@@ -1,0 +1,44 @@
+.closing__links a,
+.closing__links button {
+  position: relative;
+}
+
+.closing__links svg {
+  position: absolute !important;
+  top: 28px !important;
+  right: 28px !important;
+  display: block !important;
+  width: 18px !important;
+  height: 18px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 1.5 !important;
+}
+
+.practice .chapter-marker,
+.practice-number,
+.practice__text,
+.practice__text p {
+  color: var(--world-ink) !important;
+  opacity: 1 !important;
+}
+
+.practice__text p {
+  text-wrap: pretty;
+}
+
+.practice-number__value {
+  color: var(--world-ink) !important;
+  opacity: 1 !important;
+}
+
+.redesign-footer {
+  color: var(--world-ink);
+}
+
+@media (max-width: 800px) {
+  .closing__links svg {
+    top: 22px !important;
+    right: 22px !important;
+  }
+}

@@ -1,0 +1,367 @@
+.hero-world {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  isolation: isolate;
+  background: #dfe7e2;
+}
+
+.hero-world__sky,
+.hero-world__light,
+.hero-world__veil {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-world__sky {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 28% 14%, rgba(255, 249, 229, 0.92), transparent 31%),
+    linear-gradient(180deg, #d8e3e5 0%, #e9e9df 38%, #b8c8b5 72%, #73886f 100%);
+}
+
+.hero-world__light {
+  z-index: 1;
+  opacity: 0.72;
+  mix-blend-mode: screen;
+  background: linear-gradient(118deg, rgba(255,255,255,0.55) 0 18%, transparent 38% 100%);
+  animation: hero-light-breathe 28s ease-in-out infinite alternate;
+}
+
+.hero-world__layer {
+  position: absolute;
+  transform-origin: 50% 70%;
+  will-change: transform, opacity;
+}
+
+.hero-world__image {
+  object-fit: contain;
+  user-select: none;
+  filter: saturate(0.9) contrast(0.98);
+}
+
+.hero-world__clouds {
+  z-index: 2;
+  top: 10%;
+  left: 4%;
+  width: 70%;
+  height: 19%;
+  opacity: 0.36;
+  animation: hero-cloud-drift 34s ease-in-out infinite alternate;
+}
+
+.hero-world__far-mountains {
+  z-index: 3;
+  left: 5%;
+  bottom: 31%;
+  width: 74%;
+  height: 28%;
+  opacity: 0.9;
+}
+
+.hero-world__mid-mountains {
+  z-index: 4;
+  right: -7%;
+  bottom: 24%;
+  width: 77%;
+  height: 27%;
+  opacity: 0.92;
+}
+
+.hero-world__forest {
+  z-index: 5;
+  left: -4%;
+  bottom: 18%;
+  width: 69%;
+  height: 24%;
+  opacity: 0.94;
+}
+
+.hero-world__mist {
+  z-index: 6;
+  left: 18%;
+  bottom: 25%;
+  width: 66%;
+  height: 16%;
+  opacity: 0.7;
+  animation: hero-mist-drift 26s ease-in-out infinite alternate;
+}
+
+.hero-world__arch {
+  z-index: 8;
+  right: 1.5%;
+  bottom: 8%;
+  width: min(31vw, 32rem);
+  height: min(70vh, 44rem);
+  transform: rotate(-1.2deg);
+  filter: drop-shadow(-1.5rem 2.3rem 2rem rgba(27, 34, 25, 0.19));
+}
+
+.hero-world__river {
+  z-index: 7;
+  left: 19%;
+  bottom: -1%;
+  width: min(58vw, 58rem);
+  height: min(38vh, 25rem);
+  transform: rotate(1.5deg);
+  filter: drop-shadow(0 1.4rem 1.2rem rgba(45, 61, 53, 0.15));
+}
+
+.hero-world__river-base {
+  z-index: 1;
+}
+
+.hero-world__water-light {
+  position: absolute;
+  z-index: 2;
+  inset: 22% 8% 20% 7%;
+  opacity: 0.28;
+  mix-blend-mode: screen;
+  mask: linear-gradient(98deg, transparent 4%, #000 21% 81%, transparent 97%);
+  background: repeating-linear-gradient(108deg, transparent 0 12px, rgba(255,255,255,0.72) 14px 16px, transparent 18px 34px);
+  animation: hero-water-flow 10s linear infinite;
+  transform: skewX(-8deg);
+}
+
+.hero-world__water-light--two {
+  inset: 28% 12% 25% 12%;
+  opacity: 0.16;
+  animation-duration: 17s;
+  animation-direction: reverse;
+}
+
+.hero-world__meadow {
+  z-index: 9;
+  left: -4%;
+  bottom: -1%;
+  width: 72%;
+  height: 17%;
+}
+
+.hero-world__flowers {
+  z-index: 11;
+  left: -8%;
+  bottom: -4%;
+  width: 63%;
+  height: 23%;
+  filter: drop-shadow(0 1rem 1.4rem rgba(23, 34, 24, 0.2));
+  animation: hero-foliage-sway 9s ease-in-out infinite alternate;
+}
+
+.hero-world__vines {
+  z-index: 12;
+  top: -5%;
+  right: -3%;
+  width: min(31vw, 31rem);
+  height: 43%;
+  transform-origin: 50% 0;
+  filter: drop-shadow(0 1rem 1.2rem rgba(28, 44, 29, 0.17));
+  animation: hero-vines-sway 12s ease-in-out infinite alternate;
+}
+
+.hero-world__veil {
+  z-index: 13;
+  background:
+    linear-gradient(90deg, rgba(240, 237, 224, 0.78) 0%, rgba(240, 237, 224, 0.45) 32%, transparent 58%),
+    linear-gradient(180deg, rgba(237, 238, 229, 0.16), transparent 60%, rgba(37, 49, 37, 0.14));
+}
+
+.hero-world__plaque {
+  position: absolute;
+  z-index: 28;
+  right: clamp(1rem, 5vw, 5rem);
+  bottom: clamp(5.7rem, 13vh, 8.5rem);
+  display: grid;
+  gap: 0.15rem;
+  min-width: 9.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(56, 45, 29, 0.36);
+  border-radius: 0.25rem;
+  background: rgba(241, 231, 207, 0.9);
+  color: #3a3428;
+  text-align: left;
+  box-shadow: 0 0.8rem 2rem rgba(35, 34, 27, 0.15);
+  pointer-events: auto;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.hero-world__plaque:hover,
+.hero-world__plaque:focus-visible {
+  transform: translateY(-4px);
+  background: rgba(248, 240, 219, 0.97);
+}
+
+.hero-world__plaque span {
+  font-family: var(--serif);
+  font-size: 0.92rem;
+}
+
+.hero-world__plaque b {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-world__note {
+  position: absolute;
+  z-index: 27;
+  right: clamp(1rem, 5vw, 5rem);
+  bottom: clamp(10.9rem, 23vh, 15rem);
+  width: min(19rem, calc(100vw - 2rem));
+  padding: 1.1rem 1.2rem 1.2rem;
+  border: 1px solid rgba(56, 45, 29, 0.27);
+  background: rgba(248, 241, 223, 0.95);
+  color: #38352e;
+  box-shadow: 0 1.4rem 3rem rgba(31, 34, 28, 0.17);
+  opacity: 0;
+  transform: translateY(0.75rem) scale(0.97);
+  transform-origin: 80% 100%;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.hero-world__note.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.hero-world__note span {
+  display: block;
+  margin-bottom: 0.65rem;
+  font-family: var(--mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-world__note p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.redesign-hero__stage {
+  background: transparent;
+}
+
+.redesign-hero__intro {
+  z-index: 30;
+  padding: 1.15rem 1.25rem 1.25rem;
+  border-left: 1px solid rgba(32, 42, 33, 0.3);
+  background: linear-gradient(90deg, rgba(244, 239, 226, 0.82), rgba(244, 239, 226, 0.2) 80%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.redesign-hero .hero-word,
+.redesign-hero .hero-depth-plane--back {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.redesign-hero .hero-depth-plane--front {
+  z-index: 31;
+  right: auto;
+  left: clamp(1.3rem, 6vw, 6.5rem);
+  top: auto;
+  bottom: clamp(6.5rem, 14vh, 9rem);
+  width: min(33rem, 43vw);
+  border-color: rgba(39, 47, 37, 0.2);
+  background: rgba(244, 239, 226, 0.9);
+  color: #1d241e;
+  box-shadow: 0 1.5rem 4rem rgba(35, 43, 35, 0.14);
+}
+
+.redesign-hero__reveal,
+.hero-to-origin {
+  z-index: 32;
+}
+
+@keyframes hero-cloud-drift {
+  from { transform: translate3d(-1%, 0, 0); }
+  to { transform: translate3d(2.5%, 1.5%, 0); }
+}
+
+@keyframes hero-mist-drift {
+  from { transform: translate3d(-2%, 0, 0); opacity: 0.58; }
+  to { transform: translate3d(4%, -1%, 0); opacity: 0.76; }
+}
+
+@keyframes hero-water-flow {
+  from { background-position: 0 0; }
+  to { background-position: 18rem 4rem; }
+}
+
+@keyframes hero-foliage-sway {
+  from { transform: rotate(-0.25deg) translateY(0); }
+  to { transform: rotate(0.45deg) translateY(-0.35rem); }
+}
+
+@keyframes hero-vines-sway {
+  from { transform: rotate(-0.35deg); }
+  to { transform: rotate(0.65deg); }
+}
+
+@keyframes hero-light-breathe {
+  from { opacity: 0.56; transform: translateX(-1%); }
+  to { opacity: 0.78; transform: translateX(2%); }
+}
+
+@media (max-width: 899px) {
+  .hero-world__clouds { width: 100%; left: -18%; }
+  .hero-world__far-mountains { width: 115%; left: -15%; bottom: 35%; }
+  .hero-world__mid-mountains { width: 120%; right: -35%; bottom: 28%; }
+  .hero-world__forest { width: 110%; left: -34%; bottom: 21%; }
+  .hero-world__mist { width: 100%; left: 2%; bottom: 31%; }
+  .hero-world__river { width: 92%; left: 4%; bottom: 2%; height: 31%; }
+  .hero-world__arch { width: 43%; right: -10%; bottom: 11%; height: 48%; opacity: 0.82; }
+  .hero-world__flowers { width: 92%; left: -24%; bottom: -3%; }
+  .hero-world__vines { width: 48%; right: -16%; height: 34%; }
+  .hero-world__meadow { width: 100%; }
+  .hero-world__veil { background: linear-gradient(180deg, rgba(242,239,228,0.76) 0%, rgba(242,239,228,0.26) 45%, rgba(41,52,41,0.12) 100%); }
+  .redesign-hero__intro { width: calc(100% - 2rem); left: 1rem; padding-right: 4rem; }
+  .redesign-hero .hero-depth-plane--front { left: 1rem; width: calc(100% - 2rem); bottom: 7.5rem; }
+  .hero-world__plaque { right: 1rem; bottom: 1.5rem; }
+  .hero-world__note { right: 1rem; bottom: 6.7rem; }
+}
+
+@media (max-width: 560px) {
+  .hero-world__clouds,
+  .hero-world__far-mountains,
+  .hero-world__mist,
+  .hero-world__river,
+  .hero-world__flowers {
+    display: block;
+  }
+  .hero-world__forest,
+  .hero-world__meadow,
+  .hero-world__vines {
+    display: none;
+  }
+  .hero-world__far-mountains { width: 145%; left: -35%; bottom: 40%; }
+  .hero-world__mid-mountains { width: 145%; right: -55%; bottom: 32%; }
+  .hero-world__river { width: 128%; left: -19%; bottom: -2%; height: 34%; }
+  .hero-world__arch { width: 56%; right: -21%; bottom: 11%; height: 46%; opacity: 0.65; }
+  .hero-world__flowers { width: 120%; left: -44%; height: 18%; }
+  .redesign-hero__intro { top: 6.5rem; padding-right: 1.25rem; background: rgba(245, 240, 228, 0.76); }
+  .redesign-hero .hero-depth-plane--front { bottom: 8.4rem; }
+  .hero-world__plaque { display: none; }
+  .hero-world__note { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-world__light,
+  .hero-world__clouds,
+  .hero-world__mist,
+  .hero-world__flowers,
+  .hero-world__vines,
+  .hero-world__water-light {
+    animation: none;
+  }
+}

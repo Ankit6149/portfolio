@@ -23,7 +23,7 @@ jobs:
       - name: Install ffmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
-      - name: Build continuous scrub-optimized masters
+      - name: Build one clear scrub-optimized 1080p master
         shell: bash
         run: |
           set -euo pipefail
@@ -39,51 +39,41 @@ jobs:
           file '${{ github.workspace }}/public/portfolio-world/videos/library-dolly.mp4'
           EOF
 
-          encode_master() {
-            local size="$1"
-            local output="$2"
-            local crf="$3"
+          # Keep the source cadence and full 1080p resolution. A 0.5s GOP makes
+          # browser seeking inexpensive without the massive size of all-I-frame video.
+          ffmpeg -y \
+            -f concat -safe 0 -i /tmp/portfolio-concat.txt \
+            -an \
+            -vf "scale=1920:1080:flags=lanczos,fps=30" \
+            -c:v libx264 \
+            -preset medium \
+            -crf 23 \
+            -pix_fmt yuv420p \
+            -profile:v high \
+            -level 4.1 \
+            -g 15 \
+            -keyint_min 15 \
+            -sc_threshold 0 \
+            -refs 1 \
+            -movflags +faststart \
+            public/portfolio-world/master/master-scroll-1080p.mp4
 
-            ffmpeg -y \
-              -f concat -safe 0 -i /tmp/portfolio-concat.txt \
-              -an \
-              -vf "scale=${size}:flags=lanczos,fps=24" \
-              -c:v libx264 \
-              -preset veryfast \
-              -crf "$crf" \
-              -pix_fmt yuv420p \
-              -profile:v high \
-              -level 4.1 \
-              -g 12 \
-              -keyint_min 12 \
-              -sc_threshold 0 \
-              -bf 0 \
-              -movflags +faststart \
-              "$output"
-          }
+          ffprobe -v error \
+            -show_entries stream=width,height,r_frame_rate,codec_name,has_b_frames,refs \
+            -show_entries format=duration,size,bit_rate \
+            -of default=noprint_wrappers=1 \
+            public/portfolio-world/master/master-scroll-1080p.mp4
 
-          encode_master "1920:1080" "public/portfolio-world/master/master-scroll-1080p.mp4" 20
-          encode_master "1280:720" "public/portfolio-world/master/master-scroll-720p.mp4" 19
-
-          for file in public/portfolio-world/master/master-scroll-1080p.mp4 public/portfolio-world/master/master-scroll-720p.mp4; do
-            echo "---- $file"
-            ffprobe -v error \
-              -show_entries stream=width,height,r_frame_rate,codec_name \
-              -show_entries format=duration,size,bit_rate \
-              -of default=noprint_wrappers=1 \
-              "$file"
-          done
-
-      - name: Commit generated masters
+      - name: Commit generated master
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f public/portfolio-world/master/master-scroll-1080p.mp4 public/portfolio-world/master/master-scroll-720p.mp4
+          git add -f public/portfolio-world/master/master-scroll-1080p.mp4
           if git diff --cached --quiet; then
-            echo "Masters are already current"
+            echo "Master is already current"
             exit 0
           fi
-          git commit -m "assets: build responsive scrub-optimized portfolio masters"
+          git commit -m "assets: rebuild clear 1080p scrub master"
           git push origin HEAD:portfolio-world-base

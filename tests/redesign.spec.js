@@ -14,7 +14,7 @@ async function captureScene(page, testInfo, name) {
   });
 }
 
-test("portfolio preserves the smooth single-master-video baseline", async ({ page }, testInfo) => {
+test("portfolio preserves one continuous world and builds Studio as an in-world interaction", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -38,6 +38,7 @@ test("portfolio preserves the smooth single-master-video baseline", async ({ pag
   const world = page.locator(".continuous-world");
   await expect(world).toHaveAttribute("data-render-mode", "single-master-video");
   await expect(world).toHaveAttribute("data-world-sequence", "01-10");
+  await expect(world).toHaveAttribute("data-active-world", "01");
   await expect(page.locator(".continuous-world__stage")).toHaveCount(1);
   await expect(page.locator(".continuous-world__video")).toHaveCount(1);
   await expect(page.locator(".continuous-world__canvas")).toHaveCount(0);
@@ -48,16 +49,42 @@ test("portfolio preserves the smooth single-master-video baseline", async ({ pag
 
   const video = page.locator(".continuous-world__video");
   await expect(video).toHaveAttribute("src", "/portfolio-world/master/master-scroll-1080p.mp4");
-  await captureScene(page, testInfo, "start");
+  await captureScene(page, testInfo, "01-arrival");
 
-  await page.mouse.wheel(0, 5600);
-  await expect.poll(async () => page.locator(".continuous-world__progress span").textContent(), { timeout: 10_000 })
-    .not.toBe("0%");
-  await captureScene(page, testInfo, "middle");
+  await page.evaluate(() => {
+    const root = document.querySelector(".continuous-world");
+    const maxScroll = root.offsetHeight - window.innerHeight;
+    window.scrollTo(0, root.offsetTop + maxScroll * 0.61);
+  });
+
+  await expect(world).toHaveAttribute("data-active-world", "06", { timeout: 10_000 });
+  await expect(page.locator(".world-index")).toContainText("06");
+  await expect(page.locator(".world-index")).toContainText("Studio");
+
+  const studioInteraction = page.locator(".world-studio-interaction");
+  await expect(studioInteraction).toHaveAttribute("data-visible", "true", { timeout: 10_000 });
+  const studioHotspot = page.getByRole("button", { name: "Open selected work in the studio" });
+  await expect(studioHotspot).toBeEnabled();
+  await captureScene(page, testInfo, "06-studio");
+
+  await studioHotspot.click();
+  await expect(world).toHaveAttribute("data-folio-open", "true");
+  await expect(page.locator(".world-folio")).toHaveCount(1);
+  await expect(page.locator(".world-folio__ornament")).toHaveAttribute("src", "/portfolio-world/ui/cream-gold-frame.png");
+  await expect(page.locator(".world-folio h2")).toHaveText("The Wild Oasis");
+  await captureScene(page, testInfo, "06-studio-folio");
+
+  await page.getByRole("button", { name: "Show CardXpert AI" }).click();
+  await expect(page.locator(".world-folio h2")).toHaveText("CardXpert AI");
+
+  await page.getByRole("button", { name: "Close selected work" }).last().click();
+  await expect(world).toHaveAttribute("data-folio-open", "false");
+  await expect(page.locator(".world-folio")).toHaveCount(0);
+  await expect(world).toHaveAttribute("data-active-world", "06");
 
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  await page.waitForTimeout(900);
-  await captureScene(page, testInfo, "end");
+  await expect(world).toHaveAttribute("data-active-world", "10", { timeout: 10_000 });
+  await captureScene(page, testInfo, "10-closing-world");
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);

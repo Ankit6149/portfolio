@@ -1,5 +1,4 @@
 import "./world-base.css";
-import "./living-world.css";
 
 export const metadata = {
   title: { absolute: "Portfolio World Preview | Ankit Bhardwaj" },

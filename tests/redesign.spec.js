@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const requiredScenes = [
+const requiredRestScenes = [
   "#arrival",
   "#approach",
   "#threshold",
@@ -27,7 +27,7 @@ async function captureScene(page, testInfo, name) {
   });
 }
 
-test("portfolio world base renders the ten cinematic scenes without browser errors", async ({ page }, testInfo) => {
+test("cinematic portfolio scrubs motion between clean scene stills", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -46,32 +46,34 @@ test("portfolio world base renders the ten cinematic scenes without browser erro
   });
 
   await page.goto("/redesign", { waitUntil: "networkidle" });
-
   await expect(page).toHaveTitle(/Portfolio World Preview/);
-  await expect(page.locator(".portfolio-world-base")).toHaveCount(1);
   await expect(page.locator(".world-header")).toHaveCount(1);
   await expect(page.locator(".scene-rail")).toHaveCount(1);
-  await expect(page.locator(".world-scene")).toHaveCount(10);
-  await expect(page.locator("#arrival h1")).toContainText("Ankit Bhardwaj");
 
-  for (const selector of requiredScenes) {
+  for (const selector of requiredRestScenes) {
     await expect(page.locator(selector)).toHaveCount(1);
-    await expect(page.locator(`${selector} .world-scene__image`)).toHaveCount(1);
   }
 
-  await captureScene(page, testInfo, "arrival");
+  await expect(page.locator(".world-transition")).toHaveCount(9);
+  await expect(page.locator(".world-transition.has-video")).toHaveCount(7);
+  await expect(page.locator(".world-transition__video")).toHaveCount(7);
+  await expect(page.locator(".world-transition.is-fallback")).toHaveCount(2);
 
-  await page.locator("#study").scrollIntoViewIfNeeded();
-  await expect(page.locator("#study h1")).toContainText("Biology");
-  await captureScene(page, testInfo, "study");
+  await expect(page.locator("#arrival .world-rest__copy h1")).toContainText("Ankit Bhardwaj");
+  await captureScene(page, testInfo, "arrival-still");
+
+  const firstTransition = page.locator("#transition-01");
+  await firstTransition.scrollIntoViewIfNeeded();
+  await expect(firstTransition.locator("video")).toBeVisible();
+  await captureScene(page, testInfo, "transition-01");
 
   await page.locator("#studio").scrollIntoViewIfNeeded();
-  await expect(page.locator("#studio h1")).toContainText("built");
-  await captureScene(page, testInfo, "studio");
+  await expect(page.locator("#studio .world-rest__copy h1")).toBeVisible();
+  await captureScene(page, testInfo, "studio-still");
 
   await page.locator("#closing").scrollIntoViewIfNeeded();
-  await expect(page.locator("#closing .world-scene__actions > *")).toHaveCount(2);
-  await captureScene(page, testInfo, "closing");
+  await expect(page.locator("#closing .world-rest__copy h1")).toBeVisible();
+  await captureScene(page, testInfo, "closing-still");
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);

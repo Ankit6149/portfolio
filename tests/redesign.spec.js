@@ -14,7 +14,7 @@ async function captureScene(page, testInfo, name) {
   });
 }
 
-test("portfolio renders one continuous master video with living endpoints", async ({ page }, testInfo) => {
+test("portfolio preserves the smooth single-master-video baseline", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -37,31 +37,27 @@ test("portfolio renders one continuous master video with living endpoints", asyn
 
   const world = page.locator(".continuous-world");
   await expect(world).toHaveAttribute("data-render-mode", "single-master-video");
-  await expect(world).toHaveAttribute("data-active-endpoint", "02");
+  await expect(world).toHaveAttribute("data-world-sequence", "01-10");
   await expect(page.locator(".continuous-world__stage")).toHaveCount(1);
   await expect(page.locator(".continuous-world__video")).toHaveCount(1);
   await expect(page.locator(".continuous-world__canvas")).toHaveCount(0);
-  await expect(page.locator(".world-endpoints button")).toHaveCount(8);
-  await expect(page.locator(".world-ambient")).toHaveCount(1);
-  await expect(page.locator(".world-hotspot")).toHaveCount(1);
+  await expect(page.locator(".world-ambient")).toHaveCount(0);
+  await expect(page.locator(".world-endpoints")).toHaveCount(0);
+  await expect(page.locator(".world-rest")).toHaveCount(0);
+  await expect(page.locator(".world-transition")).toHaveCount(0);
 
   const video = page.locator(".continuous-world__video");
   await expect(video).toHaveAttribute("src", "/portfolio-world/master/master-scroll-1080p.mp4");
-  await captureScene(page, testInfo, "endpoint-02");
+  await captureScene(page, testInfo, "start");
 
-  await page.locator(".world-hotspot").first().click();
-  await expect(page.locator(".world-folio")).toHaveClass(/is-open/);
-  await expect(page.locator(".world-folio h2")).toContainText("portfolio");
-  await page.locator(".world-folio__close").click();
-
-  await page.getByRole("button", { name: "Go to 04 — Study" }).click();
-  await expect(world).toHaveAttribute("data-active-endpoint", "04", { timeout: 10_000 });
-  await expect(page.locator(".world-hotspot")).toHaveCount(2);
-  await captureScene(page, testInfo, "endpoint-04");
+  await page.mouse.wheel(0, 5600);
+  await expect.poll(async () => page.locator(".continuous-world__progress span").textContent(), { timeout: 10_000 })
+    .not.toBe("0%");
+  await captureScene(page, testInfo, "middle");
 
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  await expect(world).toHaveAttribute("data-active-endpoint", "09", { timeout: 10_000 });
-  await captureScene(page, testInfo, "endpoint-09");
+  await page.waitForTimeout(900);
+  await captureScene(page, testInfo, "end");
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);

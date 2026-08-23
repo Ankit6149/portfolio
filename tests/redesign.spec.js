@@ -1,15 +1,16 @@
 import { expect, test } from "@playwright/test";
 
-const requiredSections = [
-  ".redesign-hero",
-  ".origin",
-  ".observations",
-  ".project-story--skribli",
-  ".project-story--signalflow",
-  ".project-story--emotion",
-  ".practice",
-  ".beyond",
-  ".closing",
+const requiredScenes = [
+  "#arrival",
+  "#approach",
+  "#threshold",
+  "#estate",
+  "#study",
+  "#library",
+  "#studio",
+  "#reflection",
+  "#nature",
+  "#closing",
 ];
 
 const ignoredLocalResources = ["/_vercel/insights/script.js"];
@@ -26,7 +27,7 @@ async function captureScene(page, testInfo, name) {
   });
 }
 
-test("redesign renders its connected story without browser errors", async ({ page }, testInfo) => {
+test("portfolio world base renders the ten cinematic scenes without browser errors", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -46,49 +47,31 @@ test("redesign renders its connected story without browser errors", async ({ pag
 
   await page.goto("/redesign", { waitUntil: "networkidle" });
 
-  await expect(page).toHaveTitle(/Portfolio Preview/);
-  await expect(page.locator(".hero-word--systems")).toContainText("SYSTEMS");
-  await expect(page.locator(".hero-word--thinking")).toContainText("THINKING");
-  await expect(page.locator(".hero-depth-plane--front")).toContainText(
-    "expressed through software",
-  );
-  await expect(page.locator(".world__thread")).toHaveCount(1);
-  await expect(page.locator(".section-rail")).toHaveCount(1);
+  await expect(page).toHaveTitle(/Portfolio World Preview/);
+  await expect(page.locator(".portfolio-world-base")).toHaveCount(1);
+  await expect(page.locator(".world-header")).toHaveCount(1);
+  await expect(page.locator(".scene-rail")).toHaveCount(1);
+  await expect(page.locator(".world-scene")).toHaveCount(10);
+  await expect(page.locator("#arrival h1")).toContainText("Ankit Bhardwaj");
 
-  for (const selector of requiredSections) {
+  for (const selector of requiredScenes) {
     await expect(page.locator(selector)).toHaveCount(1);
+    await expect(page.locator(`${selector} .world-scene__image`)).toHaveCount(1);
   }
 
-  await captureScene(page, testInfo, "hero");
+  await captureScene(page, testInfo, "arrival");
 
-  await page.locator(".origin").scrollIntoViewIfNeeded();
-  await captureScene(page, testInfo, "origin");
+  await page.locator("#study").scrollIntoViewIfNeeded();
+  await expect(page.locator("#study h1")).toContainText("Biology");
+  await captureScene(page, testInfo, "study");
 
-  await page.locator(".project-story--skribli").scrollIntoViewIfNeeded();
-  await expect(page.locator(".project-story--skribli .project-story__statement")).toBeVisible();
-  await captureScene(page, testInfo, "skribli");
+  await page.locator("#studio").scrollIntoViewIfNeeded();
+  await expect(page.locator("#studio h1")).toContainText("built");
+  await captureScene(page, testInfo, "studio");
 
-  await page.locator(".project-story--signalflow").scrollIntoViewIfNeeded();
-  await captureScene(page, testInfo, "signalflow");
-
-  await page.locator(".project-story--emotion").scrollIntoViewIfNeeded();
-  await captureScene(page, testInfo, "research");
-
-  await page.locator(".practice").scrollIntoViewIfNeeded();
-  await expect(page.locator(".practice-number__value")).toHaveText("806");
-  await captureScene(page, testInfo, "practice");
-
-  await page.locator(".beyond").scrollIntoViewIfNeeded();
-  await captureScene(page, testInfo, "beyond");
-
-  await page.locator(".closing").scrollIntoViewIfNeeded();
-  await expect(page.locator(".closing__links > *")).toHaveCount(4);
+  await page.locator("#closing").scrollIntoViewIfNeeded();
+  await expect(page.locator("#closing .world-scene__actions > *")).toHaveCount(2);
   await captureScene(page, testInfo, "closing");
-
-  await page.locator(".alpha-entry").click();
-  await expect(page.locator(".alpha-panel")).toBeVisible();
-  await page.locator(".alpha-panel__close").click();
-  await expect(page.locator(".alpha-panel")).toHaveCount(0);
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);

@@ -11,8 +11,9 @@ export const REST_STATES = [
   { id: "10", title: "Closing World", time: 55.94, radius: 0.0045 },
 ];
 
-// These are not generic effects. Each video is built from the actual cinematic master,
-// stabilized against its fixed rest frame, cropped, and revealed through its real mask.
+// Every moving region below is cut from the actual cinematic master, stabilized
+// against its fixed rest frame, cropped to the physical material that should move,
+// and revealed through a feathered scene mask. No generic CSS water/mist is used.
 export const AMBIENT_REGIONS = [
   {
     id: "01-river",
@@ -24,6 +25,33 @@ export const AMBIENT_REGIONS = [
     box: { x: 0.1302083333, y: 0.3888888889, width: 0.3697916667, height: 0.4351851852 },
   },
   {
+    id: "03-threshold-river",
+    worlds: ["03"],
+    kind: "water",
+    src: "/portfolio-world/ambient/03-threshold-river.mp4",
+    mask: "/portfolio-world/ambient/03-threshold-river-mask.png",
+    opacity: 0.92,
+    box: { x: 0.2708333333, y: 0.5092592593, width: 0.1302083333, height: 0.2314814815 },
+  },
+  {
+    id: "04-study-river",
+    worlds: ["04"],
+    kind: "water",
+    src: "/portfolio-world/ambient/04-study-river.mp4",
+    mask: "/portfolio-world/ambient/04-study-river-mask.png",
+    opacity: 0.92,
+    box: { x: 0.65625, y: 0.4768518519, width: 0.1197916667, height: 0.2037037037 },
+  },
+  {
+    id: "05-passage-stream",
+    worlds: ["05"],
+    kind: "water",
+    src: "/portfolio-world/ambient/05-passage-stream.mp4",
+    mask: "/portfolio-world/ambient/05-passage-stream-mask.png",
+    opacity: 0.96,
+    box: { x: 0.6197916667, y: 0.5046296296, width: 0.1953125, height: 0.4953703704 },
+  },
+  {
     id: "06-studio-foliage",
     worlds: ["06"],
     kind: "foliage",
@@ -31,6 +59,33 @@ export const AMBIENT_REGIONS = [
     mask: "/portfolio-world/ambient/06-studio-foliage-mask.png",
     opacity: 0.82,
     box: { x: 0.0625, y: 0, width: 0.2447916667, height: 0.6018518519 },
+  },
+  {
+    id: "06-studio-river",
+    worlds: ["06"],
+    kind: "water",
+    src: "/portfolio-world/ambient/06-studio-river.mp4",
+    mask: "/portfolio-world/ambient/06-studio-river-mask.png",
+    opacity: 0.78,
+    box: { x: 0.4817708333, y: 0.4212962963, width: 0.0625, height: 0.1435185185 },
+  },
+  {
+    id: "07-archive-river",
+    worlds: ["07"],
+    kind: "water",
+    src: "/portfolio-world/ambient/07-archive-river.mp4",
+    mask: "/portfolio-world/ambient/07-archive-river-mask.png",
+    opacity: 0.78,
+    box: { x: 0.46875, y: 0.4351851852, width: 0.0859375, height: 0.1388888889 },
+  },
+  {
+    id: "08-reflection-river",
+    worlds: ["08"],
+    kind: "water",
+    src: "/portfolio-world/ambient/08-reflection-river.mp4",
+    mask: "/portfolio-world/ambient/08-reflection-river-mask.png",
+    opacity: 0.94,
+    box: { x: 0.6510416667, y: 0.3148148148, width: 0.1822916667, height: 0.2222222222 },
   },
   {
     id: "10-fountain-pool",

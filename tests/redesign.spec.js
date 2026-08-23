@@ -1,18 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-const requiredRestScenes = [
-  "#arrival",
-  "#approach",
-  "#threshold",
-  "#estate",
-  "#study",
-  "#library",
-  "#studio",
-  "#reflection",
-  "#nature",
-  "#closing",
-];
-
 const ignoredLocalResources = ["/_vercel/insights/script.js"];
 
 function isIgnoredLocalResource(url) {
@@ -20,14 +7,14 @@ function isIgnoredLocalResource(url) {
 }
 
 async function captureScene(page, testInfo, name) {
-  await page.waitForTimeout(350);
+  await page.waitForTimeout(450);
   await page.screenshot({
     path: `test-results/redesign-${testInfo.project.name}-${name}.png`,
     fullPage: false,
   });
 }
 
-test("cinematic portfolio scrubs motion between clean scene stills", async ({ page }, testInfo) => {
+test("portfolio is one continuous pinned scroll-video flow", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -47,33 +34,21 @@ test("cinematic portfolio scrubs motion between clean scene stills", async ({ pa
 
   await page.goto("/redesign", { waitUntil: "networkidle" });
   await expect(page).toHaveTitle(/Portfolio World Preview/);
-  await expect(page.locator(".world-header")).toHaveCount(1);
-  await expect(page.locator(".scene-rail")).toHaveCount(1);
+  await expect(page.locator(".continuous-world")).toHaveCount(1);
+  await expect(page.locator(".continuous-world__stage")).toHaveCount(1);
+  await expect(page.locator(".continuous-world__video")).toHaveCount(7);
+  await expect(page.locator(".world-rest")).toHaveCount(0);
+  await expect(page.locator(".world-transition")).toHaveCount(0);
 
-  for (const selector of requiredRestScenes) {
-    await expect(page.locator(selector)).toHaveCount(1);
-  }
+  await captureScene(page, testInfo, "start");
 
-  await expect(page.locator(".world-transition")).toHaveCount(9);
-  await expect(page.locator(".world-transition.has-video")).toHaveCount(7);
-  await expect(page.locator(".world-transition__video")).toHaveCount(7);
-  await expect(page.locator(".world-transition.is-fallback")).toHaveCount(2);
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.5));
+  await page.waitForTimeout(700);
+  await captureScene(page, testInfo, "middle");
 
-  await expect(page.locator("#arrival .world-rest__copy h1")).toContainText("Ankit Bhardwaj");
-  await captureScene(page, testInfo, "arrival-still");
-
-  const firstTransition = page.locator("#transition-01");
-  await firstTransition.scrollIntoViewIfNeeded();
-  await expect(firstTransition.locator("video")).toBeVisible();
-  await captureScene(page, testInfo, "transition-01");
-
-  await page.locator("#studio").scrollIntoViewIfNeeded();
-  await expect(page.locator("#studio .world-rest__copy h1")).toBeVisible();
-  await captureScene(page, testInfo, "studio-still");
-
-  await page.locator("#closing").scrollIntoViewIfNeeded();
-  await expect(page.locator("#closing .world-rest__copy h1")).toBeVisible();
-  await captureScene(page, testInfo, "closing-still");
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await page.waitForTimeout(700);
+  await captureScene(page, testInfo, "end");
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);

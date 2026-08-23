@@ -1,0 +1,118 @@
+/* Fixed rest states: the camera is allowed to feel dimensional only after scroll motion
+   settles near a defined anchor. During travel these transforms collapse back to zero. */
+
+.continuous-world__stage {
+  perspective: 1400px;
+  perspective-origin: 50% 48%;
+}
+
+.continuous-world__camera-plane {
+  --depth-x: 0px;
+  --depth-y: 0px;
+  --depth-rx: 0deg;
+  --depth-ry: 0deg;
+  --depth-scale: 1.012;
+
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: max(100vw, 177.7778svh);
+  height: max(100svh, 56.25vw);
+  overflow: hidden;
+  transform:
+    translate(-50%, -50%)
+    translate3d(var(--depth-x), var(--depth-y), 0)
+    rotateX(var(--depth-rx))
+    rotateY(var(--depth-ry))
+    scale(var(--depth-scale));
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.continuous-world__camera-plane .continuous-world__poster,
+.continuous-world__camera-plane .continuous-world__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.world-ambients {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.world-ambient-region {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0 !important;
+  transform: translate3d(0, 0, 0);
+  transform-origin: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transition: opacity 180ms linear;
+  will-change: opacity, transform;
+}
+
+.world-ambient-region video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+/* Only real extracted pixels become visible. There are deliberately no generic
+   mist, shimmer, wave, glow or particle overlays in this system. */
+.continuous-world[data-rest-world="01"] .world-ambient-region[data-ambient-id="01-river"] {
+  opacity: calc(var(--rest-strength, 0) * 1) !important;
+}
+
+.continuous-world[data-rest-world="06"] .world-ambient-region[data-ambient-id="06-studio-foliage"] {
+  opacity: calc(var(--rest-strength, 0) * .82) !important;
+  transform: translate3d(var(--near-depth-x, 0px), var(--near-depth-y, 0px), 0);
+}
+
+.continuous-world[data-rest-world="09"] .world-ambient-region[data-ambient-id="10-fountain-pool"],
+.continuous-world[data-rest-world="10"] .world-ambient-region[data-ambient-id="10-fountain-pool"] {
+  opacity: calc(var(--rest-strength, 0) * 1) !important;
+}
+
+/* Interactive objects sit slightly nearer than the rendered environment. This is a
+   tiny depth cue, not a cursor-following gimmick. */
+.world-studio-interaction {
+  transform: translate3d(var(--ui-depth-x, 0px), var(--ui-depth-y, 0px), 0) !important;
+  will-change: opacity, transform;
+}
+
+@media (pointer: coarse) {
+  .continuous-world__camera-plane {
+    transform: translate(-50%, -50%) scale(1.012);
+  }
+
+  .world-studio-interaction,
+  .world-ambient-region {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .continuous-world__camera-plane {
+    transform: translate(-50%, -50%) scale(1.012) !important;
+  }
+
+  .world-ambients {
+    display: none;
+  }
+}

@@ -1,120 +1,312 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ReactLenis, useLenis } from "lenis/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
 import frame01 from "../../portfolio-assets/PORTFOLIO_F01_ARRIVAL.png";
 
-if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger, useGSAP);
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger, useGSAP);
+}
 
-const clips = [
-  { src: "/portfolio-world/videos/stone-balcony-enter.mp4", label: "Balcony" },
-  { src: "/portfolio-world/videos/study-window.mp4", label: "Study" },
-  { src: "/portfolio-world/videos/ancient-library-reverse.mp4", label: "Archive" },
-  { src: "/portfolio-world/videos/rustic-study-track.mp4", label: "Passage" },
-  { src: "/portfolio-world/videos/art-studio-enter.mp4", label: "Studio" },
-  { src: "/portfolio-world/videos/art-studio-glide.mp4", label: "Creation" },
-  { src: "/portfolio-world/videos/library-dolly.mp4", label: "Library" },
-];
+const MANIFEST_URL = "/portfolio-world/frames/master/manifest.json";
+const FRAME_BASE = "/portfolio-world/frames/master";
+const SCROLL_HEIGHT = 940;
+const MAX_DECODED_FRAMES = 96;
+const PRELOAD_AHEAD = 24;
+const PRELOAD_BEHIND = 8;
 
-const OVERLAP = 0.085;
-const SCROLL_HEIGHT = 860;
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
 
-export default function PortfolioWorldBase() {
+function frameUrl(index) {
+  return `${FRAME_BASE}/frame-${String(index).padStart(4, "0")}.webp`;
+}
+
+function drawCover(ctx, image, width, height, alpha = 1) {
+  if (!image?.naturalWidth || !image?.naturalHeight) return;
+
+  const scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
+  const drawWidth = image.naturalWidth * scale;
+  const drawHeight = image.naturalHeight * scale;
+  const x = (width - drawWidth) / 2;
+  const y = (height - drawHeight) / 2;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(image, x, y, drawWidth, drawHeight);
+  ctx.restore();
+}
+
+function ContinuousFrameWorld() {
   const rootRef = useRef(null);
-  const videoRefs = useRef([]);
-  const durationRefs = useRef(clips.map(() => 8));
-  const targetProgress = useRef(0);
-  const renderedProgress = useRef(0);
+  const canvasRef = useRef(null);
+  const introRef = useRef(null);
+  const progressRef = useRef(null);
+  const percentRef = useRef(null);
+
+  const manifestRef = useRef(null);
+  const frameCache = useRef(new Map());
+  const framePromises = useRef(new Map());
+  const targetFrame = useRef(1);
+  const renderedFrame = useRef(1);
+  const lastWarmCenter = useRef(-999);
+  const previousTarget = useRef(1);
+  const directionRef = useRef(1);
   const rafRef = useRef(null);
-  const [readyCount, setReadyCount] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const dprRef = useRef(1);
+  const viewportRef = useRef({ width: 1, height: 1 });
 
-  const renderTimeline = useCallback((progress) => {
-    const videos = videoRefs.current;
-    const totalUnits = clips.length - (clips.length - 1) * OVERLAP;
-    const playhead = Math.min(totalUnits, Math.max(0, progress * totalUnits));
-    let strongestIndex = 0;
-    let strongestOpacity = -1;
+  const [manifest, setManifest] = useState(null);
+  const [firstFrameReady, setFirstFrameReady] = useState(false);
+  const [loadError, setLoadError] = useState(false);
 
-    videos.forEach((video, index) => {
-      if (!video) return;
-      const start = index * (1 - OVERLAP);
-      const local = playhead - start;
+  useLenis(() => ScrollTrigger.update());
 
-      if (local < 0 || local > 1) {
-        video.style.opacity = "0";
-        video.style.zIndex = "1";
-        return;
-      }
+  const loadFrame = useCallback((index, priority = "auto") => {
+    const data = manifestRef.current;
+    if (!data) return Promise.resolve(null);
 
-      let opacity = 1;
-      if (index > 0 && local < OVERLAP) opacity = local / OVERLAP;
-      if (index < clips.length - 1 && local > 1 - OVERLAP) {
-        opacity = Math.min(opacity, (1 - local) / OVERLAP);
-      }
+    const safeIndex = clamp(index, 1, data.frameCount);
+    const cached = frameCache.current.get(safeIndex);
+    if (cached?.complete) return Promise.resolve(cached);
 
-      const duration = durationRefs.current[index] || 8;
-      const targetTime = Math.max(0, Math.min(duration - 0.035, duration * local));
-      if (Number.isFinite(video.duration) && Math.abs(video.currentTime - targetTime) > 0.014) {
-        try { video.currentTime = targetTime; } catch {}
-      }
+    const existing = framePromises.current.get(safeIndex);
+    if (existing) return existing;
 
-      video.style.opacity = String(Math.max(0, Math.min(1, opacity)));
-      video.style.zIndex = String(2 + index);
-
-      if (opacity > strongestOpacity) {
-        strongestOpacity = opacity;
-        strongestIndex = index;
-      }
+    const promise = new Promise((resolve) => {
+      const image = new window.Image();
+      image.decoding = "async";
+      image.fetchPriority = priority;
+      image.onload = () => {
+        frameCache.current.set(safeIndex, image);
+        framePromises.current.delete(safeIndex);
+        resolve(image);
+      };
+      image.onerror = () => {
+        framePromises.current.delete(safeIndex);
+        resolve(null);
+      };
+      image.src = frameUrl(safeIndex);
     });
 
-    setActiveIndex((current) => current === strongestIndex ? current : strongestIndex);
+    framePromises.current.set(safeIndex, promise);
+    return promise;
+  }, []);
+
+  const pruneCache = useCallback((center) => {
+    const cache = frameCache.current;
+    if (cache.size <= MAX_DECODED_FRAMES) return;
+
+    const keep = [...cache.keys()]
+      .sort((a, b) => Math.abs(a - center) - Math.abs(b - center))
+      .slice(0, MAX_DECODED_FRAMES);
+    const keepSet = new Set(keep);
+
+    for (const [key, image] of cache) {
+      if (!keepSet.has(key)) {
+        image.src = "";
+        cache.delete(key);
+      }
+    }
+  }, []);
+
+  const warmFrameWindow = useCallback((center) => {
+    const data = manifestRef.current;
+    if (!data) return;
+
+    const rounded = Math.round(center);
+    if (Math.abs(rounded - lastWarmCenter.current) < 3) return;
+    lastWarmCenter.current = rounded;
+
+    const direction = directionRef.current || 1;
+    const queue = [rounded, rounded + 1, rounded - 1];
+
+    for (let step = 2; step <= PRELOAD_AHEAD; step += 1) {
+      queue.push(rounded + step * direction);
+      if (step <= PRELOAD_BEHIND) queue.push(rounded - step * direction);
+    }
+
+    for (const index of queue) {
+      if (index >= 1 && index <= data.frameCount) loadFrame(index);
+    }
+
+    pruneCache(rounded);
+  }, [loadFrame, pruneCache]);
+
+  const paint = useCallback((frameValue) => {
+    const canvas = canvasRef.current;
+    const data = manifestRef.current;
+    if (!canvas || !data) return;
+
+    const { width, height } = viewportRef.current;
+    const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
+    if (!ctx) return;
+
+    const dpr = dprRef.current;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = "#0a0d0b";
+    ctx.fillRect(0, 0, width, height);
+
+    const safeFrame = clamp(frameValue, 1, data.frameCount);
+    const lower = Math.floor(safeFrame);
+    const upper = Math.min(data.frameCount, lower + 1);
+    const mix = safeFrame - lower;
+
+    const lowerImage = frameCache.current.get(lower);
+    const upperImage = frameCache.current.get(upper);
+
+    if (lowerImage?.complete) {
+      drawCover(ctx, lowerImage, width, height, 1);
+      if (upperImage?.complete && upper !== lower && mix > 0.025) {
+        drawCover(ctx, upperImage, width, height, clamp(mix, 0, 1));
+      }
+      return;
+    }
+
+    if (upperImage?.complete) {
+      drawCover(ctx, upperImage, width, height, 1);
+      return;
+    }
+
+    // Never flash black when the user outruns the preload window. Keep the
+    // nearest decoded frame on screen until the exact neighbouring frame lands.
+    let nearest = null;
+    let nearestDistance = Infinity;
+    for (const [index, image] of frameCache.current) {
+      const distance = Math.abs(index - safeFrame);
+      if (image.complete && distance < nearestDistance) {
+        nearest = image;
+        nearestDistance = distance;
+      }
+    }
+    if (nearest) drawCover(ctx, nearest, width, height, 1);
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+
+    fetch(MANIFEST_URL, { cache: "force-cache" })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Frame manifest returned ${response.status}`);
+        return response.json();
+      })
+      .then(async (data) => {
+        if (cancelled) return;
+        manifestRef.current = data;
+        setManifest(data);
+        targetFrame.current = 1;
+        renderedFrame.current = 1;
+
+        const first = await loadFrame(1, "high");
+        if (cancelled || !first) return;
+
+        setFirstFrameReady(true);
+        warmFrameWindow(1);
+        paint(1);
+      })
+      .catch(() => {
+        if (!cancelled) setLoadError(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [loadFrame, paint, warmFrameWindow]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return undefined;
+
+    const resize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      viewportRef.current = { width, height };
+      dprRef.current = dpr;
+      canvas.width = Math.max(1, Math.round(width * dpr));
+      canvas.height = Math.max(1, Math.round(height * dpr));
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      paint(renderedFrame.current);
+      ScrollTrigger.refresh();
+    };
+
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+    return () => window.removeEventListener("resize", resize);
+  }, [paint]);
+
+  useEffect(() => {
     const tick = () => {
-      const target = targetProgress.current;
-      const current = renderedProgress.current;
-      const distance = target - current;
-      const next = Math.abs(distance) < 0.00008 ? target : current + distance * 0.19;
-      renderedProgress.current = next;
-      renderTimeline(next);
+      const data = manifestRef.current;
+      if (data) {
+        const target = targetFrame.current;
+        const current = renderedFrame.current;
+        const distance = target - current;
+
+        // Lenis smooths input; this second, light interpolation smooths the
+        // visual playhead itself so wheel ticks never become frame jumps.
+        const next = Math.abs(distance) < 0.002 ? target : current + distance * 0.24;
+        renderedFrame.current = next;
+        directionRef.current = target >= current ? 1 : -1;
+
+        warmFrameWindow(next);
+        paint(next);
+      }
+
       rafRef.current = requestAnimationFrame(tick);
     };
 
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [renderTimeline]);
+  }, [paint, warmFrameWindow]);
 
   useGSAP(() => {
     const trigger = ScrollTrigger.create({
       trigger: rootRef.current,
       start: "top top",
       end: "bottom bottom",
-      onUpdate: (self) => { targetProgress.current = self.progress; },
-      onRefresh: (self) => { targetProgress.current = self.progress; },
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        const data = manifestRef.current;
+        if (!data) return;
+
+        const frame = 1 + self.progress * (data.frameCount - 1);
+        directionRef.current = frame >= previousTarget.current ? 1 : -1;
+        previousTarget.current = frame;
+        targetFrame.current = frame;
+
+        if (progressRef.current) {
+          progressRef.current.style.transform = `scaleX(${Math.max(0.004, self.progress)})`;
+        }
+        if (percentRef.current) {
+          percentRef.current.textContent = `${Math.round(self.progress * 100)}%`;
+        }
+        if (introRef.current) {
+          const opacity = clamp(1 - self.progress / 0.11, 0, 1);
+          const y = self.progress * -34;
+          introRef.current.style.opacity = String(opacity);
+          introRef.current.style.transform = `translate3d(0, ${y}px, 0)`;
+        }
+      },
     });
 
     return () => trigger.kill();
-  }, { scope: rootRef });
-
-  const handleMetadata = (index) => {
-    const video = videoRefs.current[index];
-    if (!video || !Number.isFinite(video.duration)) return;
-    durationRefs.current[index] = video.duration;
-    try { video.currentTime = 0.001; } catch {}
-    video.dataset.ready = "true";
-    setReadyCount((count) => Math.min(clips.length, count + 1));
-  };
+  }, { scope: rootRef, dependencies: [manifest?.frameCount] });
 
   return (
     <main
       ref={rootRef}
       className="continuous-world"
+      data-render-mode="frame-sequence"
+      data-sequence-ready={firstFrameReady ? "true" : "false"}
       style={{ "--scroll-height": `${SCROLL_HEIGHT}svh` }}
     >
       <div className="continuous-world__stage">
@@ -125,41 +317,64 @@ export default function PortfolioWorldBase() {
           priority
           sizes="100vw"
           quality={100}
-          className={`continuous-world__poster${readyCount ? " is-hidden" : ""}`}
+          className={`continuous-world__poster${firstFrameReady ? " is-hidden" : ""}`}
         />
 
-        <div className="continuous-world__videos" aria-hidden="true">
-          {clips.map((clip, index) => (
-            <video
-              key={clip.src}
-              ref={(node) => { videoRefs.current[index] = node; }}
-              src={clip.src}
-              muted
-              playsInline
-              preload={index < 3 ? "auto" : "metadata"}
-              onLoadedMetadata={() => handleMetadata(index)}
-              className="continuous-world__video"
-            />
-          ))}
-        </div>
+        <canvas
+          ref={canvasRef}
+          className={`continuous-world__canvas${firstFrameReady ? " is-ready" : ""}`}
+          aria-label="A continuous cinematic journey through Ankit Bhardwaj's portfolio world"
+        />
 
-        <div className="continuous-world__veil" />
+        <div className="continuous-world__veil" aria-hidden="true" />
 
         <header className="continuous-world__header">
-          <span>Ankit Bhardwaj</span>
-          <span>{clips[activeIndex]?.label || "World"}</span>
+          <Link href="/redesign" className="continuous-world__brand">Ankit Bhardwaj</Link>
+          <nav aria-label="Portfolio navigation">
+            <Link href="/contact">Contact</Link>
+          </nav>
         </header>
 
-        <div className="continuous-world__intro">
-          <p>Scroll is the camera.</p>
-          <h1>One continuous world.</h1>
-          <span>No chapter stops. No page breaks. The film moves only as you move.</span>
+        <div ref={introRef} className="continuous-world__intro">
+          <p>Scroll to move through the world</p>
+          <h1>Ankit Bhardwaj</h1>
+          <span>Software, research, systems — and the questions that came before them.</span>
         </div>
 
+        {!firstFrameReady && !loadError ? (
+          <div className="continuous-world__loading" role="status">
+            <span /> Preparing the journey
+          </div>
+        ) : null}
+
+        {loadError ? (
+          <div className="continuous-world__loading continuous-world__loading--error" role="status">
+            Motion assets are unavailable. The still experience remains usable.
+          </div>
+        ) : null}
+
         <div className="continuous-world__progress" aria-hidden="true">
-          <i style={{ transform: `scaleX(${Math.max(0.015, (activeIndex + 1) / clips.length)})` }} />
+          <i ref={progressRef} />
+          <span ref={percentRef}>0%</span>
         </div>
       </div>
     </main>
+  );
+}
+
+export default function PortfolioWorldBase() {
+  return (
+    <ReactLenis
+      root
+      options={{
+        autoRaf: true,
+        lerp: 0.085,
+        smoothWheel: true,
+        wheelMultiplier: 0.82,
+        touchMultiplier: 1.05,
+      }}
+    >
+      <ContinuousFrameWorld />
+    </ReactLenis>
   );
 }

@@ -2,19 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ReactLenis, useLenis } from "lenis/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useEffect, useRef, useState } from "react";
+import { ReactLenis } from "lenis/react";
 
 import frame01 from "../../portfolio-assets/PORTFOLIO_F01_ARRIVAL.png";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, useGSAP);
-}
-
-const MASTER_VIDEO = "/portfolio-world/master/master-scroll-1080p.mp4";
+const DESKTOP_VIDEO = "/portfolio-world/master/master-scroll-1080p.mp4";
+const MOBILE_VIDEO = "/portfolio-world/master/master-scroll-720p.mp4";
 const SCROLL_HEIGHT = 1180;
 const SEEK_EPSILON = 1 / 36;
 
@@ -29,98 +23,26 @@ function ContinuousVideoWorld() {
   const progressRef = useRef(null);
   const percentRef = useRef(null);
   const loadingRef = useRef(null);
+  const rafRef = useRef(null);
 
   const durationRef = useRef(56);
   const targetTimeRef = useRef(0);
-  const rafRef = useRef(null);
-  const videoFrameCallbackRef = useRef(null);
   const [metadataReady, setMetadataReady] = useState(false);
   const [firstFrameReady, setFirstFrameReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
 
-  useLenis(() => ScrollTrigger.update());
-
-  const updateBufferLabel = useCallback(() => {
-    const video = videoRef.current;
-    const label = loadingRef.current;
-    if (!video || !label || !Number.isFinite(video.duration) || video.duration <= 0) return;
-
-    let bufferedEnd = 0;
-    for (let index = 0; index < video.buffered.length; index += 1) {
-      bufferedEnd = Math.max(bufferedEnd, video.buffered.end(index));
-    }
-    const percent = Math.min(100, Math.round((bufferedEnd / video.duration) * 100));
-    label.textContent = percent > 0 ? `Preparing motion · ${percent}%` : "Preparing motion";
-  }, []);
-
   useEffect(() => {
-    const pumpSeek = () => {
+    const tick = () => {
+      const root = rootRef.current;
       const video = videoRef.current;
-      if (video && metadataReady && Number.isFinite(video.duration) && !video.seeking) {
-        const desired = clamp(targetTimeRef.current, 0, Math.max(0, video.duration - 0.02));
-        const delta = desired - video.currentTime;
 
-        // The old builds continuously replaced currentTime while the decoder was
-        // already seeking, which made the picture judder. One seek is allowed to
-        // finish before the next target is issued; intermediate wheel events are
-        // deliberately discarded in favour of the newest target.
-        if (Math.abs(delta) > SEEK_EPSILON) {
-          try {
-            video.currentTime = desired;
-          } catch {
-            // Keep the previous decoded frame visible until the browser is ready.
-          }
-        }
-      }
+      if (root) {
+        const maxScroll = Math.max(1, root.offsetHeight - window.innerHeight);
+        const rootTop = root.getBoundingClientRect().top;
+        const progress = clamp(-rootTop / maxScroll, 0, 1);
 
-      rafRef.current = requestAnimationFrame(pumpSeek);
-    };
+        targetTimeRef.current = progress * durationRef.current;
 
-    rafRef.current = requestAnimationFrame(pumpSeek);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [metadataReady]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || typeof video.requestVideoFrameCallback !== "function") return undefined;
-
-    const observeDecodedFrames = () => {
-      videoFrameCallbackRef.current = video.requestVideoFrameCallback(() => {
-        if (!firstFrameReady && video.readyState >= 2) setFirstFrameReady(true);
-        observeDecodedFrames();
-      });
-    };
-
-    observeDecodedFrames();
-    return () => {
-      if (
-        videoFrameCallbackRef.current !== null &&
-        typeof video.cancelVideoFrameCallback === "function"
-      ) {
-        video.cancelVideoFrameCallback(videoFrameCallbackRef.current);
-      }
-    };
-  }, [firstFrameReady]);
-
-  useGSAP(() => {
-    if (!metadataReady) return undefined;
-
-    const playhead = { time: 0 };
-    const tween = gsap.to(playhead, {
-      time: durationRef.current,
-      ease: "none",
-      scrollTrigger: {
-        trigger: rootRef.current,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 0.55,
-        invalidateOnRefresh: true,
-      },
-      onUpdate: () => {
-        targetTimeRef.current = playhead.time;
-
-        const trigger = tween.scrollTrigger;
-        const progress = trigger ? trigger.progress : 0;
         if (progressRef.current) {
           progressRef.current.style.transform = `scaleX(${Math.max(0.004, progress)})`;
         }
@@ -132,11 +54,43 @@ function ContinuousVideoWorld() {
           introRef.current.style.opacity = String(opacity);
           introRef.current.style.transform = `translate3d(0, ${progress * -28}px, 0)`;
         }
-      },
-    });
+      }
 
-    return () => tween.kill();
-  }, { scope: rootRef, dependencies: [metadataReady] });
+      if (video && metadataReady && Number.isFinite(video.duration) && !video.seeking) {
+        const desired = clamp(targetTimeRef.current, 0, Math.max(0, video.duration - 0.02));
+        const delta = desired - video.currentTime;
+
+        // One decoder seek at a time. Wheel/trackpad events may update the target
+        // many times, but we always discard stale intermediate targets and seek
+        // only to the newest one after the current decode finishes.
+        if (Math.abs(delta) > SEEK_EPSILON) {
+          try {
+            video.currentTime = desired;
+          } catch {
+            // Keep the last decoded frame on screen while the media element catches up.
+          }
+        }
+      }
+
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [metadataReady]);
+
+  const updateBufferLabel = () => {
+    const video = videoRef.current;
+    const label = loadingRef.current;
+    if (!video || !label || !Number.isFinite(video.duration) || video.duration <= 0) return;
+
+    let bufferedEnd = 0;
+    for (let index = 0; index < video.buffered.length; index += 1) {
+      bufferedEnd = Math.max(bufferedEnd, video.buffered.end(index));
+    }
+    const percent = Math.min(100, Math.round((bufferedEnd / video.duration) * 100));
+    label.textContent = percent > 0 ? `Preparing motion · ${percent}%` : "Preparing motion";
+  };
 
   const handleMetadata = () => {
     const video = videoRef.current;
@@ -145,14 +99,15 @@ function ContinuousVideoWorld() {
     durationRef.current = video.duration;
     targetTimeRef.current = 0;
     video.pause();
+    setMetadataReady(true);
+
     try {
       video.currentTime = 0.001;
     } catch {
-      // loadeddata will make the first decoded frame available shortly.
+      // loadeddata will reveal the first decoded frame when available.
     }
-    setMetadataReady(true);
+
     updateBufferLabel();
-    requestAnimationFrame(() => ScrollTrigger.refresh());
   };
 
   const handleLoadedData = () => {
@@ -183,7 +138,6 @@ function ContinuousVideoWorld() {
         <video
           ref={videoRef}
           className={`continuous-world__video${firstFrameReady ? " is-ready" : ""}`}
-          src={MASTER_VIDEO}
           muted
           playsInline
           preload="auto"
@@ -194,7 +148,10 @@ function ContinuousVideoWorld() {
           onProgress={updateBufferLabel}
           onError={() => setLoadError(true)}
           aria-label="A continuous cinematic journey through Ankit Bhardwaj's portfolio world"
-        />
+        >
+          <source src={MOBILE_VIDEO} media="(max-width: 900px)" type="video/mp4" />
+          <source src={DESKTOP_VIDEO} type="video/mp4" />
+        </video>
 
         <div className="continuous-world__veil" aria-hidden="true" />
 

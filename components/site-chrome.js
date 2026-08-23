@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { primaryNav, profileLinks, resumeData, siteMeta } from "../lib/site-data";
 import { ResumePreview, ResumeToolbar } from "./resume-preview";
 import { ThemeToggle } from "./theme-toggle";
-import { FloatingTerminal } from "./floating-terminal";
 
 function LogoGlyph() {
   return (
@@ -201,7 +200,6 @@ export function SiteChrome({ children }) {
           clarity.
         </p>
       </footer>
-      <FloatingTerminal />
 
       {isResumeOpen ? (
         <div

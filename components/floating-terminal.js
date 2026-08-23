@@ -1,9 +1,19 @@
 "use client";
 
-import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import { Terminal } from "./terminal";
 import { SectionHead } from "./site-sections";
+
+const Terminal = dynamic(() => import("./terminal").then((mod) => mod.Terminal), {
+  loading: () => (
+    <div className="terminal-window terminal-window--loading">
+      <div className="terminal-line terminal-line--system">
+        [SYSTEM_ALPHA]: Loading console...
+      </div>
+    </div>
+  ),
+  ssr: false,
+});
 
 export function FloatingTerminal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,14 +48,7 @@ export function FloatingTerminal() {
           <span className="floating-core-tick floating-core-tick--two" aria-hidden="true" />
           <span className="floating-core-tick floating-core-tick--three" aria-hidden="true" />
           <div className="terminal-ping" />
-          <Image
-            src="/system-alpha-core.png"
-            alt="System Alpha Core"
-            width={56}
-            height={56}
-            className="floating-core-image"
-            priority
-          />
+          <span className="floating-core-image floating-core-image--css" aria-hidden="true" />
           <span className="floating-core-status" aria-hidden="true" />
         </button>
       </div>

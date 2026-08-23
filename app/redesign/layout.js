@@ -1,17 +1,11 @@
-import "lenis/dist/lenis.css";
-import "./redesign.css";
-import "./refinements.css";
-import "./continuous.css";
-import "./continuous-fixes.css";
-import "./world-hero.css";
-import RedesignWorldProvider from "./components/world/RedesignWorldProvider";
+import "./world-base.css";
 
 export const metadata = {
   title: {
-    absolute: "Portfolio Preview | Ankit Bhardwaj",
+    absolute: "Portfolio World Preview | Ankit Bhardwaj",
   },
   description:
-    "An interactive portfolio preview for Ankit Bhardwaj. This review route remains separate from the production portfolio.",
+    "A visual world preview for Ankit Bhardwaj's portfolio. This review route remains separate from the production portfolio.",
   robots: {
     index: false,
     follow: false,
@@ -19,5 +13,5 @@ export const metadata = {
 };
 
 export default function RedesignLayout({ children }) {
-  return <RedesignWorldProvider>{children}</RedesignWorldProvider>;
+  return children;
 }

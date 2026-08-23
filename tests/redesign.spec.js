@@ -7,14 +7,14 @@ function isIgnoredLocalResource(url) {
 }
 
 async function captureScene(page, testInfo, name) {
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(850);
   await page.screenshot({
     path: `test-results/redesign-${testInfo.project.name}-${name}.png`,
     fullPage: false,
   });
 }
 
-test("portfolio renders one continuous React frame-sequence world", async ({ page }, testInfo) => {
+test("portfolio renders one continuous scrub-optimized master video", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -34,29 +34,26 @@ test("portfolio renders one continuous React frame-sequence world", async ({ pag
 
   await page.goto("/redesign", { waitUntil: "domcontentloaded" });
   await expect(page).toHaveTitle(/Portfolio World Preview/);
-  await expect(page.locator(".continuous-world")).toHaveAttribute("data-render-mode", "frame-sequence");
+  await expect(page.locator(".continuous-world")).toHaveAttribute("data-render-mode", "single-master-video");
   await expect(page.locator(".continuous-world__stage")).toHaveCount(1);
-  await expect(page.locator(".continuous-world__canvas")).toHaveCount(1);
-  await expect(page.locator(".continuous-world__video")).toHaveCount(0);
+  await expect(page.locator(".continuous-world__video")).toHaveCount(1);
+  await expect(page.locator(".continuous-world__canvas")).toHaveCount(0);
   await expect(page.locator(".world-rest")).toHaveCount(0);
   await expect(page.locator(".world-transition")).toHaveCount(0);
 
-  const manifest = await page.request.get("/portfolio-world/frames/master/manifest.json");
-  expect(manifest.ok()).toBeTruthy();
-  const manifestJson = await manifest.json();
-  expect(manifestJson.frameCount).toBe(560);
-  expect(manifestJson.sequenceFps).toBe(10);
+  const video = page.locator(".continuous-world__video");
+  await expect(video).toHaveAttribute("src", "/portfolio-world/master/master-scroll-1080p.mp4");
+  await expect(page.locator(".continuous-world")).toHaveAttribute("data-video-ready", "true", { timeout: 30_000 });
+  await expect(video).toBeVisible();
 
-  await expect(page.locator(".continuous-world")).toHaveAttribute("data-sequence-ready", "true", { timeout: 20_000 });
-  await expect(page.locator(".continuous-world__canvas")).toBeVisible();
   await captureScene(page, testInfo, "start");
 
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight * 0.5));
-  await page.waitForTimeout(1300);
+  await expect.poll(async () => video.evaluate((node) => node.currentTime), { timeout: 12_000 }).toBeGreaterThan(10);
   await captureScene(page, testInfo, "middle");
 
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-  await page.waitForTimeout(1300);
+  await expect.poll(async () => video.evaluate((node) => node.currentTime), { timeout: 12_000 }).toBeGreaterThan(35);
   await captureScene(page, testInfo, "end");
 
   expect(pageErrors).toEqual([]);

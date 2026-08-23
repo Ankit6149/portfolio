@@ -7,8 +7,7 @@ import { ReactLenis } from "lenis/react";
 
 import frame01 from "../../portfolio-assets/PORTFOLIO_F01_ARRIVAL.png";
 
-const DESKTOP_VIDEO = "/portfolio-world/master/master-scroll-1080p.mp4";
-const MOBILE_VIDEO = "/portfolio-world/master/master-scroll-720p.mp4";
+const MASTER_VIDEO = "/portfolio-world/master/master-scroll-1080p.mp4";
 const SCROLL_HEIGHT = 1180;
 const SEEK_EPSILON = 1 / 36;
 
@@ -60,14 +59,11 @@ function ContinuousVideoWorld() {
         const desired = clamp(targetTimeRef.current, 0, Math.max(0, video.duration - 0.02));
         const delta = desired - video.currentTime;
 
-        // One decoder seek at a time. Wheel/trackpad events may update the target
-        // many times, but we always discard stale intermediate targets and seek
-        // only to the newest one after the current decode finishes.
         if (Math.abs(delta) > SEEK_EPSILON) {
           try {
             video.currentTime = desired;
           } catch {
-            // Keep the last decoded frame on screen while the media element catches up.
+            // Preserve the last decoded frame until the media element catches up.
           }
         }
       }
@@ -138,6 +134,7 @@ function ContinuousVideoWorld() {
         <video
           ref={videoRef}
           className={`continuous-world__video${firstFrameReady ? " is-ready" : ""}`}
+          src={MASTER_VIDEO}
           muted
           playsInline
           preload="auto"
@@ -148,10 +145,7 @@ function ContinuousVideoWorld() {
           onProgress={updateBufferLabel}
           onError={() => setLoadError(true)}
           aria-label="A continuous cinematic journey through Ankit Bhardwaj's portfolio world"
-        >
-          <source src={MOBILE_VIDEO} media="(max-width: 900px)" type="video/mp4" />
-          <source src={DESKTOP_VIDEO} type="video/mp4" />
-        </video>
+        />
 
         <div className="continuous-world__veil" aria-hidden="true" />
 

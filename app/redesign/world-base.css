@@ -1,6 +1,6 @@
 :root {
   --world-ink: #fffaf1;
-  --world-shadow: rgba(6, 8, 7, 0.58);
+  --world-shadow: rgba(6, 8, 7, 0.52);
 }
 
 html { scroll-behavior: auto; }
@@ -8,7 +8,7 @@ body { margin: 0; background: #0a0d0b; }
 
 .continuous-world {
   position: relative;
-  height: var(--scroll-height, 940svh);
+  height: var(--scroll-height, 1180svh);
   background: #0a0d0b;
   color: var(--world-ink);
 }
@@ -25,7 +25,7 @@ body { margin: 0; background: #0a0d0b; }
 }
 
 .continuous-world__poster,
-.continuous-world__canvas,
+.continuous-world__video,
 .continuous-world__veil {
   position: absolute;
   inset: 0;
@@ -36,35 +36,40 @@ body { margin: 0; background: #0a0d0b; }
   object-fit: cover;
   object-position: center;
   opacity: 1;
-  transition: opacity 420ms ease;
+  transition: opacity 220ms linear;
 }
 
 .continuous-world__poster.is-hidden {
   opacity: 0;
 }
 
-.continuous-world__canvas {
+.continuous-world__video {
   z-index: 1;
-  display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: center;
   opacity: 0;
   background: #0a0d0b;
-  transition: opacity 380ms ease;
-  transform: translateZ(0);
-  image-rendering: auto;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+  pointer-events: none;
+  transition: opacity 180ms linear;
 }
 
-.continuous-world__canvas.is-ready {
+.continuous-world__video.is-ready {
   opacity: 1;
 }
 
+/* Keep the grade extremely light. The artwork already carries the atmosphere;
+   the previous heavy overlays made the master look softer than it really is. */
 .continuous-world__veil {
   z-index: 20;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(5, 8, 6, .17), transparent 20%, transparent 74%, rgba(5, 8, 6, .25)),
-    radial-gradient(circle at 50% 42%, transparent 52%, rgba(5, 8, 6, .1) 100%);
+    linear-gradient(to bottom, rgba(5, 8, 6, .1), transparent 18%, transparent 78%, rgba(5, 8, 6, .18)),
+    radial-gradient(circle at 50% 44%, transparent 62%, rgba(5, 8, 6, .06) 100%);
 }
 
 .continuous-world__header {
@@ -78,11 +83,11 @@ body { margin: 0; background: #0a0d0b; }
   justify-content: space-between;
   gap: 24px;
   padding: 22px clamp(20px, 4vw, 64px);
-  color: rgba(255, 250, 242, .9);
+  color: rgba(255, 250, 242, .92);
   font: 600 10px/1.2 Arial, Helvetica, sans-serif;
   letter-spacing: .14em;
   text-transform: uppercase;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, .5);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .46);
 }
 
 .continuous-world__header a {
@@ -91,9 +96,7 @@ body { margin: 0; background: #0a0d0b; }
   transition: opacity 180ms ease;
 }
 
-.continuous-world__header a:hover {
-  opacity: .68;
-}
+.continuous-world__header a:hover { opacity: .68; }
 
 .continuous-world__brand {
   font: 500 clamp(14px, 1.2vw, 18px)/1.2 Georgia, "Times New Roman", serif;
@@ -120,7 +123,7 @@ body { margin: 0; background: #0a0d0b; }
 
 .continuous-world__intro p {
   margin: 0 0 14px;
-  color: rgba(255, 250, 242, .7);
+  color: rgba(255, 250, 242, .74);
   font: 600 10px/1 Arial, Helvetica, sans-serif;
   letter-spacing: .18em;
   text-transform: uppercase;
@@ -138,7 +141,7 @@ body { margin: 0; background: #0a0d0b; }
   display: block;
   max-width: 46ch;
   margin-top: 20px;
-  color: rgba(255, 250, 242, .78);
+  color: rgba(255, 250, 242, .82);
   font: 400 clamp(14px, 1.15vw, 18px)/1.55 Arial, Helvetica, sans-serif;
 }
 
@@ -150,12 +153,14 @@ body { margin: 0; background: #0a0d0b; }
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: rgba(255, 250, 242, .68);
+  color: rgba(255, 250, 242, .72);
   font: 600 9px/1 Arial, Helvetica, sans-serif;
-  letter-spacing: .16em;
+  letter-spacing: .14em;
   text-transform: uppercase;
   text-shadow: 0 2px 14px rgba(0, 0, 0, .45);
 }
+
+.continuous-world__loading b { font: inherit; }
 
 .continuous-world__loading span {
   width: 5px;
@@ -166,7 +171,7 @@ body { margin: 0; background: #0a0d0b; }
 }
 
 .continuous-world__loading--error {
-  max-width: 320px;
+  max-width: 360px;
   line-height: 1.45;
   letter-spacing: .08em;
   text-transform: none;
@@ -187,7 +192,7 @@ body { margin: 0; background: #0a0d0b; }
   position: absolute;
   inset: 0;
   display: block;
-  background: rgba(255, 250, 242, .82);
+  background: rgba(255, 250, 242, .88);
   transform: scaleX(.004);
   transform-origin: left center;
   will-change: transform;
@@ -197,7 +202,7 @@ body { margin: 0; background: #0a0d0b; }
   position: absolute;
   right: 0;
   bottom: 9px;
-  color: rgba(255, 250, 242, .58);
+  color: rgba(255, 250, 242, .64);
   font: 600 9px/1 Arial, Helvetica, sans-serif;
   letter-spacing: .12em;
   text-shadow: 0 2px 14px rgba(0, 0, 0, .45);
@@ -209,21 +214,10 @@ body { margin: 0; background: #0a0d0b; }
 }
 
 @media (max-width: 900px) {
-  .continuous-world {
-    height: 760svh;
-  }
-
-  .continuous-world__stage {
-    min-height: 560px;
-  }
-
-  .continuous-world__header {
-    padding: 18px;
-  }
-
-  .continuous-world__header nav {
-    gap: 16px;
-  }
+  .continuous-world { height: 920svh; }
+  .continuous-world__stage { min-height: 560px; }
+  .continuous-world__header { padding: 18px; }
+  .continuous-world__header nav { gap: 16px; }
 
   .continuous-world__intro {
     right: 20px;
@@ -255,24 +249,9 @@ body { margin: 0; background: #0a0d0b; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .continuous-world {
-    height: 100svh;
-  }
-
-  .continuous-world__canvas {
-    display: none;
-  }
-
-  .continuous-world__poster {
-    opacity: 1 !important;
-  }
-
-  .continuous-world__intro {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .continuous-world__progress {
-    display: none;
-  }
+  .continuous-world { height: 100svh; }
+  .continuous-world__video { display: none; }
+  .continuous-world__poster { opacity: 1 !important; }
+  .continuous-world__intro { opacity: 1 !important; transform: none !important; }
+  .continuous-world__progress { display: none; }
 }

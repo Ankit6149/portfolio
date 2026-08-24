@@ -7,7 +7,6 @@ import { ReactLenis, useLenis } from "lenis/react";
 
 import frame01 from "../../portfolio-assets/PORTFOLIO_F01_ARRIVAL.png";
 import { featuredProjects } from "../../lib/site-data";
-import { AMBIENT_REGIONS, REST_STATES } from "./data/rest-states";
 
 const MASTER_VIDEO = "/portfolio-world/master/master-scroll-1080p.mp4";
 const ORNATE_FRAME = "/portfolio-world/ui/cream-gold-frame.png";
@@ -38,21 +37,6 @@ function smootherstep(value) {
 
 function worldAtProgress(progress) {
   return WORLDS.find((world) => progress >= world.start && progress < world.end) || WORLDS[WORLDS.length - 1];
-}
-
-function nearestRestState(progress, duration) {
-  let nearest = null;
-
-  for (const state of REST_STATES) {
-    const anchorProgress = clamp(state.time / Math.max(duration, 0.001), 0, 1);
-    const distance = Math.abs(progress - anchorProgress);
-
-    if (distance <= state.radius && (!nearest || distance < nearest.distance)) {
-      nearest = { ...state, anchorProgress, distance };
-    }
-  }
-
-  return nearest;
 }
 
 function studioStrengthAtProgress(progress) {
@@ -141,46 +125,8 @@ function StudioFolio({ onClose }) {
   );
 }
 
-function AmbientRegions({ videoRefs }) {
-  return (
-    <div className="world-ambients" aria-hidden="true">
-      {AMBIENT_REGIONS.map((region) => (
-        <div
-          key={region.id}
-          className="world-ambient-region"
-          data-ambient-id={region.id}
-          data-kind={region.kind}
-          style={{
-            left: `${region.box.x * 100}%`,
-            top: `${region.box.y * 100}%`,
-            width: `${region.box.width * 100}%`,
-            height: `${region.box.height * 100}%`,
-            opacity: region.opacity,
-            WebkitMaskImage: `url(${region.mask})`,
-            maskImage: `url(${region.mask})`,
-          }}
-        >
-          <video
-            ref={(node) => {
-              if (node) videoRefs.current.set(region.id, node);
-              else videoRefs.current.delete(region.id);
-            }}
-            src={region.src}
-            muted
-            loop
-            playsInline
-            preload={region.id === "01-river" ? "auto" : "metadata"}
-            tabIndex={-1}
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function ContinuousVideoWorld() {
   const rootRef = useRef(null);
-  const cameraPlaneRef = useRef(null);
   const videoRef = useRef(null);
   const introRef = useRef(null);
   const progressRef = useRef(null);
@@ -189,17 +135,9 @@ function ContinuousVideoWorld() {
   const studioRef = useRef(null);
   const rafRef = useRef(null);
   const activeWorldRef = useRef("01");
-  const activeRestRef = useRef(null);
-  const ambientVideoRefs = useRef(new Map());
 
   const durationRef = useRef(56);
   const targetTimeRef = useRef(0);
-  const lastProgressRef = useRef(0);
-  const lastMotionAtRef = useRef(0);
-  const restStrengthRef = useRef(0);
-  const pointerTargetRef = useRef({ x: 0, y: 0 });
-  const pointerCurrentRef = useRef({ x: 0, y: 0 });
-
   const [metadataReady, setMetadataReady] = useState(false);
   const [firstFrameReady, setFirstFrameReady] = useState(false);
   const [loadError, setLoadError] = useState(false);
@@ -208,29 +146,6 @@ function ContinuousVideoWorld() {
   const lenis = useLenis();
 
   const activeWorld = WORLDS.find((world) => world.id === activeWorldId) || WORLDS[0];
-
-  useEffect(() => {
-    const finePointer = window.matchMedia("(pointer: fine)");
-    if (!finePointer.matches) return undefined;
-
-    const handlePointerMove = (event) => {
-      pointerTargetRef.current.x = clamp((event.clientX / window.innerWidth - 0.5) * 2, -1, 1);
-      pointerTargetRef.current.y = clamp((event.clientY / window.innerHeight - 0.5) * 2, -1, 1);
-    };
-
-    const resetPointer = () => {
-      pointerTargetRef.current.x = 0;
-      pointerTargetRef.current.y = 0;
-    };
-
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    document.documentElement.addEventListener("mouseleave", resetPointer);
-
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      document.documentElement.removeEventListener("mouseleave", resetPointer);
-    };
-  }, []);
 
   useEffect(() => {
     if (!folioOpen) {
@@ -249,65 +164,19 @@ function ContinuousVideoWorld() {
   }, [folioOpen, lenis]);
 
   useEffect(() => {
-    const syncAmbientPlayback = (restId) => {
-      for (const region of AMBIENT_REGIONS) {
-        const media = ambientVideoRefs.current.get(region.id);
-        if (!media) continue;
-
-        const shouldPlay = Boolean(restId && region.worlds.includes(restId));
-        if (shouldPlay && media.paused) {
-          media.play().catch(() => {
-            // Muted autoplay is expected to work; if a browser blocks it, the base
-            // frame remains perfectly valid and the next interaction can retry it.
-          });
-        } else if (!shouldPlay && !media.paused) {
-          media.pause();
-        }
-      }
-    };
-
-    const tick = (now) => {
+    const tick = () => {
       const root = rootRef.current;
       const video = videoRef.current;
-      const cameraPlane = cameraPlaneRef.current;
-      let progress = lastProgressRef.current;
-      let nearestRest = null;
 
       if (root) {
         const maxScroll = Math.max(1, root.offsetHeight - window.innerHeight);
         const rootTop = root.getBoundingClientRect().top;
-        progress = clamp(-rootTop / maxScroll, 0, 1);
+        const progress = clamp(-rootTop / maxScroll, 0, 1);
         const world = worldAtProgress(progress);
         const studioStrength = studioStrengthAtProgress(progress);
 
-        if (lastMotionAtRef.current === 0) lastMotionAtRef.current = now;
-        const progressDelta = Math.abs(progress - lastProgressRef.current);
-        if (progressDelta > 0.000018) lastMotionAtRef.current = now;
-        lastProgressRef.current = progress;
-
-        nearestRest = nearestRestState(progress, durationRef.current);
-        const idleFor = now - lastMotionAtRef.current;
-        const restTarget = nearestRest && idleFor > 110
-          ? smootherstep((idleFor - 110) / 260)
-          : 0;
-        const restFollow = restTarget > restStrengthRef.current ? 0.085 : 0.28;
-        restStrengthRef.current += (restTarget - restStrengthRef.current) * restFollow;
-        if (restStrengthRef.current < 0.001) restStrengthRef.current = 0;
-
-        const settledRestId = nearestRest && restStrengthRef.current > 0.18 ? nearestRest.id : null;
-        if (settledRestId !== activeRestRef.current) {
-          activeRestRef.current = settledRestId;
-          root.dataset.restWorld = settledRestId || "none";
-          syncAmbientPlayback(settledRestId);
-        }
-
-        const displayProgress = nearestRest
-          ? progress + (nearestRest.anchorProgress - progress) * restStrengthRef.current
-          : progress;
-        targetTimeRef.current = displayProgress * durationRef.current;
-
+        targetTimeRef.current = progress * durationRef.current;
         root.dataset.activeWorld = world.id;
-        root.style.setProperty("--rest-strength", String(restStrengthRef.current));
 
         if (world.id !== activeWorldRef.current) {
           activeWorldRef.current = world.id;
@@ -330,26 +199,6 @@ function ContinuousVideoWorld() {
           introRef.current.style.opacity = String(opacity);
           introRef.current.style.transform = `translate3d(0, ${progress * -28}px, 0)`;
         }
-      }
-
-      const pointer = pointerCurrentRef.current;
-      const pointerTarget = pointerTargetRef.current;
-      pointer.x += (pointerTarget.x - pointer.x) * 0.075;
-      pointer.y += (pointerTarget.y - pointer.y) * 0.075;
-
-      const depthStrength = folioOpen ? 0 : restStrengthRef.current;
-      if (cameraPlane) {
-        cameraPlane.style.setProperty("--depth-x", `${(-pointer.x * 5.5 * depthStrength).toFixed(3)}px`);
-        cameraPlane.style.setProperty("--depth-y", `${(-pointer.y * 3.8 * depthStrength).toFixed(3)}px`);
-        cameraPlane.style.setProperty("--depth-ry", `${(pointer.x * 0.32 * depthStrength).toFixed(3)}deg`);
-        cameraPlane.style.setProperty("--depth-rx", `${(-pointer.y * 0.22 * depthStrength).toFixed(3)}deg`);
-        cameraPlane.style.setProperty("--depth-scale", String(1.012 + 0.008 * depthStrength));
-      }
-      if (root) {
-        root.style.setProperty("--ui-depth-x", `${(-pointer.x * 7 * depthStrength).toFixed(3)}px`);
-        root.style.setProperty("--ui-depth-y", `${(-pointer.y * 5 * depthStrength).toFixed(3)}px`);
-        root.style.setProperty("--near-depth-x", `${(-pointer.x * 2.2 * depthStrength).toFixed(3)}px`);
-        root.style.setProperty("--near-depth-y", `${(-pointer.y * 1.6 * depthStrength).toFixed(3)}px`);
       }
 
       if (video && metadataReady && Number.isFinite(video.duration) && !video.seeking && !folioOpen) {
@@ -417,40 +266,35 @@ function ContinuousVideoWorld() {
       data-video-ready={firstFrameReady ? "true" : "false"}
       data-world-sequence="01-10"
       data-active-world="01"
-      data-rest-world="none"
       data-folio-open={folioOpen ? "true" : "false"}
-      style={{ "--scroll-height": `${SCROLL_HEIGHT}svh`, "--rest-strength": 0 }}
+      style={{ "--scroll-height": `${SCROLL_HEIGHT}svh` }}
     >
       <div className="continuous-world__stage">
-        <div ref={cameraPlaneRef} className="continuous-world__camera-plane">
-          <Image
-            src={frame01}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            quality={100}
-            className={`continuous-world__poster${firstFrameReady ? " is-hidden" : ""}`}
-          />
+        <Image
+          src={frame01}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          quality={100}
+          className={`continuous-world__poster${firstFrameReady ? " is-hidden" : ""}`}
+        />
 
-          <video
-            ref={videoRef}
-            className={`continuous-world__video${firstFrameReady ? " is-ready" : ""}`}
-            src={MASTER_VIDEO}
-            muted
-            playsInline
-            preload="auto"
-            disablePictureInPicture
-            onLoadedMetadata={handleMetadata}
-            onLoadedData={handleLoadedData}
-            onCanPlay={handleLoadedData}
-            onProgress={updateBufferLabel}
-            onError={() => setLoadError(true)}
-            aria-label="A continuous cinematic journey through Ankit Bhardwaj's portfolio world"
-          />
-
-          <AmbientRegions videoRefs={ambientVideoRefs} />
-        </div>
+        <video
+          ref={videoRef}
+          className={`continuous-world__video${firstFrameReady ? " is-ready" : ""}`}
+          src={MASTER_VIDEO}
+          muted
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          onLoadedMetadata={handleMetadata}
+          onLoadedData={handleLoadedData}
+          onCanPlay={handleLoadedData}
+          onProgress={updateBufferLabel}
+          onError={() => setLoadError(true)}
+          aria-label="A continuous cinematic journey through Ankit Bhardwaj's portfolio world"
+        />
 
         <div className="continuous-world__veil" aria-hidden="true" />
 

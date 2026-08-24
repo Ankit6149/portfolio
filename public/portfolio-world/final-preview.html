@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#11120f" />
+<title>Ankit Bhardwaj — Portfolio World Preview</title>
+<style>
+  :root{
+    --ink:#fff9ed;
+    --muted:rgba(255,249,237,.76);
+    --shadow:rgba(4,5,4,.58);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:auto;background:#11120f}
+  body{margin:0;background:#11120f;color:var(--ink);font-family:Arial,Helvetica,sans-serif;overscroll-behavior:none}
+  a{color:inherit}
+  button,a{-webkit-tap-highlight-color:transparent}
+  .skip{position:fixed;z-index:200;left:12px;top:-60px;padding:10px 14px;background:#f6efdf;color:#222;text-decoration:none;font:600 12px/1 Arial,sans-serif}
+  .skip:focus{top:12px}
+  #scroll-space{height:2030svh}
+  #stage{position:fixed;inset:0;overflow:hidden;background:#11120f;isolation:isolate}
+  .world-media,.rest,.travel,.rest img,.travel video,.grade,.atmosphere{position:absolute;inset:0;width:100%;height:100%}
+  .rest,.travel{opacity:0;pointer-events:none;will-change:opacity}
+  .rest.is-active,.travel.is-active{opacity:1}
+  .rest img,.travel video{object-fit:cover;object-position:center center;display:block;transform:translateZ(0);backface-visibility:hidden}
+  .rest img{image-rendering:auto}
+  .travel video{background:#11120f}
+  .ambient{position:absolute;z-index:4;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 240ms linear}
+  .rest.is-active .ambient{opacity:var(--ambient-opacity,1)}
+  .ambient video{width:100%;height:100%;object-fit:fill;display:block;filter:saturate(.98) contrast(1.01);-webkit-mask-image:var(--mask);mask-image:var(--mask);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+  .grade{z-index:8;pointer-events:none;background:linear-gradient(to bottom,rgba(5,7,5,.08),transparent 18%,transparent 73%,rgba(5,6,5,.16)),radial-gradient(circle at 50% 46%,transparent 58%,rgba(4,5,4,.10) 100%)}
+  .atmosphere{z-index:7;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 46%,rgba(244,235,212,.24),rgba(244,235,212,.08) 32%,transparent 68%);filter:blur(18px);transform:scale(1.08);will-change:opacity}
+  .chrome{position:absolute;z-index:30;inset:0;pointer-events:none;text-shadow:0 3px 26px var(--shadow)}
+  .brand{position:absolute;left:clamp(22px,4vw,62px);top:24px;font:500 clamp(14px,1.25vw,18px)/1.1 Georgia,'Times New Roman',serif;letter-spacing:.005em;text-decoration:none;pointer-events:auto}
+  .nav{position:absolute;right:clamp(22px,4vw,62px);top:27px;display:flex;gap:22px;pointer-events:auto}
+  .nav a{font:600 10px/1 Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;opacity:.82}
+  .nav a:hover,.brand:hover{opacity:.65}
+  .chapter{position:absolute;left:clamp(22px,4vw,62px);top:66px;font:600 9px/1.2 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,249,237,.66)}
+  .copy{position:absolute;z-index:22;max-width:min(590px,46vw);opacity:0;transition:opacity 180ms linear;text-shadow:0 4px 34px rgba(0,0,0,.68);pointer-events:none}
+  .copy.is-active{opacity:1}
+  .copy.left-low{left:clamp(26px,7vw,116px);bottom:clamp(72px,10vh,122px)}
+  .copy.left-mid{left:clamp(26px,7vw,116px);top:36%}
+  .copy.right-mid{right:clamp(26px,7vw,116px);top:34%;text-align:right}
+  .copy.right-low{right:clamp(26px,7vw,116px);bottom:clamp(72px,10vh,122px);text-align:right}
+  .copy .kicker{margin:0 0 11px;font:600 9px/1.2 Arial,sans-serif;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,249,237,.70)}
+  .copy h1,.copy h2{margin:0;color:#fff9ed;font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.038em;text-wrap:balance}
+  .copy h1{font-size:clamp(42px,5.2vw,82px);line-height:.96}
+  .copy h2{font-size:clamp(30px,3.4vw,56px);line-height:1}
+  .copy p{max-width:50ch;margin:15px 0 0;font:400 clamp(13px,1vw,16px)/1.55 Arial,sans-serif;color:rgba(255,249,237,.86);text-wrap:pretty}
+  .copy.right-mid p,.copy.right-low p{margin-left:auto}
+  .copy .inline-links{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:16px;pointer-events:auto}
+  .copy.right-mid .inline-links,.copy.right-low .inline-links{justify-content:flex-end}
+  .copy .inline-links a{font:600 10px/1.2 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(255,249,237,.48);padding-bottom:3px}
+  .copy .inline-links a:hover{border-color:#fff9ed}
+  .scroll-cue{position:absolute;z-index:24;left:clamp(26px,7vw,116px);bottom:34px;font:600 9px/1 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,249,237,.58);opacity:0;transition:opacity 240ms linear}
+  .scroll-cue.is-active{opacity:1}
+  .sound-note{position:absolute;z-index:24;right:clamp(22px,4vw,62px);bottom:26px;font:500 9px/1.2 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,249,237,.50)}
+  .loading{position:absolute;z-index:80;inset:0;display:grid;place-items:end start;padding:0 0 28px clamp(22px,4vw,62px);background:#11120f;color:rgba(255,249,237,.66);font:600 9px/1 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;transition:opacity 420ms ease;pointer-events:none}
+  .loading.done{opacity:0}
+  @media(max-width:760px){
+    #scroll-space{height:1780svh}
+    .nav{gap:14px}.nav a{font-size:9px}.chapter{top:61px}
+    .copy,.copy.left-low,.copy.left-mid,.copy.right-mid,.copy.right-low{left:22px;right:22px;top:auto;bottom:74px;max-width:calc(100vw - 44px);text-align:left}
+    .copy.right-mid p,.copy.right-low p{margin-left:0}
+    .copy.right-mid .inline-links,.copy.right-low .inline-links{justify-content:flex-start}
+    .copy h1{font-size:clamp(40px,13vw,64px)}.copy h2{font-size:clamp(30px,9vw,46px)}
+    .copy p{max-width:38ch;font-size:13px;line-height:1.5}
+    .scroll-cue{left:22px;bottom:28px}.sound-note{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .travel{display:none!important}.ambient video{display:none}.atmosphere{display:none}.copy{transition:none}.loading{transition:none}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#story">Skip cinematic journey</a>
+<div id="scroll-space" aria-hidden="true"></div>
+<main id="stage" aria-label="Ankit Bhardwaj portfolio world" data-render-mode="rest-travel">
+  <div class="world-media" id="world-media"></div>
+  <div class="grade" aria-hidden="true"></div>
+  <div class="atmosphere" id="atmosphere" aria-hidden="true"></div>
+  <div class="chrome">
+    <a class="brand" href="#" aria-label="Return to the beginning">Ankit Bhardwaj</a>
+    <nav class="nav" aria-label="Portfolio links">
+      <a href="https://github.com/Ankit6149" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
+      <a href="mailto:ankitbhardwaj6149@gmail.com">Contact</a>
+    </nav>
+    <div class="chapter" id="chapter" aria-live="polite">01 · Arrival</div>
+    <div class="scroll-cue" id="scroll-cue">Scroll to enter</div>
+    <div class="sound-note">Living-world preview · sound follows later</div>
+  </div>
+  <section id="story" aria-live="polite"></section>
+  <div class="loading" id="loading">Preparing the world</div>
+</main>
+<script>
+(() => {
+  const RAW='https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-rest-travel-preview/';
+  const img=(name)=>RAW+'portfolio-assets/'+name;
+  const clip=(name)=>RAW+'public/portfolio-world/videos/'+name;
+  const ambient=(name)=>RAW+'public/portfolio-world/ambient/'+name;
+
+  const scenes=[
+    {id:'01',title:'Arrival',image:img('PORTFOLIO_F01_ARRIVAL.png'),copy:{pos:'left-low',k:'Portfolio · New Delhi',h:'Ankit Bhardwaj',p:'Software, research, systems, and the questions that came before them.'},amb:[['01-river.mp4','01-river-mask.png',[.130208,.388889,.369792,.435185],1]]},
+    {id:'02',title:'Curiosity',image:img('PORTFOLIO_F02_APPROACH.png'),copy:{pos:'right-mid',k:'Curiosity',h:'Before software, there were questions.',p:'Biology, living systems, nature and the strange order that lets many small parts begin behaving as one.'}},
+    {id:'03',title:'Roots',image:img('PORTFOLIO_F03_THRESHOLD.png'),copy:{pos:'right-low',k:'Roots',h:'Signals made the invisible measurable.',p:'Instrumentation and Control taught me to think in sensing, feedback, state, noise and response.'},amb:[['03-threshold-river.mp4','03-threshold-river-mask.png',[.270833,.509259,.130208,.231481],.92]]},
+    {id:'04',title:'Ways of seeing',image:img('PORTFOLIO_F04_ENTER_ESTATE.png'),copy:{pos:'left-mid',k:'Ways of seeing',h:'Clarity before complexity.',p:'I begin by looking at how the parts relate: what is moving, what is hidden, where the experience becomes confusing, and what actually needs to happen.'},amb:[['04-study-river.mp4','04-study-river-mask.png',[.65625,.476852,.119792,.203704],.92]]},
+    {id:'05',title:'Research',image:img('PORTFOLIO_F05_INTERIOR_DISCOVERY.png'),copy:{pos:'right-mid',k:'Research',h:'What can an electrical signal tell us about emotion?',p:'Emotion-H Net explored EEG-based emotion classification using the DEAP dataset and Transformer encoders.'},amb:[['05-passage-stream.mp4','05-passage-stream-mask.png',[.619792,.50463,.195313,.49537],.96]]},
+    {id:'06',title:'Making',image:img('PORTFOLIO_F06_DEEPER_INSIDE.png'),copy:{pos:'left-mid',k:'Making',h:'Ideas become useful when they survive contact with reality.',p:'Understand the problem, find the structure underneath it, build something real, then keep refining until the whole thing feels clear.'},amb:[['06-studio-foliage.mp4','06-studio-foliage-mask.png',[.0625,0,.244792,.601852],.82],['06-studio-river.mp4','06-studio-river-mask.png',[.481771,.421296,.0625,.143519],.78]]},
+    {id:'07',title:'Selected work',image:img('PORTFOLIO_F07_CREATION_SPACE.png'),copy:{pos:'right-mid',k:'Selected work',h:'Built around real friction.',p:'Skribly keeps notes tied to context. SignalFlow organises a scattered content workflow. CardXpert makes credit-card discovery conversational.',links:[['Skribly','https://github.com/Ankit6149/skribly'],['SignalFlow','https://github.com/Ankit6149/SignalFlow-Studio'],['CardXpert','https://github.com/Ankit6149/credit-card-recommendation-system']]},amb:[['07-archive-river.mp4','07-archive-river-mask.png',[.46875,.435185,.085938,.138889],.78]]},
+    {id:'08',title:'Archive',image:img('PORTFOLIO_F08_REFLECTION_SPACE.png'),copy:{pos:'left-mid',k:'Archive',h:'The highlights are only part of the path.',p:'Research, applications, automation, algorithm practice, experiments and professional work all sit inside the same longer story.',links:[['GitHub','https://github.com/Ankit6149'],['LeetCode','https://leetcode.com/u/ankit_bh_/'],['ORCID','https://orcid.org/0009-0005-3408-0058']]},amb:[['08-reflection-river.mp4','08-reflection-river-mask.png',[.651042,.314815,.182292,.222222],.94]]},
+    {id:'09',title:'Beyond work',image:img('PORTFOLIO_F09_RETURN_TO_NATURE.png'),copy:{pos:'right-mid',k:'Beyond work',h:'Work is only one part of the world.',p:'I draw and paint from observation. I sing. I play basketball. I keep returning to biology, nature, old architecture, culture and questions about life.'},amb:[['10-fountain-pool.mp4','10-fountain-pool-mask.png',[0,.5,.5,.361111],1]]},
+    {id:'10',title:'Still becoming',image:img('PORTFOLIO_F10_CLOSING_WORLD.png'),copy:{pos:'left-low',k:'Still becoming',h:'The mediums change. The curiosity stays.',p:'If something here made you curious too, say hello.',links:[['Email','mailto:ankitbhardwaj6149@gmail.com'],['LinkedIn','https://www.linkedin.com'],['GitHub','https://github.com/Ankit6149']]},amb:[['10-fountain-pool.mp4','10-fountain-pool-mask.png',[0,.5,.5,.361111],1]]}
+  ];
+
+  const transitions=[
+    {kind:'haze'},
+    {kind:'video',src:clip('stone-balcony-enter.mp4')},
+    {kind:'video',src:clip('rustic-study-track.mp4')},
+    {kind:'video',src:clip('study-window.mp4')},
+    {kind:'video',src:clip('art-studio-enter.mp4')},
+    {kind:'video',src:clip('art-studio-glide.mp4')},
+    {kind:'video',src:clip('ancient-library-reverse.mp4')},
+    {kind:'video',src:clip('library-dolly.mp4')},
+    {kind:'haze'}
+  ];
+
+  const media=document.getElementById('world-media');
+  const story=document.getElementById('story');
+  const chapter=document.getElementById('chapter');
+  const atmosphere=document.getElementById('atmosphere');
+  const cue=document.getElementById('scroll-cue');
+  const loading=document.getElementById('loading');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const restNodes=scenes.map((scene,index)=>{
+    const layer=document.createElement('div'); layer.className='rest'; layer.dataset.scene=scene.id;
+    const image=document.createElement('img'); image.src=scene.image; image.alt=''; image.decoding='async'; if(index===0) image.fetchPriority='high';
+    layer.appendChild(image);
+    (scene.amb||[]).forEach(([src,mask,box,opacity])=>{
+      const a=document.createElement('div'); a.className='ambient';
+      a.style.left=(box[0]*100)+'%';a.style.top=(box[1]*100)+'%';a.style.width=(box[2]*100)+'%';a.style.height=(box[3]*100)+'%';a.style.setProperty('--ambient-opacity',opacity);a.style.setProperty('--mask',`url("${ambient(mask)}")`);
+      const v=document.createElement('video');v.src=ambient(src);v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload=index<2?'auto':'metadata';a.appendChild(v);layer.appendChild(a);
+    });
+    media.appendChild(layer); return layer;
+  });
+
+  const travelNodes=transitions.map((t)=>{
+    const layer=document.createElement('div');layer.className='travel';
+    if(t.kind==='video'){
+      const v=document.createElement('video');v.src=t.src;v.muted=true;v.playsInline=true;v.preload='metadata';v.disablePictureInPicture=true;layer.appendChild(v);t.el=v;
+    }
+    media.appendChild(layer);return layer;
+  });
+
+  const copyNodes=scenes.map((scene)=>{
+    const c=document.createElement('div');c.className='copy '+scene.copy.pos;c.dataset.scene=scene.id;
+    const links=scene.copy.links?`<div class="inline-links">${scene.copy.links.map(([label,url])=>`<a href="${url}" target="${url.startsWith('http')?'_blank':'_self'}" rel="noreferrer">${label}</a>`).join('')}</div>`:'';
+    c.innerHTML=`<p class="kicker">${scene.copy.k}</p>${scene.id==='01'?`<h1>${scene.copy.h}</h1>`:`<h2>${scene.copy.h}</h2>`}<p>${scene.copy.p}</p>${links}`;
+    story.appendChild(c);return c;
+  });
+
+  const REST=1.0, TRAVEL=1.15;
+  const segments=[]; let cursor=0;
+  scenes.forEach((scene,i)=>{segments.push({type:'rest',scene:i,start:cursor,end:cursor+REST});cursor+=REST;if(i<transitions.length){segments.push({type:'travel',from:i,to:i+1,transition:i,start:cursor,end:cursor+TRAVEL});cursor+=TRAVEL;}});
+  const total=cursor;
+
+  let pending=false,lastScene=-1,lastType='';
+  const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+  const smooth=(t)=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+  function activeSegment(u){return segments.find(s=>u>=s.start&&u<s.end)||segments[segments.length-1]}
+  function hideAll(){restNodes.forEach(n=>n.classList.remove('is-active'));travelNodes.forEach(n=>{n.classList.remove('is-active');n.style.opacity='0'});copyNodes.forEach(n=>n.classList.remove('is-active'))}
+  function showRest(index,copyStrength=1){restNodes[index].classList.add('is-active');restNodes[index].style.opacity='1';copyNodes[index].classList.toggle('is-active',copyStrength>.45);chapter.textContent=`${scenes[index].id} · ${scenes[index].title}`;if(index===0)cue.classList.add('is-active');else cue.classList.remove('is-active');}
+  function render(){
+    pending=false;
+    const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+    const p=clamp(scrollY/max,0,1); const u=p*total; const s=activeSegment(u);
+    hideAll(); atmosphere.style.opacity='0';
+    if(reduce){const idx=Math.min(s.type==='rest'?s.scene:s.to,scenes.length-1);showRest(idx,1);return;}
+    if(s.type==='rest'){
+      const local=(u-s.start)/(s.end-s.start);const edge=Math.min(smooth(local/.16),smooth((1-local)/.16));showRest(s.scene,edge);return;
+    }
+    cue.classList.remove('is-active');
+    const local=clamp((u-s.start)/(s.end-s.start),0,1); const t=transitions[s.transition];
+    chapter.textContent=`${scenes[s.from].id} → ${scenes[s.to].id}`;
+    if(t.kind==='haze'){
+      const a=smooth(clamp(local/.56,0,1)),b=smooth(clamp((local-.44)/.56,0,1));
+      restNodes[s.from].classList.add('is-active');restNodes[s.to].classList.add('is-active');restNodes[s.from].style.opacity=String(1-b);restNodes[s.to].style.opacity=String(a);
+      atmosphere.style.opacity=String(Math.sin(Math.PI*local)*.48);
+    }else{
+      const v=t.el; const inFade=smooth(local/.08),outFade=1-smooth((local-.92)/.08);
+      if(local<.10){restNodes[s.from].classList.add('is-active');restNodes[s.from].style.opacity=String(1-inFade)}
+      if(local>.90){restNodes[s.to].classList.add('is-active');restNodes[s.to].style.opacity=String(1-outFade)}
+      travelNodes[s.transition].classList.add('is-active');travelNodes[s.transition].style.opacity=String(Math.min(inFade,outFade));
+      if(v&&Number.isFinite(v.duration)&&v.duration>0){const desired=clamp(local*v.duration,.001,Math.max(.001,v.duration-.025));if(Math.abs(v.currentTime-desired)>.025&&!v.seeking){try{v.currentTime=desired}catch{}}}
+    }
+  }
+  addEventListener('scroll',()=>{if(!pending){pending=true;requestAnimationFrame(render)}},{passive:true});
+  addEventListener('resize',render,{passive:true});
+  restNodes[0].classList.add('is-active');copyNodes[0].classList.add('is-active');cue.classList.add('is-active');
+  const first=restNodes[0].querySelector('img');
+  const ready=()=>{loading.classList.add('done');setTimeout(()=>loading.remove(),500);render()};
+  if(first.complete)ready();else{first.addEventListener('load',ready,{once:true});setTimeout(ready,2200)}
+  // Warm only the next chapter; later media remains lazy until the browser needs it.
+  const preload=new Image();preload.src=scenes[1].image;
+})();
+</script>
+</body>
+</html>

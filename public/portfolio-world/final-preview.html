@@ -1,209 +1,124 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="theme-color" content="#11120f" />
-<title>Ankit Bhardwaj — Portfolio World Preview</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0c0e0c"/>
+<title>Ankit Bhardwaj — Living Portfolio</title>
 <style>
-  :root{
-    --ink:#fff9ed;
-    --muted:rgba(255,249,237,.76);
-    --shadow:rgba(4,5,4,.58);
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:auto;background:#11120f}
-  body{margin:0;background:#11120f;color:var(--ink);font-family:Arial,Helvetica,sans-serif;overscroll-behavior:none}
-  a{color:inherit}
-  button,a{-webkit-tap-highlight-color:transparent}
-  .skip{position:fixed;z-index:200;left:12px;top:-60px;padding:10px 14px;background:#f6efdf;color:#222;text-decoration:none;font:600 12px/1 Arial,sans-serif}
-  .skip:focus{top:12px}
-  #scroll-space{height:2030svh}
-  #stage{position:fixed;inset:0;overflow:hidden;background:#11120f;isolation:isolate}
-  .world-media,.rest,.travel,.rest img,.travel video,.grade,.atmosphere{position:absolute;inset:0;width:100%;height:100%}
-  .rest,.travel{opacity:0;pointer-events:none;will-change:opacity}
-  .rest.is-active,.travel.is-active{opacity:1}
-  .rest img,.travel video{object-fit:cover;object-position:center center;display:block;transform:translateZ(0);backface-visibility:hidden}
-  .rest img{image-rendering:auto}
-  .travel video{background:#11120f}
-  .ambient{position:absolute;z-index:4;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 240ms linear}
-  .rest.is-active .ambient{opacity:var(--ambient-opacity,1)}
-  .ambient video{width:100%;height:100%;object-fit:fill;display:block;filter:saturate(.98) contrast(1.01);-webkit-mask-image:var(--mask);mask-image:var(--mask);-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-  .grade{z-index:8;pointer-events:none;background:linear-gradient(to bottom,rgba(5,7,5,.08),transparent 18%,transparent 73%,rgba(5,6,5,.16)),radial-gradient(circle at 50% 46%,transparent 58%,rgba(4,5,4,.10) 100%)}
-  .atmosphere{z-index:7;pointer-events:none;opacity:0;background:radial-gradient(ellipse at 50% 46%,rgba(244,235,212,.24),rgba(244,235,212,.08) 32%,transparent 68%);filter:blur(18px);transform:scale(1.08);will-change:opacity}
-  .chrome{position:absolute;z-index:30;inset:0;pointer-events:none;text-shadow:0 3px 26px var(--shadow)}
-  .brand{position:absolute;left:clamp(22px,4vw,62px);top:24px;font:500 clamp(14px,1.25vw,18px)/1.1 Georgia,'Times New Roman',serif;letter-spacing:.005em;text-decoration:none;pointer-events:auto}
-  .nav{position:absolute;right:clamp(22px,4vw,62px);top:27px;display:flex;gap:22px;pointer-events:auto}
-  .nav a{font:600 10px/1 Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;opacity:.82}
-  .nav a:hover,.brand:hover{opacity:.65}
-  .chapter{position:absolute;left:clamp(22px,4vw,62px);top:66px;font:600 9px/1.2 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,249,237,.66)}
-  .copy{position:absolute;z-index:22;max-width:min(590px,46vw);opacity:0;transition:opacity 180ms linear;text-shadow:0 4px 34px rgba(0,0,0,.68);pointer-events:none}
-  .copy.is-active{opacity:1}
-  .copy.left-low{left:clamp(26px,7vw,116px);bottom:clamp(72px,10vh,122px)}
-  .copy.left-mid{left:clamp(26px,7vw,116px);top:36%}
-  .copy.right-mid{right:clamp(26px,7vw,116px);top:34%;text-align:right}
-  .copy.right-low{right:clamp(26px,7vw,116px);bottom:clamp(72px,10vh,122px);text-align:right}
-  .copy .kicker{margin:0 0 11px;font:600 9px/1.2 Arial,sans-serif;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,249,237,.70)}
-  .copy h1,.copy h2{margin:0;color:#fff9ed;font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.038em;text-wrap:balance}
-  .copy h1{font-size:clamp(42px,5.2vw,82px);line-height:.96}
-  .copy h2{font-size:clamp(30px,3.4vw,56px);line-height:1}
-  .copy p{max-width:50ch;margin:15px 0 0;font:400 clamp(13px,1vw,16px)/1.55 Arial,sans-serif;color:rgba(255,249,237,.86);text-wrap:pretty}
-  .copy.right-mid p,.copy.right-low p{margin-left:auto}
-  .copy .inline-links{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:16px;pointer-events:auto}
-  .copy.right-mid .inline-links,.copy.right-low .inline-links{justify-content:flex-end}
-  .copy .inline-links a{font:600 10px/1.2 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(255,249,237,.48);padding-bottom:3px}
-  .copy .inline-links a:hover{border-color:#fff9ed}
-  .scroll-cue{position:absolute;z-index:24;left:clamp(26px,7vw,116px);bottom:34px;font:600 9px/1 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,249,237,.58);opacity:0;transition:opacity 240ms linear}
-  .scroll-cue.is-active{opacity:1}
-  .sound-note{position:absolute;z-index:24;right:clamp(22px,4vw,62px);bottom:26px;font:500 9px/1.2 Arial,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,249,237,.50)}
-  .loading{position:absolute;z-index:80;inset:0;display:grid;place-items:end start;padding:0 0 28px clamp(22px,4vw,62px);background:#11120f;color:rgba(255,249,237,.66);font:600 9px/1 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;transition:opacity 420ms ease;pointer-events:none}
-  .loading.done{opacity:0}
-  @media(max-width:760px){
-    #scroll-space{height:1780svh}
-    .nav{gap:14px}.nav a{font-size:9px}.chapter{top:61px}
-    .copy,.copy.left-low,.copy.left-mid,.copy.right-mid,.copy.right-low{left:22px;right:22px;top:auto;bottom:74px;max-width:calc(100vw - 44px);text-align:left}
-    .copy.right-mid p,.copy.right-low p{margin-left:0}
-    .copy.right-mid .inline-links,.copy.right-low .inline-links{justify-content:flex-start}
-    .copy h1{font-size:clamp(40px,13vw,64px)}.copy h2{font-size:clamp(30px,9vw,46px)}
-    .copy p{max-width:38ch;font-size:13px;line-height:1.5}
-    .scroll-cue{left:22px;bottom:28px}.sound-note{display:none}
-  }
-  @media(prefers-reduced-motion:reduce){
-    .travel{display:none!important}.ambient video{display:none}.atmosphere{display:none}.copy{transition:none}.loading{transition:none}
-  }
+:root{--ivory:#fff8e9;--paper:#f2e7cf;--paperInk:#3a3429;--shadow:rgba(4,5,4,.62)}
+*{box-sizing:border-box}
+html,body{margin:0;background:#0c0e0c;color:var(--ivory);font-family:Arial,Helvetica,sans-serif;overscroll-behavior:none}
+html{scrollbar-width:none} body::-webkit-scrollbar{display:none}
+a{color:inherit}
+#scroll{height:1780svh}
+#stage{position:fixed;inset:0;overflow:hidden;background:#0c0e0c;isolation:isolate}
+.rest,.travel,.rest>img,.travel>video{position:absolute;inset:0;width:100%;height:100%}
+.rest,.travel{opacity:0;pointer-events:none}
+.rest.on,.travel.on{opacity:1}
+.rest>img,.travel>video{display:block;object-fit:cover;object-position:center center;backface-visibility:hidden;transform:translateZ(0)}
+.travel>video{background:#0c0e0c}
+.grade{position:absolute;z-index:8;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(3,5,3,.08),transparent 18%,transparent 77%,rgba(3,4,3,.17)),radial-gradient(ellipse at 50% 48%,transparent 62%,rgba(2,3,2,.10) 100%)}
+.exposure{position:absolute;z-index:70;inset:0;background:#070807;opacity:0;pointer-events:none}
+.topline{position:absolute;z-index:40;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:24px clamp(24px,4vw,64px);text-shadow:0 3px 25px rgba(0,0,0,.55)}
+.brand{font:500 clamp(15px,1.25vw,19px)/1.1 Georgia,"Times New Roman",serif;text-decoration:none;letter-spacing:.005em}
+.nav{display:flex;gap:clamp(18px,2.4vw,34px)}
+.nav a{font:600 9px/1 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;opacity:.78}
+.nav a:hover,.brand:hover{opacity:.62}
+.sceneText{position:absolute;z-index:24;opacity:0;max-width:min(580px,44vw);text-shadow:0 4px 34px var(--shadow);pointer-events:none}
+.sceneText.on{opacity:1}
+.sceneText .eyebrow{margin:0 0 11px;font:600 9px/1 Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,248,233,.7)}
+.sceneText h1,.sceneText h2{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.038em;text-wrap:balance}
+.sceneText h1{font-size:clamp(46px,5.4vw,88px);line-height:.94}
+.sceneText h2{font-size:clamp(31px,3.4vw,55px);line-height:1.02}
+.sceneText p{margin:14px 0 0;max-width:48ch;font:400 clamp(13px,1vw,16px)/1.55 Arial,sans-serif;color:rgba(255,248,233,.84)}
+.t01{left:clamp(32px,7vw,116px);bottom:clamp(80px,10vh,120px)}
+.t02{left:clamp(32px,7vw,116px);bottom:clamp(80px,10vh,120px);max-width:min(500px,38vw)}
+.t05{left:clamp(32px,7vw,116px);top:33%;max-width:min(430px,34vw)}
+.t10{left:clamp(32px,7vw,116px);bottom:clamp(80px,10vh,120px)}
+.artifact{position:absolute;z-index:26;opacity:0;pointer-events:none;filter:drop-shadow(0 11px 20px rgba(20,14,8,.25));transform-origin:center}
+.artifact.on{opacity:1}
+.artifact>img{display:block;width:100%;height:auto}
+.artifact .ink{position:absolute;color:var(--paperInk);text-shadow:none;font-family:Georgia,"Times New Roman",serif}
+.artifact .label{display:block;margin-bottom:7px;font:700 8px/1 Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#766957}
+.artifact h3{margin:0;font-size:clamp(15px,1.45vw,23px);line-height:1.07;font-weight:400}
+.artifact p{margin:7px 0 0;font:400 clamp(8px,.72vw,11px)/1.42 Arial,sans-serif;color:#5d5549}
+.a03{left:5.5%;bottom:-1.5%;width:min(29vw,420px);transform:perspective(1000px) rotateX(57deg) rotateZ(1.2deg) skewX(-2deg)}
+.a03 .ink{inset:18% 14% 17%}
+.a04{right:8.7%;top:13%;width:min(8.7vw,128px);transform:rotate(.8deg)}
+.a04 .ink{left:15%;right:15%;top:31%;text-align:center}
+.a04 h3{font-size:clamp(11px,.95vw,15px);line-height:1.22}
+.a04 p{font-size:7px;line-height:1.3}
+.a06{left:3.3%;top:22%;width:min(25vw,365px);transform:perspective(1100px) rotateY(7deg) rotateZ(-1.2deg)}
+.a06 .ink{inset:18% 15% 14%}
+.a06 h3{font-size:clamp(18px,1.55vw,25px)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:10px;border-top:1px solid rgba(58,52,41,.22);padding-top:8px}
+.metric b{display:block;font:500 clamp(12px,1vw,17px)/1 Georgia,serif}
+.metric span{display:block;margin-top:3px;font:700 6px/1.2 Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#7a6d59}
+.a08{left:34%;bottom:-3.2%;width:min(32vw,465px);transform:perspective(1100px) rotateX(58deg) rotateZ(-.7deg)}
+.a08 .ink{inset:18% 13% 16%}
+.a08 button{appearance:none;border:0;padding:0;margin:9px 0 0;background:none;color:#4a4134;font:700 8px/1.2 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid rgba(74,65,52,.38);pointer-events:auto;cursor:pointer}
+.a07{right:10.5%;top:18%;width:min(8.2vw,120px);transform:rotate(-1.5deg)}
+.a07 .ink{left:14%;right:14%;top:32%;text-align:center}
+.a07 h3{font-size:clamp(11px,.9vw,15px);line-height:1.2}
+.a09{right:5.3%;bottom:4%;width:min(31vw,455px);transform:perspective(1100px) rotateX(60deg) rotateZ(-3.6deg)}
+.a09 .ink{inset:20% 12% 19%;text-align:center}
+.a09 h3{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:clamp(16px,1.45vw,23px)}
+.folio{position:absolute;z-index:90;inset:0;display:none;place-items:center;padding:5vh 5vw;background:rgba(6,7,6,.47);backdrop-filter:blur(3px)}
+.folio.open{display:grid}
+.folioShell{position:relative;width:min(850px,92vw);aspect-ratio:551/375;filter:drop-shadow(0 24px 60px rgba(0,0,0,.48))}
+.folioShell>img{position:absolute;inset:0;width:100%;height:100%}
+.folioPaper{position:absolute;inset:15.5% 15% 16%;display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-content:center;color:#302c24;text-shadow:none}
+.folioPaper small{font:700 8px/1 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#876f48}
+.folioPaper h3{margin:7px 0 10px;font:400 clamp(29px,3vw,47px)/.98 Georgia,"Times New Roman",serif;letter-spacing:-.035em}
+.folioPaper p{margin:0;font:400 clamp(11px,.93vw,14px)/1.5 Arial,sans-serif;color:#555044}
+.projectList{display:grid;align-content:center;gap:8px}
+.projectList button{appearance:none;border:0;border-bottom:1px solid rgba(48,44,36,.17);padding:8px 0;text-align:left;background:transparent;color:#484136;font:500 13px/1.2 Georgia,serif;cursor:pointer}
+.close{position:absolute;right:16%;top:17%;z-index:3;appearance:none;border:0;padding:0;background:transparent;color:#51483a;font:700 8px/1 Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase;cursor:pointer}
+.cue{position:absolute;z-index:38;left:50%;bottom:30px;transform:translateX(-50%);font:600 8px/1 Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,248,233,.55);opacity:0}
+.cue.on{opacity:1}
+@media(max-width:760px){#scroll{height:1520svh}.topline{padding:20px 20px}.nav{gap:14px}.nav a:nth-child(-n+2){display:none}.sceneText,.t01,.t02,.t05,.t10{left:22px;right:22px;top:auto;bottom:70px;max-width:calc(100vw - 44px)}.sceneText h1{font-size:clamp(42px,13vw,63px)}.sceneText h2{font-size:clamp(29px,9vw,44px)}.sceneText p{font-size:13px}.artifact{display:none}.folio{padding:2vh 2vw}.folioShell{width:96vw}.folioPaper{grid-template-columns:1fr;gap:8px}.projectList{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.travel{display:none!important}.exposure{display:none!important}}
 </style>
 </head>
 <body>
-<a class="skip" href="#story">Skip cinematic journey</a>
-<div id="scroll-space" aria-hidden="true"></div>
-<main id="stage" aria-label="Ankit Bhardwaj portfolio world" data-render-mode="rest-travel">
-  <div class="world-media" id="world-media"></div>
-  <div class="grade" aria-hidden="true"></div>
-  <div class="atmosphere" id="atmosphere" aria-hidden="true"></div>
-  <div class="chrome">
-    <a class="brand" href="#" aria-label="Return to the beginning">Ankit Bhardwaj</a>
-    <nav class="nav" aria-label="Portfolio links">
-      <a href="https://github.com/Ankit6149" target="_blank" rel="noreferrer">GitHub</a>
-      <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
-      <a href="mailto:ankitbhardwaj6149@gmail.com">Contact</a>
-    </nav>
-    <div class="chapter" id="chapter" aria-live="polite">01 · Arrival</div>
-    <div class="scroll-cue" id="scroll-cue">Scroll to enter</div>
-    <div class="sound-note">Living-world preview · sound follows later</div>
-  </div>
-  <section id="story" aria-live="polite"></section>
-  <div class="loading" id="loading">Preparing the world</div>
+<div id="scroll" aria-hidden="true"></div>
+<main id="stage" aria-label="Ankit Bhardwaj portfolio world">
+<div id="media"></div><div class="grade"></div><div class="exposure" id="exposure"></div>
+<header class="topline"><a class="brand" href="#">Ankit Bhardwaj</a><nav class="nav"><a href="https://github.com/Ankit6149" target="_blank" rel="noreferrer">Work</a><a href="https://orcid.org/0009-0005-3408-0058" target="_blank" rel="noreferrer">Research</a><a href="mailto:ankitbhardwaj6149@gmail.com">Contact</a></nav></header>
+<div id="textRoot"></div><div id="artifactRoot"></div><div class="cue" id="cue">Scroll to continue</div>
+<div class="folio" id="folio" role="dialog" aria-modal="true" aria-label="Selected work"><div class="folioShell"><img alt="" id="folioFrame"><button class="close" id="closeFolio">Close</button><div class="folioPaper"><div><small>Selected work</small><h3 id="projectTitle">Skribly</h3><p id="projectCopy">Contextual notes that return when the app, page, file or screen context returns.</p></div><div class="projectList"><button data-p="Skribly">Skribly</button><button data-p="SignalFlow Studio">SignalFlow Studio</button><button data-p="CardXpert">CardXpert</button></div></div></div></div>
 </main>
 <script>
-(() => {
-  const RAW='https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-rest-travel-preview/';
-  const img=(name)=>RAW+'portfolio-assets/'+name;
-  const clip=(name)=>RAW+'public/portfolio-world/videos/'+name;
-  const ambient=(name)=>RAW+'public/portfolio-world/ambient/'+name;
-
-  const scenes=[
-    {id:'01',title:'Arrival',image:img('PORTFOLIO_F01_ARRIVAL.png'),copy:{pos:'left-low',k:'Portfolio · New Delhi',h:'Ankit Bhardwaj',p:'Software, research, systems, and the questions that came before them.'},amb:[['01-river.mp4','01-river-mask.png',[.130208,.388889,.369792,.435185],1]]},
-    {id:'02',title:'Curiosity',image:img('PORTFOLIO_F02_APPROACH.png'),copy:{pos:'right-mid',k:'Curiosity',h:'Before software, there were questions.',p:'Biology, living systems, nature and the strange order that lets many small parts begin behaving as one.'}},
-    {id:'03',title:'Roots',image:img('PORTFOLIO_F03_THRESHOLD.png'),copy:{pos:'right-low',k:'Roots',h:'Signals made the invisible measurable.',p:'Instrumentation and Control taught me to think in sensing, feedback, state, noise and response.'},amb:[['03-threshold-river.mp4','03-threshold-river-mask.png',[.270833,.509259,.130208,.231481],.92]]},
-    {id:'04',title:'Ways of seeing',image:img('PORTFOLIO_F04_ENTER_ESTATE.png'),copy:{pos:'left-mid',k:'Ways of seeing',h:'Clarity before complexity.',p:'I begin by looking at how the parts relate: what is moving, what is hidden, where the experience becomes confusing, and what actually needs to happen.'},amb:[['04-study-river.mp4','04-study-river-mask.png',[.65625,.476852,.119792,.203704],.92]]},
-    {id:'05',title:'Research',image:img('PORTFOLIO_F05_INTERIOR_DISCOVERY.png'),copy:{pos:'right-mid',k:'Research',h:'What can an electrical signal tell us about emotion?',p:'Emotion-H Net explored EEG-based emotion classification using the DEAP dataset and Transformer encoders.'},amb:[['05-passage-stream.mp4','05-passage-stream-mask.png',[.619792,.50463,.195313,.49537],.96]]},
-    {id:'06',title:'Making',image:img('PORTFOLIO_F06_DEEPER_INSIDE.png'),copy:{pos:'left-mid',k:'Making',h:'Ideas become useful when they survive contact with reality.',p:'Understand the problem, find the structure underneath it, build something real, then keep refining until the whole thing feels clear.'},amb:[['06-studio-foliage.mp4','06-studio-foliage-mask.png',[.0625,0,.244792,.601852],.82],['06-studio-river.mp4','06-studio-river-mask.png',[.481771,.421296,.0625,.143519],.78]]},
-    {id:'07',title:'Selected work',image:img('PORTFOLIO_F07_CREATION_SPACE.png'),copy:{pos:'right-mid',k:'Selected work',h:'Built around real friction.',p:'Skribly keeps notes tied to context. SignalFlow organises a scattered content workflow. CardXpert makes credit-card discovery conversational.',links:[['Skribly','https://github.com/Ankit6149/skribly'],['SignalFlow','https://github.com/Ankit6149/SignalFlow-Studio'],['CardXpert','https://github.com/Ankit6149/credit-card-recommendation-system']]},amb:[['07-archive-river.mp4','07-archive-river-mask.png',[.46875,.435185,.085938,.138889],.78]]},
-    {id:'08',title:'Archive',image:img('PORTFOLIO_F08_REFLECTION_SPACE.png'),copy:{pos:'left-mid',k:'Archive',h:'The highlights are only part of the path.',p:'Research, applications, automation, algorithm practice, experiments and professional work all sit inside the same longer story.',links:[['GitHub','https://github.com/Ankit6149'],['LeetCode','https://leetcode.com/u/ankit_bh_/'],['ORCID','https://orcid.org/0009-0005-3408-0058']]},amb:[['08-reflection-river.mp4','08-reflection-river-mask.png',[.651042,.314815,.182292,.222222],.94]]},
-    {id:'09',title:'Beyond work',image:img('PORTFOLIO_F09_RETURN_TO_NATURE.png'),copy:{pos:'right-mid',k:'Beyond work',h:'Work is only one part of the world.',p:'I draw and paint from observation. I sing. I play basketball. I keep returning to biology, nature, old architecture, culture and questions about life.'},amb:[['10-fountain-pool.mp4','10-fountain-pool-mask.png',[0,.5,.5,.361111],1]]},
-    {id:'10',title:'Still becoming',image:img('PORTFOLIO_F10_CLOSING_WORLD.png'),copy:{pos:'left-low',k:'Still becoming',h:'The mediums change. The curiosity stays.',p:'If something here made you curious too, say hello.',links:[['Email','mailto:ankitbhardwaj6149@gmail.com'],['LinkedIn','https://www.linkedin.com'],['GitHub','https://github.com/Ankit6149']]},amb:[['10-fountain-pool.mp4','10-fountain-pool-mask.png',[0,.5,.5,.361111],1]]}
-  ];
-
-  const transitions=[
-    {kind:'haze'},
-    {kind:'video',src:clip('stone-balcony-enter.mp4')},
-    {kind:'video',src:clip('rustic-study-track.mp4')},
-    {kind:'video',src:clip('study-window.mp4')},
-    {kind:'video',src:clip('art-studio-enter.mp4')},
-    {kind:'video',src:clip('art-studio-glide.mp4')},
-    {kind:'video',src:clip('ancient-library-reverse.mp4')},
-    {kind:'video',src:clip('library-dolly.mp4')},
-    {kind:'haze'}
-  ];
-
-  const media=document.getElementById('world-media');
-  const story=document.getElementById('story');
-  const chapter=document.getElementById('chapter');
-  const atmosphere=document.getElementById('atmosphere');
-  const cue=document.getElementById('scroll-cue');
-  const loading=document.getElementById('loading');
-  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const restNodes=scenes.map((scene,index)=>{
-    const layer=document.createElement('div'); layer.className='rest'; layer.dataset.scene=scene.id;
-    const image=document.createElement('img'); image.src=scene.image; image.alt=''; image.decoding='async'; if(index===0) image.fetchPriority='high';
-    layer.appendChild(image);
-    (scene.amb||[]).forEach(([src,mask,box,opacity])=>{
-      const a=document.createElement('div'); a.className='ambient';
-      a.style.left=(box[0]*100)+'%';a.style.top=(box[1]*100)+'%';a.style.width=(box[2]*100)+'%';a.style.height=(box[3]*100)+'%';a.style.setProperty('--ambient-opacity',opacity);a.style.setProperty('--mask',`url("${ambient(mask)}")`);
-      const v=document.createElement('video');v.src=ambient(src);v.muted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.preload=index<2?'auto':'metadata';a.appendChild(v);layer.appendChild(a);
-    });
-    media.appendChild(layer); return layer;
-  });
-
-  const travelNodes=transitions.map((t)=>{
-    const layer=document.createElement('div');layer.className='travel';
-    if(t.kind==='video'){
-      const v=document.createElement('video');v.src=t.src;v.muted=true;v.playsInline=true;v.preload='metadata';v.disablePictureInPicture=true;layer.appendChild(v);t.el=v;
-    }
-    media.appendChild(layer);return layer;
-  });
-
-  const copyNodes=scenes.map((scene)=>{
-    const c=document.createElement('div');c.className='copy '+scene.copy.pos;c.dataset.scene=scene.id;
-    const links=scene.copy.links?`<div class="inline-links">${scene.copy.links.map(([label,url])=>`<a href="${url}" target="${url.startsWith('http')?'_blank':'_self'}" rel="noreferrer">${label}</a>`).join('')}</div>`:'';
-    c.innerHTML=`<p class="kicker">${scene.copy.k}</p>${scene.id==='01'?`<h1>${scene.copy.h}</h1>`:`<h2>${scene.copy.h}</h2>`}<p>${scene.copy.p}</p>${links}`;
-    story.appendChild(c);return c;
-  });
-
-  const REST=1.0, TRAVEL=1.15;
-  const segments=[]; let cursor=0;
-  scenes.forEach((scene,i)=>{segments.push({type:'rest',scene:i,start:cursor,end:cursor+REST});cursor+=REST;if(i<transitions.length){segments.push({type:'travel',from:i,to:i+1,transition:i,start:cursor,end:cursor+TRAVEL});cursor+=TRAVEL;}});
-  const total=cursor;
-
-  let pending=false,lastScene=-1,lastType='';
-  const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-  const smooth=(t)=>{t=clamp(t,0,1);return t*t*(3-2*t)};
-  function activeSegment(u){return segments.find(s=>u>=s.start&&u<s.end)||segments[segments.length-1]}
-  function hideAll(){restNodes.forEach(n=>n.classList.remove('is-active'));travelNodes.forEach(n=>{n.classList.remove('is-active');n.style.opacity='0'});copyNodes.forEach(n=>n.classList.remove('is-active'))}
-  function showRest(index,copyStrength=1){restNodes[index].classList.add('is-active');restNodes[index].style.opacity='1';copyNodes[index].classList.toggle('is-active',copyStrength>.45);chapter.textContent=`${scenes[index].id} · ${scenes[index].title}`;if(index===0)cue.classList.add('is-active');else cue.classList.remove('is-active');}
-  function render(){
-    pending=false;
-    const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
-    const p=clamp(scrollY/max,0,1); const u=p*total; const s=activeSegment(u);
-    hideAll(); atmosphere.style.opacity='0';
-    if(reduce){const idx=Math.min(s.type==='rest'?s.scene:s.to,scenes.length-1);showRest(idx,1);return;}
-    if(s.type==='rest'){
-      const local=(u-s.start)/(s.end-s.start);const edge=Math.min(smooth(local/.16),smooth((1-local)/.16));showRest(s.scene,edge);return;
-    }
-    cue.classList.remove('is-active');
-    const local=clamp((u-s.start)/(s.end-s.start),0,1); const t=transitions[s.transition];
-    chapter.textContent=`${scenes[s.from].id} → ${scenes[s.to].id}`;
-    if(t.kind==='haze'){
-      const a=smooth(clamp(local/.56,0,1)),b=smooth(clamp((local-.44)/.56,0,1));
-      restNodes[s.from].classList.add('is-active');restNodes[s.to].classList.add('is-active');restNodes[s.from].style.opacity=String(1-b);restNodes[s.to].style.opacity=String(a);
-      atmosphere.style.opacity=String(Math.sin(Math.PI*local)*.48);
-    }else{
-      const v=t.el; const inFade=smooth(local/.08),outFade=1-smooth((local-.92)/.08);
-      if(local<.10){restNodes[s.from].classList.add('is-active');restNodes[s.from].style.opacity=String(1-inFade)}
-      if(local>.90){restNodes[s.to].classList.add('is-active');restNodes[s.to].style.opacity=String(1-outFade)}
-      travelNodes[s.transition].classList.add('is-active');travelNodes[s.transition].style.opacity=String(Math.min(inFade,outFade));
-      if(v&&Number.isFinite(v.duration)&&v.duration>0){const desired=clamp(local*v.duration,.001,Math.max(.001,v.duration-.025));if(Math.abs(v.currentTime-desired)>.025&&!v.seeking){try{v.currentTime=desired}catch{}}}
-    }
-  }
-  addEventListener('scroll',()=>{if(!pending){pending=true;requestAnimationFrame(render)}},{passive:true});
-  addEventListener('resize',render,{passive:true});
-  restNodes[0].classList.add('is-active');copyNodes[0].classList.add('is-active');cue.classList.add('is-active');
-  const first=restNodes[0].querySelector('img');
-  const ready=()=>{loading.classList.add('done');setTimeout(()=>loading.remove(),500);render()};
-  if(first.complete)ready();else{first.addEventListener('load',ready,{once:true});setTimeout(ready,2200)}
-  // Warm only the next chapter; later media remains lazy until the browser needs it.
-  const preload=new Image();preload.src=scenes[1].image;
+(()=>{
+const RAW="https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-rest-travel-preview/";
+const IMG=n=>RAW+"portfolio-assets/"+n;
+const VID=n=>RAW+"public/portfolio-world/videos/"+n;
+const A={note:"",tag:"",quote:"",frame:""};
+const artifactSources={note:"note-card.datauri.txt",tag:"hanging-tag.datauri.txt",quote:"quote-paper.datauri.txt",frame:"vintage-frame.datauri.txt",folio:"cream-gold-frame.datauri.txt"};
+Promise.all(Object.entries(artifactSources).map(async([key,file])=>{try{const src=(await fetch(RAW+"public/portfolio-world/ui/"+file).then(r=>r.text())).trim();if(key==="folio"){document.getElementById("folioFrame").src=src;}else{A[key]=src;document.querySelectorAll('[data-artifact="'+key+'"]').forEach(img=>img.src=src);}}catch{}}));
+const scenes=[
+{id:"01",title:"Arrival",image:IMG("PORTFOLIO_F01_ARRIVAL.png"),text:["t01","Ankit Bhardwaj · New Delhi","Software, research, systems — and the questions that came before them.","A portfolio about how curiosity becomes things."]},
+{id:"02",title:"Curiosity",image:IMG("PORTFOLIO_F02_APPROACH.png"),text:["t02","Curiosity","The questions came first.","Biology, living systems, nature and the strange order that lets many small parts begin behaving as one."]},
+{id:"03",title:"Roots",image:IMG("PORTFOLIO_F03_THRESHOLD.png"),artifact:["a03","note",`<span class="label">Roots</span><h3>From living systems to signals.</h3><p>Biology made me curious about how complex systems hold together. Engineering gave me sensing, feedback, state and response.</p>`]},
+{id:"04",title:"Signals",image:IMG("PORTFOLIO_F04_ENTER_ESTATE.png"),artifact:["a04","tag",`<span class="label">Signals</span><h3>Feedback<br>State<br>Response</h3><p>Making the invisible measurable.</p>`]},
+{id:"05",title:"Ways of seeing",image:IMG("PORTFOLIO_F05_INTERIOR_DISCOVERY.png"),text:["t05","Ways of seeing","Clarity before complexity.","I look for relationships first: what is moving, what is hidden, where the experience becomes confusing, and what actually needs to happen."]},
+{id:"06",title:"Research",image:IMG("PORTFOLIO_F06_DEEPER_INSIDE.png"),artifact:["a06","frame",`<span class="label">Research · Emotion-H Net</span><h3>What can an electrical signal tell us about emotion?</h3><p>EEG emotion classification on DEAP using feature selection and Transformer encoders.</p><div class="metrics"><div class="metric"><b>86.82%</b><span>test accuracy</span></div><div class="metric"><b>0.8681</b><span>F1</span></div><div class="metric"><b>0.977</b><span>AUROC</span></div></div>`]},
+{id:"07",title:"Making",image:IMG("PORTFOLIO_F08_REFLECTION_SPACE.png"),artifact:["a08","note",`<span class="label">Making</span><h3>Ideas become useful when they survive contact with reality.</h3><p>Build, test, refine, and sometimes rebuild until the whole system becomes clear.</p><button id="openFolio">Open selected work</button>`]},
+{id:"08",title:"Archive",image:IMG("PORTFOLIO_F07_CREATION_SPACE.png"),artifact:["a07","tag",`<span class="label">Archive</span><h3>Work<br>Research<br>Practice</h3><p>Projects, experiments and experience.</p>`]},
+{id:"09",title:"Beyond work",image:IMG("PORTFOLIO_F09_RETURN_TO_NATURE.png"),artifact:["a09","quote",`<span class="label">Beyond work</span><h3>Work is only one part of the world.</h3><p>Drawing · music · basketball · biology · nature · architecture · culture</p>`]},
+{id:"10",title:"Still becoming",image:IMG("PORTFOLIO_F10_CLOSING_WORLD.png"),text:["t10","Still becoming","The mediums change. The curiosity stays.","If something here made you curious too, say hello."]}
+];
+const transitions=[null,null,"stone-balcony-enter.mp4","rustic-study-track.mp4","study-window.mp4","art-studio-enter.mp4","art-studio-glide.mp4","ancient-library-reverse.mp4","library-dolly.mp4",null];
+const route=[{kind:"rest",scene:0,w:1},{kind:"cut",from:0,to:1,w:.28},{kind:"rest",scene:1,w:.72},{kind:"travel",from:1,to:2,src:transitions[2],w:1.15},{kind:"rest",scene:2,w:.78},{kind:"travel",from:2,to:3,src:transitions[3],w:1.15},{kind:"rest",scene:3,w:.78},{kind:"travel",from:3,to:4,src:transitions[4],w:1.15},{kind:"rest",scene:4,w:.82},{kind:"travel",from:4,to:5,src:transitions[5],w:1.15},{kind:"rest",scene:5,w:.9},{kind:"travel",from:5,to:6,src:transitions[6],w:1.15},{kind:"rest",scene:6,w:.92},{kind:"travel",from:6,to:7,src:transitions[7],w:1.15},{kind:"rest",scene:7,w:.86},{kind:"travel",from:7,to:8,src:transitions[8],w:1.18},{kind:"rest",scene:8,w:.95},{kind:"cut",from:8,to:9,w:.32},{kind:"rest",scene:9,w:1.05}];
+const media=document.getElementById("media"),textRoot=document.getElementById("textRoot"),artifactRoot=document.getElementById("artifactRoot"),exposure=document.getElementById("exposure"),cue=document.getElementById("cue");let rests=[],texts=[],arts=[],travels=[];
+scenes.forEach((s,i)=>{const r=document.createElement("div");r.className="rest";r.innerHTML=`<img alt="" src="${s.image}">`;media.appendChild(r);rests.push(r);if(s.text){const t=document.createElement("section");t.className="sceneText "+s.text[0];t.innerHTML=`<p class="eyebrow">${s.text[1]}</p><${i===0?"h1":"h2"}>${s.text[2]}</${i===0?"h1":"h2"}><p>${s.text[3]}</p>`;textRoot.appendChild(t);texts[i]=t;}else texts[i]=null;if(s.artifact){const a=document.createElement("div");a.className="artifact "+s.artifact[0];a.innerHTML=`<img alt="" data-artifact="${s.artifact[1]}" src="${A[s.artifact[1]]}"><div class="ink">${s.artifact[2]}</div>`;artifactRoot.appendChild(a);arts[i]=a;}else arts[i]=null;});
+route.forEach((seg,ri)=>{if(seg.kind==="travel"){const t=document.createElement("div");t.className="travel";t.innerHTML=`<video muted playsinline preload="metadata" src="${VID(seg.src)}"></video>`;media.appendChild(t);travels[ri]=t;}});
+function clear(){rests.forEach(e=>e.classList.remove("on"));travels.filter(Boolean).forEach(e=>e.classList.remove("on"));texts.forEach(e=>e&&e.classList.remove("on"));arts.forEach(e=>e&&e.classList.remove("on"));cue.classList.remove("on");exposure.style.opacity="0";}
+function rest(i){clear();rests[i].classList.add("on");texts[i]?.classList.add("on");arts[i]?.classList.add("on");if(i===0||i===9)cue.classList.add("on");}
+const projects={"Skribly":"Contextual notes that return when the app, page, file or screen context returns. A Windows-first annotation tool built around context rather than folders.","SignalFlow Studio":"A content-production workflow that keeps research, source material, assets, generation, adaptation and review connected rather than scattered.","CardXpert":"A conversational way to explore Indian credit cards through structured information and natural-language questions."};
+const folio=document.getElementById("folio"),pt=document.getElementById("projectTitle"),pc=document.getElementById("projectCopy");document.addEventListener("click",e=>{if(e.target.id==="openFolio"){folio.classList.add("open");document.documentElement.style.overflow="hidden";}if(e.target.id==="closeFolio"||e.target===folio){folio.classList.remove("open");document.documentElement.style.overflow="";}if(e.target.dataset.p){pt.textContent=e.target.dataset.p;pc.textContent=projects[e.target.dataset.p];}});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&folio.classList.contains("open")){folio.classList.remove("open");document.documentElement.style.overflow="";}});
+const total=route.reduce((s,x)=>s+x.w,0);function render(){if(folio.classList.contains("open")){requestAnimationFrame(render);return;}const max=Math.max(1,document.documentElement.scrollHeight-innerHeight),p=Math.max(0,Math.min(1,scrollY/max));let u=p*total,acc=0,ri=0;for(;ri<route.length-1;ri++){if(u<=acc+route[ri].w)break;acc+=route[ri].w;}const seg=route[ri],local=Math.max(0,Math.min(1,(u-acc)/seg.w));clear();if(seg.kind==="rest")rest(seg.scene);else if(seg.kind==="travel"){const el=travels[ri],v=el.querySelector("video");el.classList.add("on");if(Number.isFinite(v.duration)&&v.duration>0&&!v.seeking){const d=Math.min(v.duration-.025,local*v.duration);if(Math.abs(v.currentTime-d)>.035){try{v.currentTime=d;}catch{}}}}else{const first=local<.5?seg.from:seg.to;rests[first].classList.add("on");const dark=Math.sin(Math.PI*local);exposure.style.opacity=String(Math.min(1,dark*1.08));if(local<.08){texts[seg.from]?.classList.add("on");arts[seg.from]?.classList.add("on");}if(local>.92){texts[seg.to]?.classList.add("on");arts[seg.to]?.classList.add("on");}}requestAnimationFrame(render);}rest(0);requestAnimationFrame(render);
 })();
 </script>
 </body>

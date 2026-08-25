@@ -25,7 +25,7 @@ a{color:inherit}
 .nav{display:flex;gap:clamp(18px,2.4vw,34px)}
 .nav a{font:600 9px/1 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;opacity:.78}
 .nav a:hover,.brand:hover{opacity:.62}
-.sceneText{position:absolute;z-index:24;opacity:0;max-width:min(580px,44vw);text-shadow:0 4px 34px var(--shadow);pointer-events:none}
+.sceneText{position:absolute;z-index:24;opacity:0;max-width:min(580px,44vw);text-shadow:0 4px 34px var(--shadow);pointer-events:none;transition:opacity 260ms ease 90ms}
 .sceneText.on{opacity:1}
 .sceneText .eyebrow{margin:0 0 11px;font:600 9px/1 Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,248,233,.7)}
 .sceneText h1,.sceneText h2{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:400;letter-spacing:-.038em;text-wrap:balance}
@@ -36,34 +36,37 @@ a{color:inherit}
 .t02{left:clamp(32px,7vw,116px);bottom:clamp(80px,10vh,120px);max-width:min(500px,38vw)}
 .t05{left:clamp(32px,7vw,116px);top:33%;max-width:min(430px,34vw)}
 .t10{left:clamp(32px,7vw,116px);bottom:clamp(80px,10vh,120px)}
-.artifact{position:absolute;z-index:26;opacity:0;pointer-events:none;filter:drop-shadow(0 11px 20px rgba(20,14,8,.25));transform-origin:center}
+.artifact{position:absolute;z-index:26;opacity:0;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(20,14,8,.22));transform-origin:center;transition:opacity 300ms ease 100ms}
 .artifact.on{opacity:1}
-.artifact>img{display:block;width:100%;height:auto}
+.artifact>img{display:block;width:100%;height:auto;filter:sepia(.10) saturate(.88) brightness(.90) contrast(.96);opacity:.96}
 .artifact .ink{position:absolute;color:var(--paperInk);text-shadow:none;font-family:Georgia,"Times New Roman",serif}
 .artifact .label{display:block;margin-bottom:7px;font:700 8px/1 Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#766957}
 .artifact h3{margin:0;font-size:clamp(15px,1.45vw,23px);line-height:1.07;font-weight:400}
 .artifact p{margin:7px 0 0;font:400 clamp(8px,.72vw,11px)/1.42 Arial,sans-serif;color:#5d5549}
-.a03{left:5.5%;bottom:-1.5%;width:min(29vw,420px);transform:perspective(1000px) rotateX(57deg) rotateZ(1.2deg) skewX(-2deg)}
-.a03 .ink{inset:18% 14% 17%}
-.a04{right:8.7%;top:13%;width:min(8.7vw,128px);transform:rotate(.8deg)}
-.a04 .ink{left:15%;right:15%;top:31%;text-align:center}
-.a04 h3{font-size:clamp(11px,.95vw,15px);line-height:1.22}
-.a04 p{font-size:7px;line-height:1.3}
-.a06{left:3.3%;top:22%;width:min(25vw,365px);transform:perspective(1100px) rotateY(7deg) rotateZ(-1.2deg)}
-.a06 .ink{inset:18% 15% 14%}
-.a06 h3{font-size:clamp(18px,1.55vw,25px)}
+.a03{left:7.2%;bottom:4.2%;width:min(24vw,350px);transform:perspective(1000px) rotateX(58deg) rotateZ(1.1deg) skewX(-1deg)}
+.a03 .ink{left:10%;right:10%;top:28%;text-align:center}
+.a03 h3{font-size:clamp(13px,1.05vw,17px);line-height:1.1}
+.a03 .label{margin-bottom:4px;font-size:6px}
+.a06{left:24%;bottom:1.8%;width:min(34vw,500px);transform:perspective(1100px) rotateX(60deg) rotateZ(-1.1deg)}
+.a06 .ink{inset:17% 14% 15%}
+.a06 h3{font-size:clamp(17px,1.45vw,23px)}
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:10px;border-top:1px solid rgba(58,52,41,.22);padding-top:8px}
 .metric b{display:block;font:500 clamp(12px,1vw,17px)/1 Georgia,serif}
 .metric span{display:block;margin-top:3px;font:700 6px/1.2 Arial,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:#7a6d59}
-.a08{left:34%;bottom:-3.2%;width:min(32vw,465px);transform:perspective(1100px) rotateX(58deg) rotateZ(-.7deg)}
-.a08 .ink{inset:18% 13% 16%}
-.a08 button{appearance:none;border:0;padding:0;margin:9px 0 0;background:none;color:#4a4134;font:700 8px/1.2 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid rgba(74,65,52,.38);pointer-events:auto;cursor:pointer}
-.a07{right:10.5%;top:18%;width:min(8.2vw,120px);transform:rotate(-1.5deg)}
-.a07 .ink{left:14%;right:14%;top:32%;text-align:center}
-.a07 h3{font-size:clamp(11px,.9vw,15px);line-height:1.2}
-.a09{right:5.3%;bottom:4%;width:min(31vw,455px);transform:perspective(1100px) rotateX(60deg) rotateZ(-3.6deg)}
-.a09 .ink{inset:20% 12% 19%;text-align:center}
-.a09 h3{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:clamp(16px,1.45vw,23px)}
+.a08{left:39.5%;bottom:22.5%;width:min(24vw,350px);transform:perspective(1100px) rotateX(57deg) rotateZ(-.8deg)}
+.a08 .ink{left:10%;right:10%;top:23%;text-align:center}
+.a08 .label{margin-bottom:3px;font-size:6px}
+.a08 h3{font-size:clamp(14px,1.15vw,18px)}
+.a08 button{appearance:none;border:0;padding:0;margin:5px 0 0;background:none;color:#4a4134;font:700 6px/1.2 Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;border-bottom:1px solid rgba(74,65,52,.38);pointer-events:auto;cursor:pointer}
+.a07{left:46%;bottom:31%;width:min(18vw,260px);transform:perspective(1000px) rotateX(58deg) rotateZ(-1deg)}
+.a07 .ink{left:10%;right:10%;top:24%;text-align:center}
+.a07 .label{margin-bottom:3px;font-size:6px}
+.a07 h3{font-size:clamp(11px,.9vw,14px);line-height:1.15}
+.a09{right:11%;bottom:8%;width:min(25vw,365px);transform:perspective(1100px) rotateX(61deg) rotateZ(-2.8deg)}
+.a09 .ink{left:9%;right:9%;top:25%;text-align:center}
+.a09 .label{margin-bottom:3px;font-size:6px}
+.a09 h3{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:clamp(13px,1.1vw,17px);line-height:1.1}
+.a09 p{display:none}
 .folio{position:absolute;z-index:90;inset:0;display:none;place-items:center;padding:5vh 5vw;background:rgba(6,7,6,.47);backdrop-filter:blur(3px)}
 .folio.open{display:grid}
 .folioShell{position:relative;width:min(850px,92vw);aspect-ratio:551/375;filter:drop-shadow(0 24px 60px rgba(0,0,0,.48))}
@@ -95,30 +98,35 @@ const RAW="https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-rest-
 const IMG=n=>RAW+"portfolio-assets/"+n;
 const VID=n=>RAW+"public/portfolio-world/videos/"+n;
 const A={note:"",tag:"",quote:"",frame:""};
-const artifactSources={note:"note-card.datauri.txt",tag:"hanging-tag.datauri.txt",quote:"quote-paper.datauri.txt",frame:"vintage-frame.datauri.txt",folio:"cream-gold-frame.datauri.txt"};
-Promise.all(Object.entries(artifactSources).map(async([key,file])=>{try{const src=(await fetch(RAW+"public/portfolio-world/ui/"+file).then(r=>r.text())).trim();if(key==="folio"){document.getElementById("folioFrame").src=src;}else{A[key]=src;document.querySelectorAll('[data-artifact="'+key+'"]').forEach(img=>img.src=src);}}catch{}}));
+const artifactSources={note:"paper-strip.datauri.txt",tag:"hanging-tag.datauri.txt",quote:"paper-strip.datauri.txt",frame:"vintage-frame.datauri.txt",folio:"cream-gold-frame.datauri.txt"};
+Promise.all(Object.entries(artifactSources).map(async([key,file])=>{try{const src=(await fetch(RAW+"public/portfolio-world/ui/"+file).then(r=>r.text())).trim();if(key==="folio"){document.getElementById("folioFrame").src=src}else{A[key]=src;document.querySelectorAll('[data-artifact="'+key+'"]').forEach(img=>img.src=src)}}catch{}}));
 const scenes=[
 {id:"01",title:"Arrival",image:IMG("PORTFOLIO_F01_ARRIVAL.png"),text:["t01","Ankit Bhardwaj · New Delhi","Software, research, systems — and the questions that came before them.","A portfolio about how curiosity becomes things."]},
 {id:"02",title:"Curiosity",image:IMG("PORTFOLIO_F02_APPROACH.png"),text:["t02","Curiosity","The questions came first.","Biology, living systems, nature and the strange order that lets many small parts begin behaving as one."]},
-{id:"03",title:"Roots",image:IMG("PORTFOLIO_F03_THRESHOLD.png"),artifact:["a03","note",`<span class="label">Roots</span><h3>From living systems to signals.</h3><p>Biology made me curious about how complex systems hold together. Engineering gave me sensing, feedback, state and response.</p>`]},
-{id:"04",title:"Signals",image:IMG("PORTFOLIO_F04_ENTER_ESTATE.png"),artifact:["a04","tag",`<span class="label">Signals</span><h3>Feedback<br>State<br>Response</h3><p>Making the invisible measurable.</p>`]},
+{id:"03",title:"Roots",image:IMG("PORTFOLIO_F03_THRESHOLD.png"),artifact:["a03","note",`<span class="label">Roots</span><h3>Living systems → signals.</h3>`]},
+{id:"04",title:"Signals",image:IMG("PORTFOLIO_F04_ENTER_ESTATE.png")},
 {id:"05",title:"Ways of seeing",image:IMG("PORTFOLIO_F05_INTERIOR_DISCOVERY.png"),text:["t05","Ways of seeing","Clarity before complexity.","I look for relationships first: what is moving, what is hidden, where the experience becomes confusing, and what actually needs to happen."]},
-{id:"06",title:"Research",image:IMG("PORTFOLIO_F06_DEEPER_INSIDE.png"),artifact:["a06","frame",`<span class="label">Research · Emotion-H Net</span><h3>What can an electrical signal tell us about emotion?</h3><p>EEG emotion classification on DEAP using feature selection and Transformer encoders.</p><div class="metrics"><div class="metric"><b>86.82%</b><span>test accuracy</span></div><div class="metric"><b>0.8681</b><span>F1</span></div><div class="metric"><b>0.977</b><span>AUROC</span></div></div>`]},
-{id:"07",title:"Making",image:IMG("PORTFOLIO_F08_REFLECTION_SPACE.png"),artifact:["a08","note",`<span class="label">Making</span><h3>Ideas become useful when they survive contact with reality.</h3><p>Build, test, refine, and sometimes rebuild until the whole system becomes clear.</p><button id="openFolio">Open selected work</button>`]},
-{id:"08",title:"Archive",image:IMG("PORTFOLIO_F07_CREATION_SPACE.png"),artifact:["a07","tag",`<span class="label">Archive</span><h3>Work<br>Research<br>Practice</h3><p>Projects, experiments and experience.</p>`]},
-{id:"09",title:"Beyond work",image:IMG("PORTFOLIO_F09_RETURN_TO_NATURE.png"),artifact:["a09","quote",`<span class="label">Beyond work</span><h3>Work is only one part of the world.</h3><p>Drawing · music · basketball · biology · nature · architecture · culture</p>`]},
+{id:"06",title:"Research",image:IMG("PORTFOLIO_F06_DEEPER_INSIDE.png"),artifact:["a06","frame",`<span class="label">Research · Emotion-H Net</span><h3>Emotion-H Net</h3><p>EEG · DEAP · Transformer encoders</p><div class="metrics"><div class="metric"><b>86.82%</b><span>test accuracy</span></div><div class="metric"><b>0.8681</b><span>F1</span></div><div class="metric"><b>0.977</b><span>AUROC</span></div></div>`]},
+{id:"07",title:"Making",image:IMG("PORTFOLIO_F08_REFLECTION_SPACE.png"),artifact:["a08","note",`<span class="label">Making</span><h3>Selected work</h3><button id="openFolio">Open folio</button>`]},
+{id:"08",title:"Archive",image:IMG("PORTFOLIO_F07_CREATION_SPACE.png"),artifact:["a07","note",`<span class="label">Archive</span><h3>Work · research · practice</h3>`]},
+{id:"09",title:"Beyond work",image:IMG("PORTFOLIO_F09_RETURN_TO_NATURE.png"),artifact:["a09","quote",`<span class="label">Beyond work</span><h3>Work is only one part of the world.</h3>`]},
 {id:"10",title:"Still becoming",image:IMG("PORTFOLIO_F10_CLOSING_WORLD.png"),text:["t10","Still becoming","The mediums change. The curiosity stays.","If something here made you curious too, say hello."]}
 ];
 const transitions=[null,null,"stone-balcony-enter.mp4","rustic-study-track.mp4","study-window.mp4","art-studio-enter.mp4","art-studio-glide.mp4","ancient-library-reverse.mp4","library-dolly.mp4",null];
-const route=[{kind:"rest",scene:0,w:1},{kind:"cut",from:0,to:1,w:.28},{kind:"rest",scene:1,w:.72},{kind:"travel",from:1,to:2,src:transitions[2],w:1.15},{kind:"rest",scene:2,w:.78},{kind:"travel",from:2,to:3,src:transitions[3],w:1.15},{kind:"rest",scene:3,w:.78},{kind:"travel",from:3,to:4,src:transitions[4],w:1.15},{kind:"rest",scene:4,w:.82},{kind:"travel",from:4,to:5,src:transitions[5],w:1.15},{kind:"rest",scene:5,w:.9},{kind:"travel",from:5,to:6,src:transitions[6],w:1.15},{kind:"rest",scene:6,w:.92},{kind:"travel",from:6,to:7,src:transitions[7],w:1.15},{kind:"rest",scene:7,w:.86},{kind:"travel",from:7,to:8,src:transitions[8],w:1.18},{kind:"rest",scene:8,w:.95},{kind:"cut",from:8,to:9,w:.32},{kind:"rest",scene:9,w:1.05}];
+const route=[{kind:"rest",scene:0,w:1.00},{kind:"cut",from:0,to:1,w:.10},{kind:"rest",scene:1,w:.72},{kind:"travel",from:1,to:2,src:transitions[2],w:1.15},{kind:"rest",scene:2,w:.78},{kind:"travel",from:2,to:3,src:transitions[3],w:1.15},{kind:"rest",scene:3,w:.78},{kind:"travel",from:3,to:4,src:transitions[4],w:1.15},{kind:"rest",scene:4,w:.82},{kind:"travel",from:4,to:5,src:transitions[5],w:1.15},{kind:"rest",scene:5,w:.90},{kind:"travel",from:5,to:6,src:transitions[6],w:1.15},{kind:"rest",scene:6,w:.92},{kind:"travel",from:6,to:7,src:transitions[7],w:1.15},{kind:"rest",scene:7,w:.86},{kind:"travel",from:7,to:8,src:transitions[8],w:1.18},{kind:"rest",scene:8,w:.95},{kind:"cut",from:8,to:9,w:.10},{kind:"rest",scene:9,w:1.05}];
 const media=document.getElementById("media"),textRoot=document.getElementById("textRoot"),artifactRoot=document.getElementById("artifactRoot"),exposure=document.getElementById("exposure"),cue=document.getElementById("cue");let rests=[],texts=[],arts=[],travels=[];
-scenes.forEach((s,i)=>{const r=document.createElement("div");r.className="rest";r.innerHTML=`<img alt="" src="${s.image}">`;media.appendChild(r);rests.push(r);if(s.text){const t=document.createElement("section");t.className="sceneText "+s.text[0];t.innerHTML=`<p class="eyebrow">${s.text[1]}</p><${i===0?"h1":"h2"}>${s.text[2]}</${i===0?"h1":"h2"}><p>${s.text[3]}</p>`;textRoot.appendChild(t);texts[i]=t;}else texts[i]=null;if(s.artifact){const a=document.createElement("div");a.className="artifact "+s.artifact[0];a.innerHTML=`<img alt="" data-artifact="${s.artifact[1]}" src="${A[s.artifact[1]]}"><div class="ink">${s.artifact[2]}</div>`;artifactRoot.appendChild(a);arts[i]=a;}else arts[i]=null;});
-route.forEach((seg,ri)=>{if(seg.kind==="travel"){const t=document.createElement("div");t.className="travel";t.innerHTML=`<video muted playsinline preload="metadata" src="${VID(seg.src)}"></video>`;media.appendChild(t);travels[ri]=t;}});
-function clear(){rests.forEach(e=>e.classList.remove("on"));travels.filter(Boolean).forEach(e=>e.classList.remove("on"));texts.forEach(e=>e&&e.classList.remove("on"));arts.forEach(e=>e&&e.classList.remove("on"));cue.classList.remove("on");exposure.style.opacity="0";}
-function rest(i){clear();rests[i].classList.add("on");texts[i]?.classList.add("on");arts[i]?.classList.add("on");if(i===0||i===9)cue.classList.add("on");}
+scenes.forEach((s,i)=>{const r=document.createElement("div");r.className="rest";r.innerHTML=`<img alt="" src="${s.image}">`;media.appendChild(r);rests.push(r);if(s.text){const t=document.createElement("section");t.className="sceneText "+s.text[0];t.innerHTML=`<p class="eyebrow">${s.text[1]}</p><${i===0?"h1":"h2"}>${s.text[2]}</${i===0?"h1":"h2"}><p>${s.text[3]}</p>`;textRoot.appendChild(t);texts[i]=t}else texts[i]=null;if(s.artifact){const a=document.createElement("div");a.className="artifact "+s.artifact[0];a.innerHTML=`<img alt="" data-artifact="${s.artifact[1]}" src="${A[s.artifact[1]]}"><div class="ink">${s.artifact[2]}</div>`;artifactRoot.appendChild(a);arts[i]=a}else arts[i]=null});
+route.forEach((seg,ri)=>{if(seg.kind==="travel"){const t=document.createElement("div");t.className="travel";t.dataset.ri=ri;t.innerHTML=`<video muted playsinline preload="metadata" src="${VID(seg.src)}"></video>`;media.appendChild(t);travels[ri]=t}});
+function clear(){rests.forEach(e=>e.classList.remove("on"));travels.filter(Boolean).forEach(e=>e.classList.remove("on"));texts.forEach(e=>e&&e.classList.remove("on"));arts.forEach(e=>e&&e.classList.remove("on"));cue.classList.remove("on");exposure.style.opacity="0"}
+function rest(i){clear();rests[i].classList.add("on");texts[i]?.classList.add("on");arts[i]?.classList.add("on");if(i===0)cue.classList.add("on")}
 const projects={"Skribly":"Contextual notes that return when the app, page, file or screen context returns. A Windows-first annotation tool built around context rather than folders.","SignalFlow Studio":"A content-production workflow that keeps research, source material, assets, generation, adaptation and review connected rather than scattered.","CardXpert":"A conversational way to explore Indian credit cards through structured information and natural-language questions."};
-const folio=document.getElementById("folio"),pt=document.getElementById("projectTitle"),pc=document.getElementById("projectCopy");document.addEventListener("click",e=>{if(e.target.id==="openFolio"){folio.classList.add("open");document.documentElement.style.overflow="hidden";}if(e.target.id==="closeFolio"||e.target===folio){folio.classList.remove("open");document.documentElement.style.overflow="";}if(e.target.dataset.p){pt.textContent=e.target.dataset.p;pc.textContent=projects[e.target.dataset.p];}});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&folio.classList.contains("open")){folio.classList.remove("open");document.documentElement.style.overflow="";}});
-const total=route.reduce((s,x)=>s+x.w,0);function render(){if(folio.classList.contains("open")){requestAnimationFrame(render);return;}const max=Math.max(1,document.documentElement.scrollHeight-innerHeight),p=Math.max(0,Math.min(1,scrollY/max));let u=p*total,acc=0,ri=0;for(;ri<route.length-1;ri++){if(u<=acc+route[ri].w)break;acc+=route[ri].w;}const seg=route[ri],local=Math.max(0,Math.min(1,(u-acc)/seg.w));clear();if(seg.kind==="rest")rest(seg.scene);else if(seg.kind==="travel"){const el=travels[ri],v=el.querySelector("video");el.classList.add("on");if(Number.isFinite(v.duration)&&v.duration>0&&!v.seeking){const d=Math.min(v.duration-.025,local*v.duration);if(Math.abs(v.currentTime-d)>.035){try{v.currentTime=d;}catch{}}}}else{const first=local<.5?seg.from:seg.to;rests[first].classList.add("on");const dark=Math.sin(Math.PI*local);exposure.style.opacity=String(Math.min(1,dark*1.08));if(local<.08){texts[seg.from]?.classList.add("on");arts[seg.from]?.classList.add("on");}if(local>.92){texts[seg.to]?.classList.add("on");arts[seg.to]?.classList.add("on");}}requestAnimationFrame(render);}rest(0);requestAnimationFrame(render);
+const folio=document.getElementById("folio"),pt=document.getElementById("projectTitle"),pc=document.getElementById("projectCopy");
+document.addEventListener("click",e=>{if(e.target.id==="openFolio"){folio.classList.add("open");document.documentElement.style.overflow="hidden"}if(e.target.id==="closeFolio"||e.target===folio){folio.classList.remove("open");document.documentElement.style.overflow=""}if(e.target.dataset.p){pt.textContent=e.target.dataset.p;pc.textContent=projects[e.target.dataset.p]}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&folio.classList.contains("open")){folio.classList.remove("open");document.documentElement.style.overflow=""}});
+const debug=new URLSearchParams(location.search).get("scene");if(debug!==null){document.getElementById("scroll").style.height="100vh";rest(Math.max(0,Math.min(9,Number(debug))));return}
+const total=route.reduce((s,x)=>s+x.w,0);
+function render(){if(folio.classList.contains("open")){requestAnimationFrame(render);return}const max=Math.max(1,document.documentElement.scrollHeight-innerHeight),p=Math.max(0,Math.min(1,scrollY/max));let u=p*total,acc=0,ri=0;for(;ri<route.length-1;ri++){if(u<=acc+route[ri].w)break;acc+=route[ri].w}const seg=route[ri],local=Math.max(0,Math.min(1,(u-acc)/seg.w));clear();if(seg.kind==="rest"){rest(seg.scene)}else if(seg.kind==="travel"){const el=travels[ri],v=el.querySelector("video");el.classList.add("on");if(Number.isFinite(v.duration)&&v.duration>0&&!v.seeking){const d=Math.min(v.duration-.025,local*v.duration);if(Math.abs(v.currentTime-d)>.035){try{v.currentTime=d}catch{}}}}else{const first=local<.5?seg.from:seg.to;rests[first].classList.add("on");if(local<.08){texts[seg.from]?.classList.add("on");arts[seg.from]?.classList.add("on")}if(local>.92){texts[seg.to]?.classList.add("on");arts[seg.to]?.classList.add("on")}}requestAnimationFrame(render)}
+rest(0);requestAnimationFrame(render);
 })();
 </script>
 </body>

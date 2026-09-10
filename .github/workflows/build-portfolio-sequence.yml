@@ -1,0 +1,54 @@
+name: Build portfolio motion frames
+
+on:
+  push:
+    branches:
+      - portfolio-world-base
+    paths:
+      - .github/workflows/build-portfolio-sequence.yml
+      - scripts/build-portfolio-sequence.sh
+      - public/portfolio-world/videos/**
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: portfolio-motion-frames
+  cancel-in-progress: true
+
+jobs:
+  build-frames:
+    if: ${{ !contains(github.event.head_commit.message || '', '[frames]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: portfolio-world-base
+
+      - name: Ensure ffmpeg is available
+        run: |
+          if ! command -v ffmpeg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          ffmpeg -version | head -1
+
+      - name: Build deterministic WebP sequence
+        run: bash scripts/build-portfolio-sequence.sh
+
+      - name: Commit generated frame sequence
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/portfolio-world/frames/master
+          if git diff --cached --quiet; then
+            echo "Frame sequence is already current."
+            exit 0
+          fi
+          git commit -m "assets: [frames] build master scroll frame sequence"
+          git push origin HEAD:portfolio-world-base

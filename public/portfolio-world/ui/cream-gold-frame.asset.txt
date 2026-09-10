@@ -1,0 +1,1 @@
+Asset source staged for portfolio living-world UI. Binary frame will be committed separately via Git tree. Source audit: ui_cream_gold/09.png, quantized web copy 551x375 RGBA.

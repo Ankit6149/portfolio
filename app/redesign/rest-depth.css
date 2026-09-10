@@ -1,0 +1,166 @@
+/* Fixed rest states: the camera is allowed to feel dimensional only after scroll motion
+   settles near a defined anchor. During travel these transforms collapse back to zero. */
+
+.continuous-world__stage {
+  perspective: 1400px;
+  perspective-origin: 50% 48%;
+}
+
+.continuous-world__camera-plane {
+  --depth-x: 0px;
+  --depth-y: 0px;
+  --depth-rx: 0deg;
+  --depth-ry: 0deg;
+  --depth-scale: 1.012;
+
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: max(100vw, 177.7778svh);
+  height: max(100svh, 56.25vw);
+  overflow: hidden;
+  transform:
+    translate(-50%, -50%)
+    translate3d(var(--depth-x), var(--depth-y), 0)
+    rotateX(var(--depth-rx))
+    rotateY(var(--depth-ry))
+    scale(var(--depth-scale));
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.continuous-world__camera-plane .continuous-world__poster,
+.continuous-world__camera-plane .continuous-world__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.world-ambients {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.world-ambient-region {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0 !important;
+  transform: translate3d(0, 0, 0);
+  transform-origin: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-position: center;
+  mask-position: center;
+  transition: opacity 180ms linear;
+  will-change: opacity, transform;
+}
+
+.world-ambient-region video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+
+/* Only real extracted pixels become visible. There are deliberately no generic
+   mist, shimmer, wave, glow or particle overlays in this system. */
+.continuous-world[data-rest-world="01"] .world-ambient-region[data-ambient-id="01-river"] {
+  opacity: calc(var(--rest-strength, 0) * 1) !important;
+}
+
+.continuous-world[data-rest-world="03"] .world-ambient-region[data-ambient-id="03-threshold-river"],
+.continuous-world[data-rest-world="04"] .world-ambient-region[data-ambient-id="04-study-river"],
+.continuous-world[data-rest-world="05"] .world-ambient-region[data-ambient-id="05-passage-stream"],
+.continuous-world[data-rest-world="06"] .world-ambient-region[data-ambient-id="06-studio-river"],
+.continuous-world[data-rest-world="07"] .world-ambient-region[data-ambient-id="07-archive-river"],
+.continuous-world[data-rest-world="08"] .world-ambient-region[data-ambient-id="08-reflection-river"] {
+  opacity: calc(var(--rest-strength, 0) * .94) !important;
+}
+
+.continuous-world[data-rest-world="06"] .world-ambient-region[data-ambient-id="06-studio-river"],
+.continuous-world[data-rest-world="07"] .world-ambient-region[data-ambient-id="07-archive-river"] {
+  opacity: calc(var(--rest-strength, 0) * .78) !important;
+}
+
+.continuous-world[data-rest-world="06"] .world-ambient-region[data-ambient-id="06-studio-foliage"] {
+  opacity: calc(var(--rest-strength, 0) * .82) !important;
+  transform: translate3d(var(--near-depth-x, 0px), var(--near-depth-y, 0px), 0);
+}
+
+/* The foliage's source pixels already contain real motion. This tiny, deliberately
+   uneven secondary drift keeps it from following the cursor like a cardboard layer.
+   Long flat stretches in the keyframes are intentional: wind is not a metronome. */
+.world-ambient-region[data-kind="foliage"] video {
+  transform-origin: 47% 82%;
+  animation: livingFoliage 13.7s cubic-bezier(.42, 0, .2, 1) infinite;
+}
+
+.continuous-world[data-rest-world="09"] .world-ambient-region[data-ambient-id="10-fountain-pool"],
+.continuous-world[data-rest-world="10"] .world-ambient-region[data-ambient-id="10-fountain-pool"] {
+  opacity: calc(var(--rest-strength, 0) * 1) !important;
+}
+
+/* Interactive objects sit slightly nearer than the rendered environment. This is a
+   tiny depth cue, not a cursor-following gimmick. */
+.world-studio-interaction {
+  transform: translate3d(var(--ui-depth-x, 0px), var(--ui-depth-y, 0px), 0) !important;
+  will-change: opacity, transform;
+}
+
+@keyframes livingFoliage {
+  0%, 18% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.006);
+  }
+  31% {
+    transform: translate3d(.45px, -.2px, 0) rotate(.035deg) scale(1.0065);
+  }
+  43%, 58% {
+    transform: translate3d(.25px, -.1px, 0) rotate(.018deg) scale(1.0064);
+  }
+  72% {
+    transform: translate3d(-.38px, .18px, 0) rotate(-.03deg) scale(1.0066);
+  }
+  86%, 94% {
+    transform: translate3d(-.12px, .08px, 0) rotate(-.01deg) scale(1.0062);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1.006);
+  }
+}
+
+@media (pointer: coarse) {
+  .continuous-world__camera-plane {
+    transform: translate(-50%, -50%) scale(1.012);
+  }
+
+  .world-studio-interaction,
+  .world-ambient-region {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .continuous-world__camera-plane {
+    transform: translate(-50%, -50%) scale(1.012) !important;
+  }
+
+  .world-ambients {
+    display: none;
+  }
+
+  .world-ambient-region video {
+    animation: none !important;
+  }
+}

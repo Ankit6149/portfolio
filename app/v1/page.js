@@ -101,6 +101,62 @@ function ProjectVisual({ type }) {
   );
 }
 
+
+function HeroGarden() {
+  return (
+    <svg className="hero2-garden" viewBox="0 0 1200 900" aria-hidden="true">
+      <defs>
+        <linearGradient id="forestWash" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#123f3b" stopOpacity=".2" />
+          <stop offset=".55" stopColor="#0a4c47" stopOpacity=".92" />
+          <stop offset="1" stopColor="#062f2c" />
+        </linearGradient>
+        <linearGradient id="petalWash" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#f7ddd0" />
+          <stop offset=".48" stopColor="#e99bad" />
+          <stop offset="1" stopColor="#c76681" />
+        </linearGradient>
+        <filter id="softInk"><feGaussianBlur stdDeviation="16" /></filter>
+        <filter id="glow"><feGaussianBlur stdDeviation="5" /></filter>
+      </defs>
+
+      <path className="hero2-wash" d="M405 10C646 22 742 107 887 221c155 122 245 278 273 478 16 116-17 180-66 201H612c-126-80-206-175-246-285-53-147-59-296-11-447C367 127 384 71 405 10Z" fill="url(#forestWash)" />
+      <path className="hero2-mist" d="M133 541c197-54 335-64 466-26 114 33 196 99 291 188 67 62 160 94 282 98" fill="none" stroke="#f4eee5" strokeWidth="94" strokeLinecap="round" opacity=".34" filter="url(#softInk)" />
+
+      <g className="hero2-stems" fill="none" stroke="#c9aa61" strokeWidth="2.2">
+        <path d="M1120 100C978 193 845 268 727 388c-89 91-143 205-225 355" />
+        <path d="M1178 253C1013 270 900 347 808 455c-74 87-121 173-184 319" />
+        <path d="M1028 40C946 143 881 213 767 284" />
+      </g>
+
+      <g className="hero2-leaves">
+        <path d="M873 266c63-49 104-41 127-5-53 25-92 30-127 5Z" fill="#9aae72" />
+        <path d="M804 349c44-74 91-88 131-67-34 55-75 79-131 67Z" fill="#cad59c" />
+        <path d="M745 430c-10-77 18-119 62-126 7 62-10 104-62 126Z" fill="#71865b" />
+        <path d="M666 541c55-55 106-59 140-25-49 42-93 51-140 25Z" fill="#b4c892" />
+        <path d="M601 663c-10-69 18-105 58-110 6 53-12 90-58 110Z" fill="#809566" />
+      </g>
+
+      <g className="hero2-bloom" fill="url(#petalWash)">
+        <path d="M954 167c34-52 82-44 87-3-28 26-59 27-87 3Z" />
+        <path d="M1003 183c38-38 81-15 68 23-32 14-58 7-68-23Z" />
+        <path d="M969 212c12-54 62-63 80-24-14 33-42 44-80 24Z" />
+        <path d="M860 314c30-57 83-53 91-11-26 32-57 36-91 11Z" />
+        <path d="M910 334c36-42 82-22 73 19-29 19-58 13-73-19Z" />
+        <path d="M817 391c25-47 68-45 78-11-20 29-46 34-78 11Z" />
+        <path d="M713 517c31-52 79-45 86-6-25 28-54 31-86 6Z" />
+        <path d="M756 540c37-38 77-15 66 21-29 15-54 9-66-21Z" />
+      </g>
+
+      <g className="hero2-sparks" fill="#efd79a">
+        <circle cx="935" cy="130" r="4" /><circle cx="1055" cy="230" r="5" />
+        <circle cx="847" cy="284" r="3.5" /><circle cx="770" cy="456" r="4.5" />
+        <circle cx="635" cy="602" r="4" />
+      </g>
+    </svg>
+  );
+}
+
 export default function PortfolioV1() {
   const root = useRef(null);
 
@@ -181,70 +237,70 @@ export default function PortfolioV1() {
       </header>
 
       <main>
-        <section id="top" className="hero depth-scene">
-          <div className="hero-wash hero-wash--one" data-depth="-0.35" />
-          <div className="hero-wash hero-wash--two" data-depth="0.25" />
-          <Petals className="hero-petals" />
+        <section id="top" className="hero2">
+          <div className="hero2-paper" aria-hidden="true" />
+          <div className="hero2-art" data-depth="0.16">
+            <HeroGarden />
+          </div>
 
-          <div className="hero-copy" data-depth="-0.08">
-            <p className="eyebrow">Ankit Bhardwaj · New Delhi</p>
-            <div className="hero-title-wrap">
-              <span className="hero-script" aria-hidden="true">curiosity</span>
+          <div className="hero2-copy">
+            <p className="hero2-kicker">Ankit Bhardwaj · New Delhi</p>
+
+            <div className="hero2-title">
+              <span className="hero2-script">curiosity</span>
               <h1>
-                <span className="hero-line">Curiosity</span>
-                <span className="hero-line hero-line--shift">is the thread.</span>
+                <span className="hero2-line hero2-line--one">I build to</span>
+                <span className="hero2-line hero2-line--two">understand.</span>
               </h1>
-              <div className="hero-occluder" data-depth="0.34" aria-hidden="true" />
             </div>
-            <p className="hero-lead">
-              It has taken me from biology to signals, from sketches to software,
-              from research to products, and it continues to shape how I understand
-              people, systems, and the world around me.
+
+            <p className="hero2-intro">
+              Software, research, systems and experiments — different mediums,
+              connected by the same habit of looking closely and asking better questions.
             </p>
-            <div className="hero-actions">
-              <a href="#story">Enter the story <span>↓</span></a>
-              <a href="#work">See what grew from it</a>
+
+            <div className="hero2-links">
+              <a href="#story">Follow the thread <span>↓</span></a>
+              <a href="#work">Selected work <span>↘</span></a>
             </div>
           </div>
 
-          <div className="hero-side-note" data-depth="0.18">
-            <span>Currently</span>
-            <strong>Software Engineering Intern</strong>
-            <small>Wyrd Media Labs</small>
+          <div className="hero2-index" aria-hidden="true">
+            <span>01</span><i /><span>arrival</span>
           </div>
 
-          <div className="hero-depth-word hero-depth-word--one" data-depth="0.5" aria-hidden="true">observe</div>
-          <div className="hero-depth-word hero-depth-word--two" data-depth="-0.15" aria-hidden="true">build</div>
+          <div className="hero2-foreground" data-depth="0.34" aria-hidden="true">
+            <span className="hero2-petal hero2-petal--a" />
+            <span className="hero2-petal hero2-petal--b" />
+            <span className="hero2-petal hero2-petal--c" />
+            <span className="hero2-leaf hero2-leaf--a" />
+            <span className="hero2-leaf hero2-leaf--b" />
+          </div>
         </section>
 
-        <section id="story" className="story-section depth-scene">
-          <div className="story-number" aria-hidden="true">01</div>
-          <div className="story-copy">
-            <p className="section-kicker">The route changed. The questions stayed alive.</p>
-            <div className="clip-line"><h2 className="reveal-line">Life first.</h2></div>
-            <div className="clip-line"><h2 className="reveal-line">Signals next.</h2></div>
-            <div className="clip-line"><h2 className="reveal-line">Software became another medium.</h2></div>
+        <section id="story" className="thread2">
+          <div className="thread2-track" aria-hidden="true">
+            <span>observe</span><i /><span>measure</span><i /><span>build</span><i /><span>refine</span>
           </div>
 
-          <div className="story-orbit" data-depth="0.3" aria-hidden="true">
-            <span>biology</span>
-            <span>feedback</span>
-            <span>observation</span>
-            <span>systems</span>
+          <div className="thread2-copy">
+            <p className="section-kicker">One thread, many mediums</p>
+            <h2>
+              <span>Life made me curious.</span>
+              <span>Engineering taught me to read systems.</span>
+              <span>Software let me make ideas tangible.</span>
+            </h2>
           </div>
 
-          <div className="story-body">
+          <div className="thread2-note">
+            <span className="thread2-note__mark">↳</span>
             <p>
-              Biology was an early way of understanding life. Instrumentation and
-              Control Engineering introduced signals, measurement, feedback, noise,
-              changing state, response, and stability.
-            </p>
-            <p>
-              Software did not replace those interests. It gave them another place to
-              become tangible, from interfaces and automations to desktop tools and
-              research systems.
+              Biology, signals, interfaces, automation, research, desktop tools —
+              the subjects change. The instinct does not.
             </p>
           </div>
+
+          <div className="thread2-word" data-depth="-0.16" aria-hidden="true">thread</div>
         </section>
 
         <section id="work" className="work-intro depth-scene">

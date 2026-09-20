@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - portfolio-redesign
+      - portfolio-v1-2d-depth
   pull_request:
     branches:
       - master
@@ -31,8 +32,14 @@ jobs:
       - name: Build portfolio
         run: npm run build
 
-      - name: Run connected portfolio browser checks
-        run: npm run test:redesign
+      - name: Run portfolio browser checks
+        shell: bash
+        run: |
+          if [[ "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" == portfolio-v1-* ]]; then
+            npm run test:v1
+          else
+            npm run test:redesign
+          fi
 
       - name: Upload portfolio scene captures
         if: always()

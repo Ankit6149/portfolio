@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:redesign": "playwright test tests/redesign.spec.js"
+    "test:redesign": "playwright test tests/redesign.spec.js",
+    "test:v1": "playwright test tests/v1.spec.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

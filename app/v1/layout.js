@@ -1,4 +1,4 @@
-import { Allura, Harmattan, Noto_Serif_Display } from "next/font/google";
+import { Harmattan, Kalam, Noto_Serif_Display } from "next/font/google";
 import "./v1.css";
 
 const display = Noto_Serif_Display({

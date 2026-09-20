@@ -14,9 +14,9 @@ const body = Harmattan({
   variable: "--v1-body",
 });
 
-const script = Allura({
+const script = Kalam({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["300", "400", "700"],
   variable: "--v1-script",
 });
 

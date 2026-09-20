@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Portfolio V1 · Ankit Bhardwaj</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Harmattan:wght@400;500;600;700&family=Kalam:wght@300;400;700&family=Noto+Serif+Display:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root{--v1-display:"Noto Serif Display",serif;--v1-body:"Harmattan",sans-serif;--v1-script:"Kalam",cursive}
+:root{
+--cream:#f5eee3;--cream2:#ece4d8;--ink:#17342f;--teal:#0d4a45;--deep:#073734;
+--moss:#6e7e58;--sage:#aebd99;--mint:#d9e5d6;--blush:#e9a2aa;--rose:#d66c7e;
+--coral:#e88272;--peach:#f1c2aa;--gold:#c6a762;--lav:#c5b6c9;--line:rgba(23,52,47,.18)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--v1-body),sans-serif}a{color:inherit;text-decoration:none}
+.v1-shell{overflow:clip;background:radial-gradient(circle at 85% 8%,rgba(13,74,69,.12),transparent 28%),radial-gradient(circle at 10% 15%,rgba(233,162,170,.16),transparent 26%),var(--cream)}
+.v1-nav{position:fixed;inset:0 0 auto;z-index:50;height:72px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 4vw;border-bottom:1px solid rgba(23,52,47,.1);background:rgba(245,238,227,.76);backdrop-filter:blur(18px)}
+.v1-brand{font-family:var(--v1-display),serif;font-size:1.5rem;font-weight:600;letter-spacing:-.06em}.v1-nav nav{display:flex;gap:2rem;font-size:1.05rem}.v1-contact{justify-self:end;border-bottom:1px solid currentColor}
+.depth-scene{position:relative;isolation:isolate}.hero{min-height:100svh;display:grid;align-items:center;padding:128px 7vw 80px}.hero-copy{position:relative;z-index:5;width:min(820px,72vw)}
+.eyebrow,.section-kicker,.project-kicker{margin:0 0 1.25rem;font-size:1.08rem;line-height:1;text-transform:uppercase;letter-spacing:.14em;font-weight:600}
+.hero-title-wrap{position:relative;width:min(1040px,82vw)}.hero h1{position:relative;z-index:2;margin:0;font-family:var(--v1-display),serif;font-size:clamp(5.4rem,11.5vw,11.7rem);font-weight:400;line-height:.73;letter-spacing:-.065em}.hero-line{display:block}.hero-line--shift{margin-left:.62em;font-style:italic}
+.hero-script{position:absolute;z-index:1;top:-.62em;left:45%;font-family:var(--v1-script),cursive;font-size:clamp(6rem,13vw,13rem);color:rgba(214,108,126,.5);transform:rotate(-8deg)}
+.hero-occluder{position:absolute;z-index:3;width:clamp(180px,24vw,420px);aspect-ratio:1.25;right:4%;top:39%;border-radius:58% 42% 64% 36%/47% 55% 45% 53%;background:radial-gradient(circle at 36% 42%,rgba(241,194,170,.95) 0 13%,transparent 14%),radial-gradient(circle at 53% 30%,rgba(233,162,170,.94) 0 11%,transparent 12%),radial-gradient(circle at 65% 56%,rgba(214,108,126,.82) 0 13%,transparent 14%),radial-gradient(circle at 42% 66%,rgba(174,189,153,.92) 0 20%,transparent 21%),linear-gradient(145deg,rgba(110,126,88,.78),rgba(13,74,69,.92));box-shadow:0 35px 80px rgba(7,55,52,.12);opacity:.9;transform:rotate(-9deg)}
+.hero-lead{position:relative;z-index:6;max-width:640px;margin:3rem 0 0 8%;font-size:clamp(1.35rem,1.75vw,1.85rem);line-height:1.35}.hero-actions{display:flex;gap:2rem;margin:2rem 0 0 8%;font-size:1.08rem}.hero-actions a:first-child{border-bottom:1px solid currentColor}
+.hero-side-note{position:absolute;z-index:5;right:6vw;top:27vh;width:180px;padding-left:1rem;border-left:1px solid var(--line)}.hero-side-note span,.hero-side-note small{display:block;opacity:.65}.hero-side-note strong{display:block;margin:.3rem 0;font-family:var(--v1-display),serif;font-size:1.35rem;font-weight:500}
+.hero-wash{position:absolute;z-index:-2;border-radius:50%;filter:blur(12px)}.hero-wash--one{width:72vw;height:58vw;left:-28vw;top:3vh;background:radial-gradient(circle,rgba(233,162,170,.42),rgba(241,194,170,.17) 42%,transparent 68%)}.hero-wash--two{width:58vw;height:58vw;right:-20vw;top:12vh;background:radial-gradient(circle,rgba(13,74,69,.54),rgba(110,126,88,.25) 43%,transparent 68%)}
+.hero-depth-word{position:absolute;z-index:1;font-family:var(--v1-display),serif;font-size:clamp(4rem,9vw,10rem);color:rgba(23,52,47,.055)}.hero-depth-word--one{right:-1vw;bottom:4vh}.hero-depth-word--two{left:1vw;top:22vh;writing-mode:vertical-rl}
+.petal-field{position:absolute;inset:0;z-index:4;pointer-events:none}.petal{position:absolute;width:28px;height:16px;border-radius:70% 30% 72% 28%;background:var(--blush);opacity:.75}.petal--1{left:73%;top:16%;width:22px;background:var(--peach)}.petal--2{left:86%;top:29%;transform:rotate(75deg);background:var(--rose)}.petal--3{left:63%;top:63%;transform:rotate(-23deg);background:var(--sage)}.petal--4{left:92%;top:68%;width:18px;transform:rotate(120deg);background:var(--coral)}.petal--5{left:77%;top:48%;transform:rotate(8deg);background:var(--lav)}.petal--6{left:58%;top:24%;width:15px;transform:rotate(145deg);background:var(--blush)}
+.story-section{min-height:120vh;padding:14vh 8vw 12vh;display:grid;grid-template-columns:1.25fr .75fr;gap:8vw;align-items:center;background:linear-gradient(120deg,rgba(255,255,255,.28),transparent 46%),linear-gradient(180deg,var(--cream),#eee5d9)}.story-number{position:absolute;top:7vh;left:3vw;font-family:var(--v1-display),serif;font-size:14rem;color:rgba(23,52,47,.045)}.story-copy h2{margin:0;font-family:var(--v1-display),serif;font-size:clamp(3.3rem,6.8vw,7.5rem);font-weight:400;line-height:.88;letter-spacing:-.05em}.clip-line{overflow:hidden}.story-copy .clip-line:nth-of-type(3) h2{max-width:11ch;color:var(--teal)}.story-body{align-self:end;max-width:540px;font-size:1.35rem;line-height:1.5}
+.story-orbit{position:absolute;right:7vw;top:10vh;width:min(36vw,520px);aspect-ratio:1;border:1px solid rgba(198,167,98,.5);border-radius:50%}.story-orbit:before,.story-orbit:after{content:"";position:absolute;inset:15%;border:1px solid rgba(23,52,47,.14);border-radius:50%}.story-orbit:after{inset:31%}.story-orbit span{position:absolute;padding:.15rem .45rem;background:var(--cream)}.story-orbit span:nth-child(1){top:8%;left:52%}.story-orbit span:nth-child(2){right:-4%;top:48%}.story-orbit span:nth-child(3){bottom:10%;left:28%}.story-orbit span:nth-child(4){left:-2%;top:40%}
+.work-intro{min-height:86vh;display:flex;flex-direction:column;justify-content:center;padding:12vh 8vw;background:#e8dfd3}.work-intro h2{position:relative;z-index:2;margin:0;max-width:12ch;font-family:var(--v1-display),serif;font-size:clamp(4.4rem,9vw,9rem);line-height:.82;font-weight:400;letter-spacing:-.055em}.work-intro h2 span{display:block;margin-left:1.2em;font-style:italic}.work-bloom{position:absolute;right:-4vw;bottom:-12vh;width:min(44vw,650px);aspect-ratio:1.3;border-radius:61% 39% 54% 46%/46% 63% 37% 54%;background:radial-gradient(circle at 34% 35%,rgba(233,162,170,.94) 0 12%,transparent 13%),radial-gradient(circle at 55% 28%,rgba(241,194,170,.9) 0 14%,transparent 15%),radial-gradient(circle at 64% 54%,rgba(214,108,126,.8) 0 11%,transparent 12%),radial-gradient(circle at 38% 62%,rgba(174,189,153,.9) 0 18%,transparent 19%),linear-gradient(135deg,rgba(110,126,88,.9),rgba(13,74,69,.92));transform:rotate(-9deg)}
+.project-chapter{position:relative;min-height:110vh;padding:14vh 7vw 10vh;display:grid;align-items:center;overflow:hidden;border-top:1px solid var(--line)}.project-chapter:nth-child(odd){background:#f4ecdf}.project-chapter:nth-child(even){background:#e7ded1}.project-index{position:absolute;top:8vh;left:4vw;font-family:var(--v1-display),serif;font-size:1.4rem}.project-title-ghost{position:absolute;left:-2vw;top:20%;font-family:var(--v1-display),serif;font-size:clamp(7rem,16vw,16rem);line-height:.8;white-space:nowrap;color:rgba(23,52,47,.055);letter-spacing:-.06em}.project-grid{position:relative;z-index:3;width:min(1320px,100%);margin:auto;display:grid;grid-template-columns:.85fr 1.15fr;gap:7vw;align-items:center}.project-copy h3{margin:.15rem 0 1.2rem;font-family:var(--v1-display),serif;font-size:clamp(4rem,7vw,7rem);line-height:.8;font-weight:400;letter-spacing:-.055em}.project-copy blockquote{margin:2rem 0;max-width:430px;font-family:var(--v1-display),serif;font-style:italic;font-size:clamp(1.7rem,2.5vw,2.65rem);line-height:1.05}.project-copy>p{max-width:560px;font-size:1.25rem;line-height:1.5}.project-tags{display:flex;flex-wrap:wrap;gap:.55rem;margin:1.8rem 0}.project-tags span{border:1px solid rgba(23,52,47,.2);border-radius:999px;padding:.3rem .7rem}.project-copy>a{border-bottom:1px solid currentColor;font-size:1.15rem}
+.project-art{position:relative;min-height:520px;border-radius:46% 54% 42% 58%/52% 41% 59% 48%;background:linear-gradient(145deg,rgba(255,255,255,.56),rgba(255,255,255,.08)),radial-gradient(circle at 70% 25%,rgba(233,162,170,.5),transparent 28%),linear-gradient(145deg,var(--mint),var(--sage));box-shadow:0 45px 100px rgba(7,55,52,.1);overflow:hidden}.project-art:before{content:"";position:absolute;inset:9%;border:1px solid rgba(255,255,255,.55);border-radius:inherit}
+.project-art--notes .note{position:absolute;width:220px;min-height:150px;padding:1.3rem;background:#f4d6bf;box-shadow:0 24px 48px rgba(23,52,47,.12);font-family:var(--v1-script),cursive;font-size:2rem}.note--one{left:18%;top:20%;transform:rotate(-8deg)}.note--two{right:15%;bottom:18%;transform:rotate(7deg);background:#e7a7ad!important}.note-orbit{position:absolute;width:320px;height:320px;border:1px solid rgba(198,167,98,.65);border-radius:50%;right:-7%;top:-4%}
+.project-art--flow{display:flex;align-items:center;justify-content:center;gap:.7rem;padding:4rem;background:radial-gradient(circle at 20% 20%,rgba(241,194,170,.72),transparent 23%),linear-gradient(145deg,#d9e5d6,#8da081 52%,#174d47)}.flow-node{position:relative;z-index:2;display:grid;place-items:center;min-width:105px;min-height:105px;border-radius:50%;background:rgba(245,238,227,.82);border:1px solid rgba(23,52,47,.14)}.project-art--flow i{width:44px;height:1px;background:rgba(245,238,227,.85)}
+.project-art--signal{display:grid;place-items:center;background:linear-gradient(145deg,#0f4742,#163630)}.project-art--signal svg{width:110%;height:60%}.project-art--signal path{fill:none;stroke:#f0b1b7;stroke-width:6}.project-art--signal .signal-soft{stroke:rgba(217,229,214,.55);stroke-width:2}.signal-stat{position:absolute;right:10%;bottom:12%;color:var(--cream);text-align:right}.signal-stat strong{display:block;font-family:var(--v1-display),serif;font-size:4rem;font-weight:400}.signal-stat span{opacity:.7}
+.research-section{min-height:100vh;padding:14vh 8vw;display:grid;grid-template-columns:.9fr 1.1fr;gap:7vw;align-items:center;background:var(--deep);color:var(--cream)}.research-copy h2{margin:0 0 2rem;font-family:var(--v1-display),serif;font-size:clamp(4rem,7vw,7rem);font-weight:400;line-height:.84;letter-spacing:-.055em}.research-copy>p{max-width:560px;font-size:1.25rem;line-height:1.5;opacity:.82}.research-copy>a{display:inline-block;margin-top:2rem;border-bottom:1px solid currentColor}.research-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem}.research-metrics strong{display:block;font-family:var(--v1-display),serif;font-size:2.3rem;font-weight:400}.research-metrics span{opacity:.6}.research-art{position:relative;min-height:520px;display:grid;place-items:center}.research-art svg{width:110%}.research-art path{fill:none;stroke:var(--blush);stroke-width:6}.research-art .research-art-soft{stroke:rgba(217,229,214,.32);stroke-width:2}.research-word{position:absolute;font-family:var(--v1-display),serif;font-size:clamp(5rem,10vw,10rem);color:rgba(245,238,227,.07)}.research-word--signal{top:6%;left:4%}.research-word--meaning{right:-5%;bottom:5%;font-style:italic}
+.capabilities-section{padding:13vh 7vw;background:#eee5d8}.capabilities-section>.section-kicker{max-width:1260px;margin-inline:auto}.capabilities-grid{width:min(1260px,100%);margin:4rem auto 0;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}.capability{min-height:230px;padding:1.5rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.capability span{opacity:.45}.capability strong{display:block;margin-top:2.7rem;font-family:var(--v1-display),serif;font-size:2rem;font-weight:500}.capability p{font-size:1.1rem;line-height:1.4}
+.beyond-section{min-height:100vh;padding:12vh 8vw;display:grid;align-items:end;background:radial-gradient(circle at 80% 40%,rgba(233,162,170,.44),transparent 29%),radial-gradient(circle at 62% 72%,rgba(110,126,88,.35),transparent 34%),var(--cream)}.beyond-copy{position:relative;z-index:5;width:min(630px,65vw);margin-left:auto}.beyond-copy h2{margin:0 0 1.5rem;font-family:var(--v1-display),serif;font-size:clamp(4rem,7vw,7.5rem);font-weight:400;line-height:.84;letter-spacing:-.055em}.beyond-copy p{font-size:1.3rem;line-height:1.5}.beyond-words span{position:absolute;z-index:2;font-family:var(--v1-display),serif;color:rgba(23,52,47,.12);line-height:1}.beyond-words span:nth-child(1){left:5vw;top:18%;font-size:11vw}.beyond-words span:nth-child(2){left:19vw;top:48%;font-size:8vw;font-style:italic}.beyond-words span:nth-child(3){left:8vw;bottom:10%;font-size:10vw}.beyond-words span:nth-child(4){right:5vw;top:10%;font-size:6vw}
+.current-section{min-height:78vh;padding:13vh 8vw;display:grid;grid-template-columns:1fr .72fr;gap:8vw;align-items:center;background:#e4dbce}.current-section h2{margin:0;font-family:var(--v1-display),serif;font-size:clamp(3.7rem,6vw,6.3rem);font-weight:400;line-height:.87;letter-spacing:-.05em}.current-copy{font-size:1.3rem;line-height:1.5}
+.closing-section{min-height:88vh;position:relative;display:grid;place-content:center;text-align:center;padding:12vh 8vw;background:linear-gradient(180deg,#f1e8dc,#f5eee3)}.closing-script{position:absolute;top:10%;left:50%;transform:translateX(-50%) rotate(-7deg);margin:0;font-family:var(--v1-script),cursive;font-size:clamp(7rem,17vw,17rem);color:rgba(214,108,126,.18);white-space:nowrap}.closing-section h2{position:relative;margin:0;font-family:var(--v1-display),serif;font-size:clamp(5rem,10vw,10rem);line-height:.8;font-weight:400;letter-spacing:-.06em}.closing-section>p:not(.closing-script){max-width:560px;margin:2rem auto;font-size:1.3rem}.closing-links{display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem}.closing-links a{border-bottom:1px solid currentColor}.v1-footer{display:flex;justify-content:space-between;padding:1.5rem 4vw;border-top:1px solid var(--line);background:var(--cream)}
+@media(max-width:980px){.v1-nav{grid-template-columns:auto 1fr}.v1-nav nav{display:none}.v1-contact{justify-self:end}.hero-copy,.hero-title-wrap{width:92vw}.hero-side-note{top:auto;bottom:5vh;right:5vw}.story-section,.project-grid,.research-section,.current-section{grid-template-columns:1fr}.story-orbit{opacity:.5;right:-12vw}.project-art{min-height:430px}.research-art{min-height:360px}.capabilities-grid{grid-template-columns:repeat(2,1fr)}.beyond-copy{width:min(650px,90vw)}}
+@media(max-width:640px){.v1-nav{height:62px;padding-inline:1rem}.hero{padding:100px 1.2rem 64px}.hero-copy,.hero-title-wrap{width:100%}.hero h1{font-size:clamp(4.2rem,22vw,7rem);line-height:.78}.hero-line--shift{margin-left:.18em}.hero-script{left:32%;top:-1.15em;font-size:6rem}.hero-occluder{width:42vw;right:-8%;top:47%}.hero-lead,.hero-actions{margin-left:0}.hero-lead{font-size:1.18rem}.hero-actions{flex-direction:column;gap:.8rem}.hero-side-note{position:static;margin-top:3rem;width:100%}.story-section,.work-intro,.project-chapter,.research-section,.capabilities-section,.beyond-section,.current-section,.closing-section{padding-inline:1.2rem}.story-section{min-height:auto;padding-block:8rem;gap:4rem}.story-orbit{width:70vw;top:12%;right:-34vw}.story-copy h2{font-size:clamp(3.4rem,17vw,6rem)}.work-intro{min-height:72vh}.work-intro h2{font-size:clamp(4rem,19vw,6.5rem)}.project-chapter{min-height:auto;padding-block:8rem}.project-grid{gap:4rem}.project-art{min-height:330px}.project-art--flow{padding:1.5rem;gap:.35rem}.flow-node{min-width:64px;min-height:64px;font-size:.72rem}.project-art--flow i{width:12px}.research-section{min-height:auto;padding-block:8rem}.research-metrics{grid-template-columns:1fr}.capabilities-grid{grid-template-columns:1fr}.beyond-copy{width:100%}.current-section{min-height:auto;padding-block:8rem}.v1-footer{flex-direction:column;gap:.4rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-depth]{transform:none!important}}
+
+</style>
+</head>
+<body>
+<div class="v1-shell">
+<header class="v1-nav">
+  <a class="v1-brand" href="#top">AB</a>
+  <nav aria-label="Primary"><a href="#story">Story</a><a href="#work">Work</a><a href="#research">Research</a><a href="#about">Beyond</a></nav>
+  <a class="v1-contact" href="mailto:ankitbhardwaj80100@gmail.com">Say hello</a>
+</header>
+<main>
+<section id="top" class="hero depth-scene">
+  <div class="hero-wash hero-wash--one" data-depth="-0.35"></div>
+  <div class="hero-wash hero-wash--two" data-depth="0.25"></div>
+  <div class="petal-field hero-petals" aria-hidden="true"><span class="petal petal--1"></span><span class="petal petal--2"></span><span class="petal petal--3"></span><span class="petal petal--4"></span><span class="petal petal--5"></span><span class="petal petal--6"></span><span class="petal petal--1"></span><span class="petal petal--2"></span><span class="petal petal--3"></span><span class="petal petal--4"></span><span class="petal petal--5"></span><span class="petal petal--6"></span><span class="petal petal--1"></span><span class="petal petal--2"></span><span class="petal petal--3"></span><span class="petal petal--4"></span><span class="petal petal--5"></span><span class="petal petal--6"></span></div>
+  <div class="hero-copy" data-depth="-0.08">
+    <p class="eyebrow">Ankit Bhardwaj · New Delhi</p>
+    <div class="hero-title-wrap">
+      <span class="hero-script" aria-hidden="true">curiosity</span>
+      <h1><span class="hero-line">Curiosity</span><span class="hero-line hero-line--shift">is the thread.</span></h1>
+      <div class="hero-occluder" data-depth="0.34" aria-hidden="true"></div>
+    </div>
+    <p class="hero-lead">It has taken me from biology to signals, from sketches to software, from research to products, and it continues to shape how I understand people, systems, and the world around me.</p>
+    <div class="hero-actions"><a href="#story">Enter the story <span>↓</span></a><a href="#work">See what grew from it</a></div>
+  </div>
+  <div class="hero-side-note" data-depth="0.18"><span>Currently</span><strong>Software Engineering Intern</strong><small>Wyrd Media Labs</small></div>
+  <div class="hero-depth-word hero-depth-word--one" data-depth="0.5" aria-hidden="true">observe</div>
+  <div class="hero-depth-word hero-depth-word--two" data-depth="-0.15" aria-hidden="true">build</div>
+</section>
+
+<section id="story" class="story-section depth-scene">
+  <div class="story-number" aria-hidden="true">01</div>
+  <div class="story-copy">
+    <p class="section-kicker">The route changed. The questions stayed alive.</p>
+    <div class="clip-line"><h2 class="reveal-line">Life first.</h2></div>
+    <div class="clip-line"><h2 class="reveal-line">Signals next.</h2></div>
+    <div class="clip-line"><h2 class="reveal-line">Software became another medium.</h2></div>
+  </div>
+  <div class="story-orbit" data-depth="0.3" aria-hidden="true"><span>biology</span><span>feedback</span><span>observation</span><span>systems</span></div>
+  <div class="story-body">
+    <p>Biology was an early way of understanding life. Instrumentation and Control Engineering introduced signals, measurement, feedback, noise, changing state, response, and stability.</p>
+    <p>Software did not replace those interests. It gave them another place to become tangible, from interfaces and automations to desktop tools and research systems.</p>
+  </div>
+</section>
+
+<section id="work" class="work-intro depth-scene">
+  <p class="section-kicker">Selected work</p>
+  <h2>Products as responses<span>to things worth noticing.</span></h2>
+  <div class="work-bloom" data-depth="0.32" aria-hidden="true"></div>
+</section>
+
+<div class="project-list">
+<section class="project-chapter">
+  <div class="project-index">01</div>
+  <div class="project-title-ghost" aria-hidden="true">Skribly</div>
+  <div class="project-grid">
+    <div class="project-copy">
+      <p class="project-kicker">Contextual desktop notes</p>
+      <h3>Skribly</h3>
+      <blockquote>A note loses value when the context that made it important disappears.</blockquote>
+      <p>A Windows-first contextual notes and annotation app built around overlays, shortcuts, local-first behavior, and notes that return with the relevant app or screen context.</p>
+      <div class="project-tags"><span>Tauri</span><span>React</span><span>Rust</span><span>Windows APIs</span></div>
+      <a href="https://github.com/Ankit6149/skribly" target="_blank" rel="noreferrer">Inspect the work <span>↗</span></a>
+    </div>
+    <div class="project-art project-art--notes" aria-hidden="true"><div class="note note--one"><span>remember this</span><i></i></div><div class="note note--two"><span>returns with context</span></div><div class="note-orbit"></div></div>
+  </div>
+</section>
+<section class="project-chapter">
+  <div class="project-index">02</div>
+  <div class="project-title-ghost" aria-hidden="true">SignalFlow Studio</div>
+  <div class="project-grid">
+    <div class="project-copy">
+      <p class="project-kicker">AI-assisted content production</p>
+      <h3>SignalFlow Studio</h3>
+      <blockquote>Generation is easy. Preserving context and judgment is harder.</blockquote>
+      <p>A multi-stage workflow for research, source capture, mixed-context intake, generation, review, platform adaptation, and packaging.</p>
+      <div class="project-tags"><span>Next.js</span><span>LLM integrations</span><span>Product systems</span></div>
+      <a href="https://github.com/Ankit6149/SignalFlow-Studio" target="_blank" rel="noreferrer">Inspect the work <span>↗</span></a>
+    </div>
+    <div class="project-art project-art--flow" aria-hidden="true"><span class="flow-node">Model</span><i></i><span class="flow-node">Context</span><i></i><span class="flow-node">Outputs</span><i></i><span class="flow-node">Package</span></div>
+  </div>
+</section>
+<section class="project-chapter">
+  <div class="project-index">03</div>
+  <div class="project-title-ghost" aria-hidden="true">Emotion-H Net</div>
+  <div class="project-grid">
+    <div class="project-copy">
+      <p class="project-kicker">Published research</p>
+      <h3>Emotion-H Net</h3>
+      <blockquote>What must a model see before a noisy signal can mean anything?</blockquote>
+      <p>EEG emotion recognition on the DEAP dataset using engineered features, recursive feature elimination, and a lightweight four-encoder Transformer architecture.</p>
+      <div class="project-tags"><span>PyTorch</span><span>Transformers</span><span>EEG</span><span>ICDSA 2025</span></div>
+      <a href="https://link.springer.com/chapter/10.1007/978-3-032-15407-1_18" target="_blank" rel="noreferrer">Inspect the work <span>↗</span></a>
+    </div>
+    <div class="project-art project-art--signal" aria-hidden="true"><svg viewBox="0 0 800 260" preserveAspectRatio="none"><path d="M0 142 C55 142 55 80 110 80 S165 205 220 205 275 110 330 110 385 150 440 150 495 55 550 55 605 180 660 180 715 122 800 122"></path><path class="signal-soft" d="M0 160 C70 110 100 200 170 148 S275 75 350 136 440 214 520 135 620 84 800 154"></path></svg><div class="signal-stat"><strong>86.82%</strong><span>test accuracy</span></div></div>
+  </div>
+</section></div>
+
+<section id="research" class="research-section depth-scene">
+  <div class="research-copy">
+    <p class="section-kicker">Research</p>
+    <h2>Biology and software met again in a signal.</h2>
+    <p>Emotion-H Net explored EEG-based emotion recognition on the DEAP dataset. The pipeline reduced 600 engineered features to 164 before a lightweight four-encoder Transformer learned from them.</p>
+    <div class="research-metrics"><div><strong>150,244</strong><span>parameters</span></div><div><strong>86.82%</strong><span>test accuracy</span></div><div><strong>0.977</strong><span>AUROC</span></div></div>
+    <a href="https://link.springer.com/chapter/10.1007/978-3-032-15407-1_18" target="_blank" rel="noreferrer">Springer LNNS · ICDSA 2025 ↗</a>
+  </div>
+  <div class="research-art" data-depth="0.22" aria-hidden="true">
+    <svg viewBox="0 0 900 500"><path d="M0 260 C72 240 92 95 164 180 S264 398 350 258 454 96 540 258 668 410 734 242 814 160 900 224"></path><path class="research-art-soft" d="M0 305 C90 165 150 405 238 274 S390 164 465 300 585 375 666 245 790 164 900 300"></path></svg>
+    <span class="research-word research-word--signal">signal</span><span class="research-word research-word--meaning">meaning</span>
+  </div>
+</section>
+
+<section class="capabilities-section">
+  <p class="section-kicker">Engineering, grouped by purpose</p>
+  <div class="capabilities-grid"><div class="capability"><span>01</span><strong>Interfaces</strong><p>React, Next.js, responsive UI, product flows</p></div><div class="capability"><span>02</span><strong>Systems</strong><p>APIs, authentication, permissions, event-driven workflows</p></div><div class="capability"><span>03</span><strong>Data</strong><p>PostgreSQL, Supabase, Redis, Firebase, SQL</p></div><div class="capability"><span>04</span><strong>AI + automation</strong><p>LLM integrations, PyTorch, n8n, MCP, model evaluation</p></div><div class="capability"><span>05</span><strong>Desktop</strong><p>Tauri, Rust, Windows APIs</p></div><div class="capability"><span>06</span><strong>Practice</strong><p>C++, debugging, testing, CI/CD, deployment</p></div></div>
+</section>
+
+<section id="about" class="beyond-section depth-scene">
+  <div class="petal-field beyond-petals" aria-hidden="true"><span class="petal petal--1"></span><span class="petal petal--2"></span><span class="petal petal--3"></span><span class="petal petal--4"></span><span class="petal petal--5"></span><span class="petal petal--6"></span><span class="petal petal--1"></span><span class="petal petal--2"></span><span class="petal petal--3"></span><span class="petal petal--4"></span><span class="petal petal--5"></span><span class="petal petal--6"></span><span class="petal petal--1"></span><span class="petal petal--2"></span><span class="petal petal--3"></span><span class="petal petal--4"></span><span class="petal petal--5"></span><span class="petal petal--6"></span></div>
+  <div class="beyond-words" aria-hidden="true"><span data-depth="-0.15">sketch</span><span data-depth="0.24">sing</span><span data-depth="-0.08">play</span><span data-depth="0.18">observe</span></div>
+  <div class="beyond-copy"><p class="section-kicker">Beyond output</p><h2>Not everything needs to become a project.</h2><p>Drawing, painting, music, basketball, biology, nature, architecture, culture, and questions about life all exist outside the project archive. Some influence the work. Some are simply parts of living.</p></div>
+</section>
+
+<section class="current-section">
+  <div><p class="section-kicker">Current chapter</p><h2>Building across frontend, backend, data, integrations, and workflow state.</h2></div>
+  <div class="current-copy"><p>Software Engineering Intern at Wyrd Media Labs, working across full-stack business products and the operational edge cases that appear between interfaces, APIs, permissions, data, and external services.</p><p>B.Tech in Instrumentation and Control Engineering, NSUT, 2021–2025.</p></div>
+</section>
+
+<section class="closing-section">
+  <p class="closing-script" aria-hidden="true">still curious</p>
+  <h2>The questions continue.</h2>
+  <p>Explore the code, the research, the practice, or simply start a conversation.</p>
+  <div class="closing-links"><a href="https://github.com/Ankit6149" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/ankit-bhardwaj-6b9b62221/" target="_blank" rel="noreferrer">LinkedIn ↗</a><a href="https://leetcode.com/u/ankit_bh_/" target="_blank" rel="noreferrer">LeetCode ↗</a><a href="https://orcid.org/0009-0005-3408-0058" target="_blank" rel="noreferrer">ORCID ↗</a><a href="mailto:ankitbhardwaj80100@gmail.com">Email ↗</a></div>
+</section>
+</main>
+<footer class="v1-footer"><span>© 2026 Ankit Bhardwaj</span><span>V1 · layered 2D study</span><a href="#top">Back to top</a></footer>
+</div>
+<script>
+const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+if(!reduced){
+  const layers=[...document.querySelectorAll("[data-depth]")];
+  const update=()=>{const y=scrollY;layers.forEach(el=>{const d=parseFloat(el.dataset.depth||"0");el.style.transform="translate3d(0,"+(y*d*.08)+"px,0)";});};
+  addEventListener("scroll",update,{passive:true});update();
+}
+</script>
+</body></html>

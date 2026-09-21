@@ -1,0 +1,60 @@
+name: Build living ambient loops
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - portfolio-world-base
+    paths:
+      - scripts/build-living-ambients.py
+      - .github/workflows/build-living-ambients.yml
+      - public/portfolio-world/master/master-scroll-1080p.mp4
+
+permissions:
+  contents: write
+
+jobs:
+  build-ambients:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: portfolio-world-base
+
+      - name: Install media dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg python3-pip
+          python3 -m pip install --break-system-packages opencv-python-headless numpy
+
+      - name: Extract stabilized real-world ambient loops
+        run: python3 scripts/build-living-ambients.py
+
+      - name: Inspect generated assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat public/portfolio-world/ambient/manifest.json
+          for video in public/portfolio-world/ambient/*.mp4; do
+            echo "--- $video"
+            ffprobe -v error \
+              -show_entries stream=width,height,r_frame_rate,codec_name \
+              -show_entries format=duration,size \
+              -of default=noprint_wrappers=1 \
+              "$video"
+          done
+
+      - name: Commit generated ambient assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f public/portfolio-world/ambient
+          if git diff --cached --quiet; then
+            echo "Ambient assets are already current"
+            exit 0
+          fi
+          git commit -m "assets: build stabilized living-world ambient loops"
+          git push origin HEAD:portfolio-world-base

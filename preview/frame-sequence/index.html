@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Ankit Bhardwaj — Frame Sequence Baseline</title>
+  <style>
+    *{box-sizing:border-box}html,body,#root{margin:0;min-height:100%;background:#090c0a;color:#fff}html{scroll-behavior:auto}body{overflow-x:hidden;font-family:Arial,Helvetica,sans-serif}.world{position:relative;height:1150svh;background:#090c0a}.stage{position:sticky;top:0;width:100%;height:100svh;min-height:600px;overflow:hidden;background:#090c0a;isolation:isolate}.poster,.canvas,.veil{position:absolute;inset:0;width:100%;height:100%}.poster{z-index:0;object-fit:cover;object-position:center;transition:opacity .35s ease}.poster.is-hidden{opacity:0}.canvas{z-index:1;display:block}.veil{z-index:5;pointer-events:none;background:linear-gradient(to bottom,rgba(4,7,5,.18),transparent 20%,transparent 78%,rgba(4,7,5,.28)),radial-gradient(circle at 50% 46%,transparent 45%,rgba(3,5,4,.11) 100%)}.top{position:absolute;z-index:10;top:0;left:0;right:0;display:flex;justify-content:space-between;gap:20px;padding:20px clamp(18px,3.5vw,56px);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,251,241,.8);text-shadow:0 2px 14px rgba(0,0,0,.5);pointer-events:none}.center{position:absolute;z-index:9;left:clamp(24px,7vw,110px);bottom:clamp(66px,10vh,118px);max-width:min(640px,55vw);pointer-events:none;text-shadow:0 3px 28px rgba(0,0,0,.58);transition:opacity .45s ease}.center.is-quiet{opacity:.2}.center p{margin:0 0 12px;font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,251,241,.72)}.center h1{margin:0;font:400 clamp(44px,6vw,96px)/.95 Georgia,"Times New Roman",serif;letter-spacing:-.045em}.center span{display:block;margin-top:18px;max-width:46ch;font-size:15px;line-height:1.55;color:rgba(255,251,241,.73)}.progress{position:absolute;z-index:10;left:clamp(18px,3.5vw,56px);right:clamp(18px,3.5vw,56px);bottom:22px;height:1px;background:rgba(255,255,255,.18);overflow:hidden}.progress i{display:block;width:100%;height:100%;transform-origin:left center;background:rgba(255,251,241,.78)}.status{position:absolute;z-index:11;right:clamp(18px,3.5vw,56px);bottom:34px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,251,241,.56);text-shadow:0 2px 10px rgba(0,0,0,.5)}@media(max-width:800px){.world{height:900svh}.stage{min-height:540px}.top{padding:17px 18px}.center{left:20px;right:20px;bottom:68px;max-width:none}.center h1{font-size:clamp(40px,12vw,66px);max-width:11ch}.center span{font-size:14px}.progress{left:18px;right:18px;bottom:18px}.status{right:18px;bottom:31px}}@media(prefers-reduced-motion:reduce){.world{height:100svh}.center{opacity:1!important}.progress{display:none}}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import React,{useEffect,useRef,useState} from 'https://esm.sh/react@19.2.3';
+    import {createRoot} from 'https://esm.sh/react-dom@19.2.3/client';
+    import Lenis from 'https://esm.sh/lenis@1.3.25';
+    import gsap from 'https://esm.sh/gsap@3.15.0';
+
+    const FRAME_COUNT=560;
+    const FRAME_BASE='https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-world-base/public/portfolio-world/frames/master/';
+    const frameUrl=(n)=>FRAME_BASE+`frame-${String(n).padStart(4,'0')}.webp`;
+
+    function App(){
+      const canvasRef=useRef(null);
+      const stageRef=useRef(null);
+      const cacheRef=useRef(new Map());
+      const pendingRef=useRef(new Set());
+      const targetRef=useRef(0);
+      const smoothRef=useRef(0);
+      const lastFrameRef=useRef(1);
+      const directionRef=useRef(1);
+      const rafRef=useRef(0);
+      const [ready,setReady]=useState(false);
+      const [progress,setProgress]=useState(0);
+      const [frame,setFrame]=useState(1);
+
+      useEffect(()=>{
+        const canvas=canvasRef.current;
+        const ctx=canvas.getContext('2d',{alpha:false,desynchronized:true});
+        const cache=cacheRef.current;
+        const pending=pendingRef.current;
+
+        const load=(n)=>{
+          n=Math.max(1,Math.min(FRAME_COUNT,n));
+          if(cache.has(n)||pending.has(n)) return;
+          pending.add(n);
+          const img=new Image();
+          img.decoding='async';
+          img.src=frameUrl(n);
+          img.onload=()=>{pending.delete(n);cache.set(n,img);if(n===1)setReady(true)};
+          img.onerror=()=>pending.delete(n);
+        };
+
+        const preloadWindow=(n,dir)=>{
+          load(n);
+          for(let i=1;i<=16;i++){load(n+i);load(n-i)}
+          for(let i=17;i<=52;i+=2) load(n+(dir>=0?i:-i));
+          if(cache.size>110){
+            const keys=[...cache.keys()].sort((a,b)=>Math.abs(b-n)-Math.abs(a-n));
+            keys.slice(0,cache.size-95).forEach(k=>cache.delete(k));
+          }
+        };
+
+        const cover=(img,alpha=1)=>{
+          const dpr=Math.min(2,window.devicePixelRatio||1);
+          const w=Math.max(1,canvas.clientWidth),h=Math.max(1,canvas.clientHeight);
+          const pw=Math.round(w*dpr),ph=Math.round(h*dpr);
+          if(canvas.width!==pw||canvas.height!==ph){canvas.width=pw;canvas.height=ph}
+          const iw=img.naturalWidth,ih=img.naturalHeight;
+          const scale=Math.max(pw/iw,ph/ih);
+          const dw=iw*scale,dh=ih*scale;
+          const dx=(pw-dw)/2,dy=(ph-dh)/2;
+          ctx.globalAlpha=alpha;
+          ctx.drawImage(img,dx,dy,dw,dh);
+          ctx.globalAlpha=1;
+        };
+
+        const nearestLoaded=(n)=>{
+          if(cache.has(n)) return n;
+          for(let d=1;d<25;d++){
+            const a=n-d,b=n+d;
+            if(cache.has(a)) return a;
+            if(cache.has(b)) return b;
+          }
+          return cache.has(lastFrameRef.current)?lastFrameRef.current:1;
+        };
+
+        const draw=(position)=>{
+          const exact=1+position*(FRAME_COUNT-1);
+          const base=Math.floor(exact),frac=exact-base;
+          const a=nearestLoaded(base);
+          const imgA=cache.get(a);
+          if(!imgA) return;
+          ctx.fillStyle='#090c0a';ctx.fillRect(0,0,canvas.width,canvas.height);
+          cover(imgA,1);
+          const imgB=cache.get(Math.min(FRAME_COUNT,base+1));
+          if(imgB&&a===base&&frac>0.05){cover(imgB,Math.min(.42,frac*.42))}
+          lastFrameRef.current=a;
+          setFrame(a);
+        };
+
+        load(1);for(let i=2;i<=42;i++)load(i);
+
+        const lenis=new Lenis({lerp:.085,smoothWheel:true,wheelMultiplier:.78,touchMultiplier:1.05,syncTouch:false});
+        lenis.on('scroll',({progress:lp,velocity})=>{
+          targetRef.current=Math.max(0,Math.min(1,lp));
+          if(Math.abs(velocity)>.01) directionRef.current=velocity>=0?1:-1;
+        });
+        const ticker=(time)=>lenis.raf(time*1000);
+        gsap.ticker.add(ticker);gsap.ticker.lagSmoothing(0);
+
+        const tick=()=>{
+          const target=targetRef.current;
+          const current=smoothRef.current;
+          const next=Math.abs(target-current)<.00002?target:current+(target-current)*.16;
+          smoothRef.current=next;
+          const targetFrame=Math.max(1,Math.min(FRAME_COUNT,Math.round(1+next*(FRAME_COUNT-1))));
+          preloadWindow(targetFrame,directionRef.current);
+          draw(next);
+          setProgress(next);
+          rafRef.current=requestAnimationFrame(tick);
+        };
+        rafRef.current=requestAnimationFrame(tick);
+
+        const onResize=()=>draw(smoothRef.current);
+        window.addEventListener('resize',onResize,{passive:true});
+        return()=>{cancelAnimationFrame(rafRef.current);window.removeEventListener('resize',onResize);gsap.ticker.remove(ticker);lenis.destroy()};
+      },[]);
+
+      return React.createElement('main',{className:'world'},
+        React.createElement('section',{className:'stage',ref:stageRef},
+          React.createElement('img',{className:'poster'+(ready?' is-hidden':''),src:frameUrl(1),alt:''}),
+          React.createElement('canvas',{ref:canvasRef,className:'canvas','aria-hidden':'true'}),
+          React.createElement('div',{className:'veil'}),
+          React.createElement('header',{className:'top'},React.createElement('span',null,'Ankit Bhardwaj'),React.createElement('span',null,'Scroll = camera')),
+          React.createElement('div',{className:'center'+(progress>.045?' is-quiet':'')},React.createElement('p',null,'A living portfolio'),React.createElement('h1',null,'One continuous world.'),React.createElement('span',null,'The master journey is now rendered as an ordered frame sequence. There are no page breaks and no separate video sections.')),
+          React.createElement('div',{className:'status'},`${String(frame).padStart(3,'0')} / ${FRAME_COUNT}`),
+          React.createElement('div',{className:'progress'},React.createElement('i',{style:{transform:`scaleX(${Math.max(.002,progress)})`}}))
+        )
+      );
+    }
+    createRoot(document.getElementById('root')).render(React.createElement(App));
+  </script>
+</body>
+</html>

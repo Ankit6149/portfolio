@@ -1,17 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-const requiredSections = [
-  ".redesign-hero",
-  ".origin",
-  ".observations",
-  ".project-story--skribli",
-  ".project-story--signalflow",
-  ".project-story--emotion",
-  ".practice",
-  ".beyond",
-  ".closing",
-];
-
 const ignoredLocalResources = ["/_vercel/insights/script.js"];
 
 function isIgnoredLocalResource(url) {
@@ -19,14 +7,22 @@ function isIgnoredLocalResource(url) {
 }
 
 async function captureScene(page, testInfo, name) {
-  await page.waitForTimeout(350);
+  await page.waitForTimeout(900);
   await page.screenshot({
     path: `test-results/redesign-${testInfo.project.name}-${name}.png`,
     fullPage: false,
   });
 }
 
-test("redesign renders its connected story without browser errors", async ({ page }, testInfo) => {
+async function scrollWorldTo(page, progress) {
+  await page.evaluate((nextProgress) => {
+    const root = document.querySelector(".continuous-world");
+    const maxScroll = root.offsetHeight - window.innerHeight;
+    window.scrollTo(0, root.offsetTop + maxScroll * nextProgress);
+  }, progress);
+}
+
+test("portfolio preserves one continuous world and builds Studio as an in-world interaction", async ({ page }, testInfo) => {
   const pageErrors = [];
   const consoleErrors = [];
   const failedResponses = [];
@@ -44,51 +40,65 @@ test("redesign renders its connected story without browser errors", async ({ pag
     }
   });
 
-  await page.goto("/redesign", { waitUntil: "networkidle" });
+  await page.goto("/redesign", { waitUntil: "domcontentloaded" });
+  await expect(page).toHaveTitle(/Portfolio World Preview/);
 
-  await expect(page).toHaveTitle(/Portfolio Preview/);
-  await expect(page.locator(".hero-word--systems")).toContainText("SYSTEMS");
-  await expect(page.locator(".hero-word--thinking")).toContainText("THINKING");
-  await expect(page.locator(".hero-depth-plane--front")).toContainText(
-    "expressed through software",
-  );
-  await expect(page.locator(".world__thread")).toHaveCount(1);
-  await expect(page.locator(".section-rail")).toHaveCount(1);
+  const world = page.locator(".continuous-world");
+  await expect(world).toHaveAttribute("data-render-mode", "single-master-video");
+  await expect(world).toHaveAttribute("data-world-sequence", "01-10");
+  await expect(world).toHaveAttribute("data-active-world", "01");
+  await expect(page.locator(".continuous-world__stage")).toHaveCount(1);
+  await expect(page.locator(".continuous-world__video")).toHaveCount(1);
+  await expect(page.locator(".continuous-world__canvas")).toHaveCount(0);
+  await expect(page.locator(".world-ambient")).toHaveCount(0);
+  await expect(page.locator(".world-endpoints")).toHaveCount(0);
+  await expect(page.locator(".world-rest")).toHaveCount(0);
+  await expect(page.locator(".world-transition")).toHaveCount(0);
 
-  for (const selector of requiredSections) {
-    await expect(page.locator(selector)).toHaveCount(1);
+  const video = page.locator(".continuous-world__video");
+  await expect(video).toHaveAttribute("src", "/portfolio-world/master/master-scroll-1080p.mp4");
+  await captureScene(page, testInfo, "01-arrival");
+
+  // Follow the same spatial path a person scrolls through. CI's bundled headless
+  // Chromium does not guarantee H.264 decode support, so media decode is not used
+  // as an assertion; the world state and interaction layer are validated instead.
+  for (const progress of [0.16, 0.31, 0.44, 0.54, 0.61]) {
+    await scrollWorldTo(page, progress);
+    await page.waitForTimeout(300);
   }
 
-  await captureScene(page, testInfo, "hero");
+  await expect(world).toHaveAttribute("data-active-world", "06", { timeout: 10_000 });
+  await expect(page.locator(".world-index")).toContainText("06");
+  await expect(page.locator(".world-index")).toContainText("Studio");
 
-  await page.locator(".origin").scrollIntoViewIfNeeded();
-  await captureScene(page, testInfo, "origin");
+  const studioInteraction = page.locator(".world-studio-interaction");
+  await expect(studioInteraction).toHaveAttribute("data-visible", "true", { timeout: 10_000 });
+  const studioHotspot = page.getByRole("button", { name: "Open selected work in the studio" });
+  await expect(studioHotspot).toBeEnabled();
+  await captureScene(page, testInfo, "06-studio");
 
-  await page.locator(".project-story--skribli").scrollIntoViewIfNeeded();
-  await expect(page.locator(".project-story--skribli .project-story__statement")).toBeVisible();
-  await captureScene(page, testInfo, "skribli");
+  await studioHotspot.click();
+  await expect(world).toHaveAttribute("data-folio-open", "true");
+  await expect(page.locator(".world-folio")).toHaveCount(1);
+  await expect(page.locator(".world-folio__ornament")).toHaveAttribute("src", "/portfolio-world/ui/cream-gold-frame.png");
+  await expect(page.locator(".world-folio h2")).toHaveText("The Wild Oasis");
+  await expect(studioInteraction).toHaveCSS("pointer-events", "none");
+  await captureScene(page, testInfo, "06-studio-folio");
 
-  await page.locator(".project-story--signalflow").scrollIntoViewIfNeeded();
-  await captureScene(page, testInfo, "signalflow");
+  await page.getByRole("button", { name: "Show CardXpert AI" }).click();
+  await expect(page.locator(".world-folio h2")).toHaveText("CardXpert AI");
 
-  await page.locator(".project-story--emotion").scrollIntoViewIfNeeded();
-  await captureScene(page, testInfo, "research");
+  await page.getByRole("button", { name: "Close selected work" }).last().click();
+  await expect(world).toHaveAttribute("data-folio-open", "false");
+  await expect(page.locator(".world-folio")).toHaveCount(0);
+  await expect(world).toHaveAttribute("data-active-world", "06");
 
-  await page.locator(".practice").scrollIntoViewIfNeeded();
-  await expect(page.locator(".practice-number__value")).toHaveText("806");
-  await captureScene(page, testInfo, "practice");
-
-  await page.locator(".beyond").scrollIntoViewIfNeeded();
-  await captureScene(page, testInfo, "beyond");
-
-  await page.locator(".closing").scrollIntoViewIfNeeded();
-  await expect(page.locator(".closing__links > *")).toHaveCount(4);
-  await captureScene(page, testInfo, "closing");
-
-  await page.locator(".alpha-entry").click();
-  await expect(page.locator(".alpha-panel")).toBeVisible();
-  await page.locator(".alpha-panel__close").click();
-  await expect(page.locator(".alpha-panel")).toHaveCount(0);
+  for (const progress of [0.76, 0.88, 0.96, 1]) {
+    await scrollWorldTo(page, progress);
+    await page.waitForTimeout(250);
+  }
+  await expect(world).toHaveAttribute("data-active-world", "10", { timeout: 10_000 });
+  await captureScene(page, testInfo, "10-closing-world");
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);

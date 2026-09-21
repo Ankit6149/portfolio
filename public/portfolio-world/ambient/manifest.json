@@ -1,0 +1,164 @@
+{
+  "version": 2,
+  "frame": {
+    "width": 1920,
+    "height": 1080
+  },
+  "principle": "stabilized real source pixels, never generic ambient overlays",
+  "regions": [
+    {
+      "id": "01-river",
+      "worlds": [
+        "01"
+      ],
+      "kind": "water",
+      "src": "/portfolio-world/ambient/01-river.mp4",
+      "mask": "/portfolio-world/ambient/01-river-mask.png",
+      "anchorTime": 0.0,
+      "opacity": 1.0,
+      "box": {
+        "x": 0.13020833333333334,
+        "y": 0.3888888888888889,
+        "width": 0.3697916666666667,
+        "height": 0.4351851851851852
+      }
+    },
+    {
+      "id": "03-threshold-river",
+      "worlds": [
+        "03"
+      ],
+      "kind": "water",
+      "src": "/portfolio-world/ambient/03-threshold-river.mp4",
+      "mask": "/portfolio-world/ambient/03-threshold-river-mask.png",
+      "anchorTime": 8.0,
+      "opacity": 0.92,
+      "box": {
+        "x": 0.2708333333333333,
+        "y": 0.5092592592592593,
+        "width": 0.13020833333333334,
+        "height": 0.23148148148148148
+      }
+    },
+    {
+      "id": "04-study-river",
+      "worlds": [
+        "04"
+      ],
+      "kind": "water",
+      "src": "/portfolio-world/ambient/04-study-river.mp4",
+      "mask": "/portfolio-world/ambient/04-study-river-mask.png",
+      "anchorTime": 16.0,
+      "opacity": 0.92,
+      "box": {
+        "x": 0.65625,
+        "y": 0.47685185185185186,
+        "width": 0.11979166666666667,
+        "height": 0.2037037037037037
+      }
+    },
+    {
+      "id": "05-passage-stream",
+      "worlds": [
+        "05"
+      ],
+      "kind": "water",
+      "src": "/portfolio-world/ambient/05-passage-stream.mp4",
+      "mask": "/portfolio-world/ambient/05-passage-stream-mask.png",
+      "anchorTime": 24.0,
+      "opacity": 0.96,
+      "box": {
+        "x": 0.6197916666666666,
+        "y": 0.5046296296296297,
+        "width": 0.1953125,
+        "height": 0.49537037037037035
+      }
+    },
+    {
+      "id": "06-studio-foliage",
+      "worlds": [
+        "06"
+      ],
+      "kind": "foliage",
+      "src": "/portfolio-world/ambient/06-studio-foliage.mp4",
+      "mask": "/portfolio-world/ambient/06-studio-foliage-mask.png",
+      "anchorTime": 32.0,
+      "opacity": 0.82,
+      "box": {
+        "x": 0.0625,
+        "y": 0.0,
+        "width": 0.24479166666666666,
+        "height": 0.6018518518518519
+      }
+    },
+    {
+      "id": "06-studio-river",
+      "worlds": [
+        "06"
+      ],
+      "kind": "water",
+      "src": "/portfolio-world/ambient/06-studio-river.mp4",
+      "mask": "/portfolio-world/ambient/06-studio-river-mask.png",
+      "anchorTime": 32.0,
+      "opacity": 0.78,
+      "box": {
+        "x": 0.4817708333333333,
+        "y": 0.4212962962962963,
+        "width": 0.0625,
+        "height": 0.14351851851851852
+      }
+    },
+    {
+      "id": "07-archive-river",
+      "worlds": [
+        "07"
+      ],
+      "kind": "water",
+      "src": "/portfolio-world/ambient/07-archive-river.mp4",
+      "mask": "/portfolio-world/ambient/07-archive-river-mask.png",
+      "anchorTime": 40.0,
+      "opacity": 0.78,
+      "box": {
+        "x": 0.46875,
+        "y": 0.4351851851851852,
+        "width": 0.0859375,
+        "height": 0.1388888888888889
+      }
+    },
+    {
+      "id": "08-reflection-river",
+      "worlds": [
+        "08"
+      ],
+      "kind": "water",
+      "src": "/portfolio-world/ambient/08-reflection-river.mp4",
+      "mask": "/portfolio-world/ambient/08-reflection-river-mask.png",
+      "anchorTime": 48.0,
+      "opacity": 0.94,
+      "box": {
+        "x": 0.6510416666666666,
+        "y": 0.3148148148148148,
+        "width": 0.18229166666666666,
+        "height": 0.2222222222222222
+      }
+    },
+    {
+      "id": "10-fountain-pool",
+      "worlds": [
+        "09",
+        "10"
+      ],
+      "kind": "water",
+      "src": "/portfolio-world/ambient/10-fountain-pool.mp4",
+      "mask": "/portfolio-world/ambient/10-fountain-pool-mask.png",
+      "anchorTime": 55.94,
+      "opacity": 1.0,
+      "box": {
+        "x": 0.0,
+        "y": 0.5,
+        "width": 0.5,
+        "height": 0.3611111111111111
+      }
+    }
+  ]
+}

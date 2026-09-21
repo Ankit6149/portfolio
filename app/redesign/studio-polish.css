@@ -1,0 +1,55 @@
+/* 06 / Studio final integration polish.
+   Keep the folio above its scrim, preload the approved frame before the click,
+   and make every background media layer non-interactive while the folio owns focus. */
+
+.continuous-world::after {
+  content: "";
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  left: -10px;
+  bottom: -10px;
+  opacity: 0;
+  pointer-events: none;
+  background: url("/portfolio-world/ui/cream-gold-frame.png") center / contain no-repeat;
+}
+
+.continuous-world__poster,
+.continuous-world__video,
+.continuous-world__veil {
+  pointer-events: none;
+}
+
+.continuous-world[data-folio-open="true"] .world-studio-interaction {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.world-folio__scrim {
+  z-index: 0;
+}
+
+.world-folio__frame {
+  z-index: 1;
+  isolation: isolate;
+  overflow: hidden;
+  background: #f4edda;
+}
+
+.world-folio__ornament {
+  z-index: 1 !important;
+  opacity: 1 !important;
+}
+
+.world-folio__paper {
+  z-index: 2;
+}
+
+@media (min-width: 561px) {
+  .world-folio__frame {
+    /* The real approved asset supplies the ornate edge. This cream underlay is a
+       loading-safe paper surface, so the content never appears as text floating
+       directly on top of the cinematic scene. */
+    box-shadow: inset 0 0 0 1px rgba(111, 91, 54, .12);
+  }
+}

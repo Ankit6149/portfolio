@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "sourceDurationSeconds": 56,
+  "sourceFps": 30,
+  "sequenceFps": 10,
+  "frameCount": 560,
+  "width": 1280,
+  "height": 720,
+  "pattern": "/portfolio-world/frames/master/frame-%04d.webp",
+  "segments": [
+    { "index": 0, "label": "Arrival / balcony", "startFrame": 1,   "endFrame": 80,  "source": "stone-balcony-enter.mp4" },
+    { "index": 1, "label": "Study passage",     "startFrame": 81,  "endFrame": 160, "source": "rustic-study-track.mp4" },
+    { "index": 2, "label": "Study window",      "startFrame": 161, "endFrame": 240, "source": "study-window.mp4" },
+    { "index": 3, "label": "Enter studio",      "startFrame": 241, "endFrame": 320, "source": "art-studio-enter.mp4" },
+    { "index": 4, "label": "Creation studio",   "startFrame": 321, "endFrame": 400, "source": "art-studio-glide.mp4" },
+    { "index": 5, "label": "Library passage",   "startFrame": 401, "endFrame": 480, "source": "ancient-library-reverse.mp4" },
+    { "index": 6, "label": "Library to garden", "startFrame": 481, "endFrame": 560, "source": "library-dolly.mp4" }
+  ]
+}

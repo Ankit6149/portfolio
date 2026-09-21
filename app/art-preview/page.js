@@ -3,276 +3,191 @@
 import { useEffect, useState } from "react";
 import "./art-preview.css";
 
-const FRAME = "https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-world-base/public/portfolio-world/frames/master";
+const frames = {
+  arrival: "https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-world-base/public/portfolio-world/frames/master/frame-0032.webp",
+  study: "https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-world-base/public/portfolio-world/frames/master/frame-0132.webp",
+  window: "https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-world-base/public/portfolio-world/frames/master/frame-0210.webp",
+  studio: "https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-world-base/public/portfolio-world/frames/master/frame-0348.webp",
+  library: "https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-world-base/public/portfolio-world/frames/master/frame-0442.webp",
+  garden: "https://raw.githubusercontent.com/Ankit6149/portfolio/portfolio-world-base/public/portfolio-world/frames/master/frame-0538.webp",
+};
 
 const chapters = [
-  ["01", "ROOTS", "roots"],
-  ["02", "WORK", "work"],
-  ["03", "RESEARCH", "research"],
-  ["04", "BEYOND", "beyond"],
-];
-
-const projects = [
-  {
-    name: "Skribly",
-    type: "Contextual desktop notes",
-    line: "Keep a thought attached to the place where it became useful.",
-    body: "A Windows-first note system built around context: applications, windows, files and moments. The interesting work is not the note itself; it is returning the right thought without interrupting the screen it belongs to.",
-    href: "https://github.com/Ankit6149/skribly",
-  },
-  {
-    name: "SignalFlow Studio",
-    type: "Evidence-aware content studio",
-    line: "Generation is useful. Remembering where an idea came from is more useful.",
-    body: "A production workflow for gathering source material, shaping outputs and keeping review between evidence and publishing instead of reducing the process to one opaque generation box.",
-    href: "https://github.com/Ankit6149/SignalFlow-Studio",
-  },
-  {
-    name: "The Wild Oasis",
-    type: "Product engineering",
-    line: "Two sides of one product: the customer experience and the operation behind it.",
-    body: "A customer booking experience and an internal operations application built across Next.js, React, Supabase, authentication, state and data-heavy workflows.",
-    href: "https://github.com/Ankit6149",
-  },
+  { id: "origin", no: "01", label: "Origin" },
+  { id: "work", no: "02", label: "Work" },
+  { id: "research", no: "03", label: "Research" },
+  { id: "beyond", no: "04", label: "Beyond" },
 ];
 
 export default function ArtPreviewPage() {
-  const [progress, setProgress] = useState(0);
+  const [active, setActive] = useState("origin");
 
   useEffect(() => {
-    const update = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0);
-    };
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
+    const observers = chapters.map((chapter) => {
+      const el = document.getElementById(chapter.id);
+      if (!el) return null;
+      const observer = new IntersectionObserver(
+        ([entry]) => entry.isIntersecting && setActive(chapter.id),
+        { threshold: 0.48 }
+      );
+      observer.observe(el);
+      return observer;
+    });
+    return () => observers.forEach((observer) => observer?.disconnect());
   }, []);
 
   return (
-    <main className="art-world">
-      <div className="progress-track" aria-hidden="true">
-        <span style={{ transform: `scaleY(${progress / 100})` }} />
-      </div>
-
+    <main className="art-page">
       <header className="art-nav">
-        <a className="art-nav__name" href="#top">Ankit Bhardwaj</a>
-        <nav aria-label="Portfolio sections">
+        <a className="art-brand" href="#top">Ankit Bhardwaj</a>
+        <nav>
           <a href="#work">Work</a>
           <a href="#research">Research</a>
-          <a href="#beyond">Beyond</a>
-          <a href="#contact">Contact</a>
+          <a href="#beyond">About</a>
+          <a href="/contact">Contact</a>
         </nav>
       </header>
 
-      <section id="top" className="hero chapter">
-        <div className="scene scene--hero">
-          <img src={`${FRAME}/frame-0030.webp`} alt="" />
-          <div className="scene__veil" />
-          <div className="mist mist--one" />
-          <div className="mist mist--two" />
-          <div className="hero-botanical hero-botanical--left" aria-hidden="true" />
-          <div className="hero-botanical hero-botanical--right" aria-hidden="true" />
-        </div>
-
-        <div className="hero-copy">
-          <p className="kicker">ANKIT BHARDWAJ · DELHI</p>
-          <h1><span>Curiosity</span> is the thread.</h1>
-          <p className="hero-deck">
-            Life, signals, software, people, systems, drawing, research —
-            different rooms of the same curiosity.
-          </p>
-          <div className="hero-actions">
-            <a href="#work">Enter the work <span>↘</span></a>
-            <a href="/resume">Resume <span>↗</span></a>
-          </div>
-        </div>
-
-        <div className="hero-note">
-          <span>01 — ARRIVAL</span>
-          <p>Not a résumé turned into a website. A place to understand how the work, questions and interests connect.</p>
-        </div>
-
-        <div className="scroll-cue" aria-hidden="true"><i />scroll</div>
-      </section>
-
-      <section id="roots" className="roots chapter">
-        <div className="roots-image frame-window">
-          <img src={`${FRAME}/frame-0195.webp`} alt="" />
-          <div className="frame-window__wash" />
-        </div>
-
-        <div className="chapter-index">
-          <span>01</span>
-          <p>Where it began</p>
-        </div>
-
-        <div className="roots-copy">
-          <p className="eyebrow">BEFORE SOFTWARE</p>
-          <h2>I was interested in <em>living systems</em> before digital ones.</h2>
-          <p>
-            Biology first made complexity feel beautiful: separate parts sensing, communicating,
-            adapting and somehow remaining one system. Instrumentation and Control later gave
-            those instincts another language — signals, feedback, noise, state and stability.
-          </p>
-          <p>
-            Software did not replace those interests. It became the medium where more of them
-            could become tangible.
-          </p>
-        </div>
-
-        <div className="roots-margin-note">
-          <span>observe</span><span>measure</span><span>build</span><span>refine</span>
-        </div>
-      </section>
-
-      <section id="work" className="work chapter">
-        <div className="work-sky">
-          <img src={`${FRAME}/frame-0285.webp`} alt="" />
-          <div />
-        </div>
-
-        <div className="chapter-index chapter-index--light">
-          <span>02</span>
-          <p>Selected work</p>
-        </div>
-
-        <div className="work-intro">
-          <p className="eyebrow">THINGS THAT BECAME PRODUCTS</p>
-          <h2>The interface is only the visible edge.</h2>
-          <p>
-            I am most interested when a product forces several kinds of thinking to meet:
-            interaction, architecture, reliability, automation, data, constraints and what a person
-            actually experiences.
-          </p>
-        </div>
-
-        <div className="project-river">
-          {projects.map((project, index) => (
-            <article className="project-story" key={project.name}>
-              <div className="project-story__number">0{index + 1}</div>
-              <div className="project-story__head">
-                <span>{project.type}</span>
-                <h3>{project.name}</h3>
-              </div>
-              <blockquote>{project.line}</blockquote>
-              <p>{project.body}</p>
-              <a href={project.href} target="_blank" rel="noreferrer">
-                Inspect the work <span>↗</span>
-              </a>
-            </article>
-          ))}
-        </div>
-
-        <p className="work-footnote">
-          The public portfolio stays selective. Unreleased product architecture and private client work remain private.
-        </p>
-      </section>
-
-      <section id="research" className="research chapter">
-        <div className="research-scene">
-          <img src={`${FRAME}/frame-0360.webp`} alt="" />
-          <div className="research-scene__shadow" />
-          <div className="research-paper">
-            <span>EEG · DEAP · TRANSFORMERS</span>
-            <svg viewBox="0 0 800 120" aria-hidden="true">
-              <path d="M0 68 C52 68 58 66 84 66 C105 66 108 28 124 28 C143 28 144 100 164 100 C188 100 191 52 214 52 C239 52 245 76 270 76 C298 76 305 64 332 64 C361 64 368 66 393 66 C425 66 428 39 449 39 C471 39 475 92 497 92 C520 92 525 59 549 59 C577 59 582 70 612 70 C644 70 651 66 677 66 C716 66 733 68 800 68" />
-            </svg>
-            <strong>86.82%</strong>
-            <small>test accuracy</small>
-          </div>
-        </div>
-
-        <div className="chapter-index">
-          <span>03</span>
-          <p>Research</p>
-        </div>
-
-        <div className="research-copy">
-          <p className="eyebrow">EMOTION-H NET</p>
-          <h2>When a noisy signal has to become <em>meaning</em>.</h2>
-          <p>
-            My published research explored EEG-based emotion classification using the DEAP dataset.
-            The work reduced an initial 600-feature space to 164 selected features and used four
-            Transformer encoders to learn from the resulting representation.
-          </p>
-          <dl>
-            <div><dt>86.82%</dt><dd>Test accuracy</dd></div>
-            <div><dt>0.977</dt><dd>AUROC</dd></div>
-            <div><dt>164</dt><dd>Selected features</dd></div>
-          </dl>
-          <a href="https://orcid.org/0009-0005-3408-0058" target="_blank" rel="noreferrer">
-            Publication record <span>↗</span>
+      <aside className="chapter-rail" aria-label="Portfolio chapters">
+        {chapters.map((chapter) => (
+          <a key={chapter.id} href={`#${chapter.id}`} className={active === chapter.id ? "active" : ""}>
+            <span>{chapter.no}</span><b>{chapter.label}</b>
           </a>
-        </div>
-      </section>
-
-      <section id="beyond" className="beyond chapter">
-        <div className="beyond-scene">
-          <img src={`${FRAME}/frame-0460.webp`} alt="" />
-          <div />
-        </div>
-
-        <div className="chapter-index chapter-index--light">
-          <span>04</span>
-          <p>Beyond output</p>
-        </div>
-
-        <div className="beyond-copy">
-          <p className="eyebrow">A PERSON IS BIGGER THAN THE WORK</p>
-          <h2>Some things influence the work. Some are simply <em>life</em>.</h2>
-        </div>
-
-        <div className="beyond-words" aria-label="Interests">
-          <span className="word word--draw">drawing</span>
-          <span className="word word--basket">basketball</span>
-          <span className="word word--music">music</span>
-          <span className="word word--biology">biology</span>
-          <span className="word word--nature">nature</span>
-        </div>
-
-        <div className="beyond-note">
-          <p>
-            I draw and paint from observation, sing when I get the chance, play basketball,
-            keep returning to biology, and think a lot about nature, culture, spirituality and the
-            kind of life worth building.
-          </p>
-        </div>
-      </section>
-
-      <section id="contact" className="closing chapter">
-        <div className="closing-scene">
-          <img src={`${FRAME}/frame-0535.webp`} alt="" />
-          <div />
-        </div>
-
-        <div className="closing-copy">
-          <p className="eyebrow">THE WORLD CONTINUES</p>
-          <h2>There is more to inspect than fits on one page.</h2>
-          <div className="closing-links">
-            <a href="/projects"><span>Projects</span><b>See the builds ↗</b></a>
-            <a href="/publications"><span>Research</span><b>Read the work ↗</b></a>
-            <a href="/about"><span>Story</span><b>Go deeper ↗</b></a>
-            <a href="/contact"><span>Contact</span><b>Start a conversation ↗</b></a>
-          </div>
-        </div>
-
-        <footer>
-          <span>Ankit Bhardwaj</span>
-          <span>Software engineer · New Delhi</span>
-          <a href="#top">Back to the beginning ↑</a>
-        </footer>
-      </section>
-
-      <aside className="chapter-rail" aria-label="Chapter navigation">
-        {chapters.map(([n, label, id]) => (
-          <a href={`#${id}`} key={id}><span>{n}</span>{label}</a>
         ))}
       </aside>
+
+      <section className="hero" id="top">
+        <div className="hero-art" style={{ "--hero": `url("${frames.arrival}")` }}>
+          <div className="hero-wash" />
+          <div className="paint-edge paint-edge-a" />
+          <div className="paint-edge paint-edge-b" />
+          <div className="hero-copy">
+            <p className="kicker">Portfolio · Delhi, India</p>
+            <h1>Curiosity<br/><em>is the thread.</em></h1>
+            <p className="hero-intro">
+              I began with living systems, signals and questions about how things work.
+              Software became one of the places where those questions could become tangible.
+            </p>
+          </div>
+          <div className="hero-note">
+            <span>Scroll through the world</span>
+            <i />
+          </div>
+        </div>
+      </section>
+
+      <section className="origin story-section" id="origin">
+        <div className="chapter-mark"><span>01</span><b>Where it began</b></div>
+        <div className="origin-grid">
+          <div className="origin-art image-window" style={{ "--image": `url("${frames.study}")` }}>
+            <span className="window-label">signals · feedback · living systems</span>
+          </div>
+          <div className="origin-copy">
+            <p className="serif-note">Before software, there was observation.</p>
+            <h2>The medium changed.<br/>The questions kept moving.</h2>
+            <p>
+              Biology taught me to look at life as coordinated systems. Instrumentation &amp; Control gave
+              me another language for sensing, feedback, noise and changing states. Software widened
+              the territory again.
+            </p>
+            <p>
+              I am most interested when a problem sits between disciplines — when understanding the
+              relationship between parts matters as much as building the parts themselves.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="work story-section dark-section" id="work">
+        <div className="chapter-mark light"><span>02</span><b>Where it led</b></div>
+        <div className="work-intro">
+          <p className="serif-note">Different products. A recurring instinct.</p>
+          <h2>Build until the idea survives contact with reality.</h2>
+        </div>
+
+        <article className="project project-left">
+          <div className="project-art image-window" style={{ "--image": `url("${frames.window}")` }}>
+            <span className="project-number">01</span>
+          </div>
+          <div className="project-copy">
+            <small>Context · attention · desktop systems</small>
+            <h3>Skribly</h3>
+            <p className="project-line">Leave the thought where it became relevant.</p>
+            <p>
+              A contextual note system for Windows: notes, ink and reminders that return with the
+              application, file, webpage or screen where they matter.
+            </p>
+            <a href="https://github.com/Ankit6149/skribly" target="_blank" rel="noreferrer">Inspect the work ↗</a>
+          </div>
+        </article>
+
+        <article className="project project-right">
+          <div className="project-copy">
+            <small>Evidence · generation · editorial judgment</small>
+            <h3>SignalFlow Studio</h3>
+            <p className="project-line">Generation should not erase where an idea came from.</p>
+            <p>
+              A content production studio that keeps source context, editable outputs and publishing
+              handoffs together instead of turning generation into a black box.
+            </p>
+            <a href="https://github.com/Ankit6149/SignalFlow-Studio" target="_blank" rel="noreferrer">Inspect the work ↗</a>
+          </div>
+          <div className="project-art image-window" style={{ "--image": `url("${frames.studio}")` }}>
+            <span className="project-number">02</span>
+          </div>
+        </article>
+      </section>
+
+      <section className="research story-section" id="research">
+        <div className="chapter-mark"><span>03</span><b>Research</b></div>
+        <div className="research-world">
+          <div className="research-art image-window" style={{ "--image": `url("${frames.library}")` }} />
+          <div className="research-card">
+            <small>EEG · representation · deep learning</small>
+            <h2>Emotion-H Net</h2>
+            <p className="project-line">What must a model see before a noisy signal can mean anything?</p>
+            <p>
+              EEG emotion classification using the DEAP dataset, feature selection and a Transformer-based
+              architecture. Published in Springer LNNS following ICDSA 2025.
+            </p>
+            <div className="metrics">
+              <span><b>86.82%</b> test accuracy</span>
+              <span><b>0.977</b> AUROC</span>
+              <span><b>164</b> selected features</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="beyond story-section" id="beyond">
+        <div className="beyond-art" style={{ "--image": `url("${frames.garden}")` }}>
+          <div className="beyond-wash" />
+          <div className="chapter-mark light"><span>04</span><b>Beyond output</b></div>
+          <div className="beyond-copy">
+            <p className="serif-note">Not everything becomes a project.</p>
+            <h2>Observe.<br/>Make.<br/>Move.</h2>
+            <p>
+              Sketching, painting, basketball, music, biology, nature and old architecture are not side
+              decorations around engineering. They are part of how I notice rhythm, structure, movement
+              and detail.
+            </p>
+          </div>
+          <div className="beyond-words" aria-hidden="true">
+            <span>sketch</span><span>play</span><span>listen</span><span>observe</span>
+          </div>
+        </div>
+      </section>
+
+      <footer className="art-footer">
+        <p className="serif-note">The shortest version of the story ends here.</p>
+        <h2>The work keeps changing.<br/>The thread stays visible.</h2>
+        <div className="footer-links">
+          <a href="/projects">Explore projects ↗</a>
+          <a href="/about">Read the full story ↗</a>
+          <a href="/contact">Start a conversation ↗</a>
+        </div>
+        <small>Preview direction · September 2026 · isolated from production</small>
+      </footer>
     </main>
   );
 }

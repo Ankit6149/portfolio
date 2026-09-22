@@ -1,438 +1,345 @@
 "use client";
 
-import Link from "next/link";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const projects = [
+const work = [
   {
-    index: "01",
+    no: "01",
     title: "Skribly",
-    kicker: "Contextual desktop notes",
-    thought: "A note loses value when the context that made it important disappears.",
-    body:
-      "A Windows-first contextual notes and annotation app built around overlays, shortcuts, local-first behavior, and notes that return with the relevant app or screen context.",
+    eyebrow: "Contextual desktop notes",
+    thought: "A thought should be able to return with the place that made it matter.",
+    body: "A Windows-first note system built around app context, overlays, shortcuts, handwriting, local persistence and keeping the tool present without letting it take over the screen.",
     tags: ["Tauri", "React", "Rust", "Windows APIs"],
     href: "https://github.com/Ankit6149/skribly",
-    visual: "notes",
+    art: "note"
   },
   {
-    index: "02",
+    no: "02",
     title: "SignalFlow Studio",
-    kicker: "AI-assisted content production",
-    thought: "Generation is easy. Preserving context and judgment is harder.",
-    body:
-      "A multi-stage workflow for research, source capture, mixed-context intake, generation, review, platform adaptation, and packaging.",
+    eyebrow: "Evidence-aware content systems",
+    thought: "Generation becomes useful when the source, the judgment and the final decision stay visible.",
+    body: "A multi-stage studio for mixed context, model choice, editable outputs, review and publishing handoffs — designed around preserving evidence instead of hiding it behind automation.",
     tags: ["Next.js", "LLM integrations", "Product systems"],
     href: "https://github.com/Ankit6149/SignalFlow-Studio",
-    visual: "flow",
+    art: "flow"
   },
   {
-    index: "03",
+    no: "03",
     title: "Emotion-H Net",
-    kicker: "Published research",
-    thought: "What must a model see before a noisy signal can mean anything?",
-    body:
-      "EEG emotion recognition on the DEAP dataset using engineered features, recursive feature elimination, and a lightweight four-encoder Transformer architecture.",
+    eyebrow: "Published EEG research",
+    thought: "Before a model can learn from a signal, the signal has to become a useful representation.",
+    body: "Emotion classification on DEAP using engineered EEG features, recursive feature elimination and a lightweight four-encoder Transformer architecture.",
     tags: ["PyTorch", "Transformers", "EEG", "ICDSA 2025"],
     href: "https://link.springer.com/chapter/10.1007/978-3-032-15407-1_18",
-    visual: "signal",
-  },
+    art: "signal"
+  }
 ];
 
-const capabilities = [
-  ["Interfaces", "React, Next.js, responsive UI, product flows"],
-  ["Systems", "APIs, authentication, permissions, event-driven workflows"],
-  ["Data", "PostgreSQL, Supabase, Redis, Firebase, SQL"],
-  ["AI + automation", "LLM integrations, PyTorch, n8n, MCP, model evaluation"],
-  ["Desktop", "Tauri, Rust, Windows APIs"],
-  ["Practice", "C++, debugging, testing, CI/CD, deployment"],
+const practices = [
+  ["Observe", "Look closely before deciding what the problem is."],
+  ["Connect", "Move between biology, signals, interfaces and systems."],
+  ["Build", "Turn the useful part of an idea into something tangible."],
+  ["Refine", "Let testing, friction and real use reshape the work."]
 ];
 
-function Petals({ className = "" }) {
+function PainterlyField({ variant = "hero" }) {
   return (
-    <div className={`petal-field ${className}`} aria-hidden="true">
-      {Array.from({ length: 18 }).map((_, i) => (
-        <span key={i} className={`petal petal--${(i % 6) + 1}`} />
-      ))}
-    </div>
-  );
-}
-
-function ProjectVisual({ type }) {
-  if (type === "notes") {
-    return (
-      <div className="project-art project-art--notes" aria-hidden="true">
-        <div className="note note--one"><span>remember this</span><i /></div>
-        <div className="note note--two"><span>returns with context</span></div>
-        <div className="note-orbit" />
-      </div>
-    );
-  }
-
-  if (type === "flow") {
-    return (
-      <div className="project-art project-art--flow" aria-hidden="true">
-        <span className="flow-node">Model</span>
-        <i />
-        <span className="flow-node">Context</span>
-        <i />
-        <span className="flow-node">Outputs</span>
-        <i />
-        <span className="flow-node">Package</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="project-art project-art--signal" aria-hidden="true">
-      <svg viewBox="0 0 800 260" preserveAspectRatio="none">
-        <path d="M0 142 C55 142 55 80 110 80 S165 205 220 205 275 110 330 110 385 150 440 150 495 55 550 55 605 180 660 180 715 122 800 122" />
-        <path className="signal-soft" d="M0 160 C70 110 100 200 170 148 S275 75 350 136 440 214 520 135 620 84 800 154" />
-      </svg>
-      <div className="signal-stat"><strong>86.82%</strong><span>test accuracy</span></div>
-    </div>
-  );
-}
-
-
-function HeroGarden() {
-  return (
-    <svg className="hero2-garden" viewBox="0 0 1200 900" aria-hidden="true">
+    <svg className={"paint-field paint-field--" + variant} viewBox="0 0 1400 900" aria-hidden="true">
       <defs>
-        <linearGradient id="forestWash" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#123f3b" stopOpacity=".2" />
-          <stop offset=".55" stopColor="#0a4c47" stopOpacity=".92" />
-          <stop offset="1" stopColor="#062f2c" />
+        <linearGradient id={"forest-" + variant} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#e7efe7" stopOpacity=".18" />
+          <stop offset=".38" stopColor="#789a82" stopOpacity=".65" />
+          <stop offset=".72" stopColor="#245f58" stopOpacity=".92" />
+          <stop offset="1" stopColor="#103f3a" />
         </linearGradient>
-        <linearGradient id="petalWash" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#f7ddd0" />
-          <stop offset=".48" stopColor="#e99bad" />
-          <stop offset="1" stopColor="#c76681" />
+        <linearGradient id={"rose-" + variant} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#f7d9d3" />
+          <stop offset=".5" stopColor="#efa3ae" />
+          <stop offset="1" stopColor="#d9778e" />
         </linearGradient>
-        <filter id="softInk"><feGaussianBlur stdDeviation="16" /></filter>
-        <filter id="glow"><feGaussianBlur stdDeviation="5" /></filter>
+        <filter id={"ink-" + variant}>
+          <feTurbulence type="fractalNoise" baseFrequency=".012 .035" numOctaves="3" seed="8" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="34" xChannelSelector="R" yChannelSelector="B" />
+        </filter>
+        <filter id={"soft-" + variant}>
+          <feGaussianBlur stdDeviation="18" />
+        </filter>
       </defs>
 
-      <path className="hero2-wash" d="M405 10C646 22 742 107 887 221c155 122 245 278 273 478 16 116-17 180-66 201H612c-126-80-206-175-246-285-53-147-59-296-11-447C367 127 384 71 405 10Z" fill="url(#forestWash)" />
-      <path className="hero2-mist" d="M133 541c197-54 335-64 466-26 114 33 196 99 291 188 67 62 160 94 282 98" fill="none" stroke="#f4eee5" strokeWidth="94" strokeLinecap="round" opacity=".34" filter="url(#softInk)" />
-
-      <g className="hero2-stems" fill="none" stroke="#c9aa61" strokeWidth="2.2">
-        <path d="M1120 100C978 193 845 268 727 388c-89 91-143 205-225 355" />
-        <path d="M1178 253C1013 270 900 347 808 455c-74 87-121 173-184 319" />
-        <path d="M1028 40C946 143 881 213 767 284" />
+      <g filter={"url(#ink-" + variant + ")"} opacity=".98">
+        <path d="M535 34C760 12 1030 88 1220 252c124 107 180 231 180 432 0 116-33 185-99 216H710c-120-52-210-124-278-223-85-122-128-252-124-388 4-112 65-194 227-255Z" fill={"url(#forest-" + variant + ")"} />
+        <path d="M322 641C473 518 610 460 769 455c176-6 318 61 520 248-165-46-323-44-463 13-136 55-284 96-504 90-63-2-116-12-159-30 56-34 109-79 159-135Z" fill="#f2b3bc" opacity=".56" />
+        <path d="M418 548c190-145 352-180 515-105 130 60 239 94 405 87-180 81-354 115-515 103-161-11-276-40-405-85Z" fill="#f7dfd3" opacity=".58" />
+        <path d="M716 278c110-108 221-146 332-114 89 25 151 78 219 171-105-46-204-48-297-7-93 42-178 39-254-50Z" fill="#8eaa8b" opacity=".74" />
       </g>
 
-      <g className="hero2-leaves">
-        <path d="M873 266c63-49 104-41 127-5-53 25-92 30-127 5Z" fill="#9aae72" />
-        <path d="M804 349c44-74 91-88 131-67-34 55-75 79-131 67Z" fill="#cad59c" />
-        <path d="M745 430c-10-77 18-119 62-126 7 62-10 104-62 126Z" fill="#71865b" />
-        <path d="M666 541c55-55 106-59 140-25-49 42-93 51-140 25Z" fill="#b4c892" />
-        <path d="M601 663c-10-69 18-105 58-110 6 53-12 90-58 110Z" fill="#809566" />
+      <g fill="none" stroke="#c7a664" strokeWidth="2" opacity=".68">
+        <path d="M1265 58C1120 144 1005 235 907 356 821 463 757 582 651 742" />
+        <path d="M1378 203c-165 35-287 108-391 218-87 92-153 188-223 326" />
+        <path d="M1180 22c-84 121-175 192-310 251" />
       </g>
 
-      <g className="hero2-bloom" fill="url(#petalWash)">
-        <path d="M954 167c34-52 82-44 87-3-28 26-59 27-87 3Z" />
-        <path d="M1003 183c38-38 81-15 68 23-32 14-58 7-68-23Z" />
-        <path d="M969 212c12-54 62-63 80-24-14 33-42 44-80 24Z" />
-        <path d="M860 314c30-57 83-53 91-11-26 32-57 36-91 11Z" />
-        <path d="M910 334c36-42 82-22 73 19-29 19-58 13-73-19Z" />
-        <path d="M817 391c25-47 68-45 78-11-20 29-46 34-78 11Z" />
-        <path d="M713 517c31-52 79-45 86-6-25 28-54 31-86 6Z" />
-        <path d="M756 540c37-38 77-15 66 21-29 15-54 9-66-21Z" />
+      <g fill={"url(#rose-" + variant + ")"} opacity=".94">
+        <path d="M1120 141c40-54 91-43 95 3-33 27-66 26-95-3Z" />
+        <path d="M1184 176c38-42 82-23 73 17-29 19-57 13-73-17Z" />
+        <path d="M1016 280c39-59 94-48 95-1-32 29-64 29-95 1Z" />
+        <path d="M1079 314c43-45 89-19 77 22-34 18-61 10-77-22Z" />
+        <path d="M901 430c34-47 80-36 82 4-27 24-54 22-82-4Z" />
+        <path d="M791 572c35-52 84-43 89-1-28 28-58 28-89 1Z" />
       </g>
 
-      <g className="hero2-sparks" fill="#efd79a">
-        <circle cx="935" cy="130" r="4" /><circle cx="1055" cy="230" r="5" />
-        <circle cx="847" cy="284" r="3.5" /><circle cx="770" cy="456" r="4.5" />
-        <circle cx="635" cy="602" r="4" />
+      <g fill="#d8e1bf">
+        <path d="M1024 248c48-59 100-66 139-35-40 48-85 60-139 35Z" />
+        <path d="M938 356c43-69 96-84 143-54-34 55-82 73-143 54Z" />
+        <path d="M848 483c-3-66 27-104 72-106 3 53-21 88-72 106Z" />
+        <path d="M730 621c49-52 99-57 136-25-42 40-86 49-136 25Z" />
       </g>
+
+      <path d="M330 692C532 568 661 548 837 576c180 29 293 92 486 136" fill="none" stroke="#fff8ee" strokeWidth="78" strokeLinecap="round" opacity=".20" filter={"url(#soft-" + variant + ")"} />
     </svg>
+  );
+}
+
+function Petals() {
+  return (
+    <div className="petals" aria-hidden="true">
+      {Array.from({ length: 16 }).map((_, i) => <span key={i} className={"petal petal-" + (i + 1)} />)}
+    </div>
+  );
+}
+
+function MiniArt({ type }) {
+  if (type === "note") {
+    return (
+      <div className="mini-art mini-art--note" aria-hidden="true">
+        <span className="paper paper-a">remember why</span>
+        <span className="paper paper-b">same place</span>
+        <i className="orbit" />
+      </div>
+    );
+  }
+  if (type === "flow") {
+    return (
+      <div className="mini-art mini-art--flow" aria-hidden="true">
+        <div className="flow-line">
+          <span>context</span><i /><span>model</span><i /><span>review</span><i /><span>ship</span>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="mini-art mini-art--signal" aria-hidden="true">
+      <svg viewBox="0 0 720 260" preserveAspectRatio="none">
+        <path d="M0 145 C45 145 62 75 108 75 S160 205 213 205 268 105 324 105 377 160 428 160 483 48 539 48 595 194 646 194 686 125 720 125" />
+        <path className="soft" d="M0 171 C73 119 98 205 166 154 S281 84 354 146 446 211 520 142 628 91 720 161" />
+      </svg>
+      <span>86.82%</span>
+    </div>
   );
 }
 
 export default function PortfolioV1() {
   const root = useRef(null);
 
-  useGSAP(
-    () => {
-      const media = gsap.matchMedia();
+  useGSAP(() => {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
 
-      media.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.utils.toArray("[data-depth]").forEach((layer) => {
-          const depth = Number(layer.dataset.depth || 0);
-          gsap.to(layer, {
-            yPercent: depth * -10,
-            ease: "none",
-            scrollTrigger: {
-              trigger: layer.closest("section") || root.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 1,
-            },
-          });
-        });
-
-        gsap.utils.toArray(".reveal-line").forEach((line) => {
-          gsap.fromTo(
-            line,
-            { yPercent: 115, opacity: 0 },
-            {
-              yPercent: 0,
-              opacity: 1,
-              duration: 1,
-              ease: "power3.out",
-              scrollTrigger: { trigger: line, start: "top 88%" },
-            }
-          );
-        });
-
-        gsap.utils.toArray(".project-chapter").forEach((chapter) => {
-          const title = chapter.querySelector(".project-title-ghost");
-          const art = chapter.querySelector(".project-art");
-          gsap.fromTo(
-            title,
-            { xPercent: -8 },
-            {
-              xPercent: 7,
-              ease: "none",
-              scrollTrigger: { trigger: chapter, start: "top bottom", end: "bottom top", scrub: 1 },
-            }
-          );
-          gsap.fromTo(
-            art,
-            { yPercent: 12, rotate: -1.5 },
-            {
-              yPercent: -8,
-              rotate: 1.5,
-              ease: "none",
-              scrollTrigger: { trigger: chapter, start: "top bottom", end: "bottom top", scrub: 1 },
-            }
-          );
-        });
+    gsap.utils.toArray("[data-float]").forEach((el) => {
+      const amount = Number(el.dataset.float || 0);
+      gsap.to(el, {
+        yPercent: amount,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el.closest("section") || root.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
       });
+    });
 
-      return () => media.revert();
-    },
-    { scope: root }
-  );
+    gsap.utils.toArray(".reveal").forEach((el) => {
+      gsap.fromTo(el, { y: 44, opacity: 0 }, {
+        y: 0,
+        opacity: 1,
+        duration: .9,
+        ease: "power3.out",
+        scrollTrigger: { trigger: el, start: "top 88%" }
+      });
+    });
+
+    gsap.utils.toArray(".work-row").forEach((row) => {
+      gsap.fromTo(row.querySelector(".work-ghost"), { xPercent: -5 }, {
+        xPercent: 6,
+        ease: "none",
+        scrollTrigger: { trigger: row, start: "top bottom", end: "bottom top", scrub: 1 }
+      });
+    });
+  }, { scope: root });
 
   return (
-    <div ref={root} className="v1-shell">
+    <div ref={root} className="v1">
       <header className="v1-nav">
-        <a className="v1-brand" href="#top">AB</a>
-        <nav aria-label="Primary">
+        <a href="#top" className="brand"><span>AB</span><b>Ankit Bhardwaj</b></a>
+        <nav aria-label="Primary navigation">
           <a href="#story">Story</a>
           <a href="#work">Work</a>
           <a href="#research">Research</a>
-          <a href="#about">Beyond</a>
+          <a href="#beyond">Beyond</a>
         </nav>
-        <a className="v1-contact" href="mailto:ankitbhardwaj80100@gmail.com">Say hello</a>
+        <a className="connect" href="mailto:ankitbhardwaj80100@gmail.com">Let&apos;s connect <span>→</span></a>
       </header>
 
       <main>
-        <section id="top" className="hero2">
-          <div className="hero2-paper" aria-hidden="true" />
-          <div className="hero2-art" data-depth="0.16">
-            <HeroGarden />
-          </div>
+        <section id="top" className="hero">
+          <div className="texture" />
+          <div className="hero-art" data-float="-8"><PainterlyField variant="hero" /></div>
+          <Petals />
 
-          <div className="hero2-copy">
-            <p className="hero2-kicker">Ankit Bhardwaj · New Delhi</p>
-
-            <div className="hero2-title">
-              <span className="hero2-script">curiosity</span>
-              <h1>
-                <span className="hero2-line hero2-line--one">I build to</span>
-                <span className="hero2-line hero2-line--two">understand.</span>
-              </h1>
-            </div>
-
-            <p className="hero2-intro">
-              Software, research, systems and experiments — different mediums,
-              connected by the same habit of looking closely and asking better questions.
+          <div className="hero-copy">
+            <p className="micro reveal">Living systems · signals · software · making</p>
+            <h1 className="reveal">Curiosity is<br />the <em>thread.</em></h1>
+            <p className="hero-intro reveal">
+              I started by wanting to understand how living things sense, adapt and stay coordinated.
+              Instrumentation gave those questions another language. Software became a place to build with them.
             </p>
-
-            <div className="hero2-links">
-              <a href="#story">Follow the thread <span>↓</span></a>
-              <a href="#work">Selected work <span>↘</span></a>
+            <div className="hero-actions reveal">
+              <a href="#story" className="primary">Follow the story <span>↓</span></a>
+              <a href="#work" className="quiet">Selected work <span>↘</span></a>
             </div>
           </div>
 
-          <div className="hero2-index" aria-hidden="true">
-            <span>01</span><i /><span>arrival</span>
-          </div>
+          <aside className="hero-quote reveal">
+            <p>Questions came before code.</p>
+            <span>They still do.</span>
+          </aside>
 
-          <div className="hero2-foreground" data-depth="0.34" aria-hidden="true">
-            <span className="hero2-petal hero2-petal--a" />
-            <span className="hero2-petal hero2-petal--b" />
-            <span className="hero2-petal hero2-petal--c" />
-            <span className="hero2-leaf hero2-leaf--a" />
-            <span className="hero2-leaf hero2-leaf--b" />
+          <div className="hero-axis" aria-hidden="true">
+            <span>observe</span><i /><span>connect</span><i /><span>build</span>
           </div>
         </section>
 
-        <section id="story" className="thread2">
-          <div className="thread2-track" aria-hidden="true">
-            <span>observe</span><i /><span>measure</span><i /><span>build</span><i /><span>refine</span>
-          </div>
-
-          <div className="thread2-copy">
-            <p className="section-kicker">One thread, many mediums</p>
-            <h2>
-              <span>Life made me curious.</span>
-              <span>Engineering taught me to read systems.</span>
-              <span>Software let me make ideas tangible.</span>
-            </h2>
-          </div>
-
-          <div className="thread2-note">
-            <span className="thread2-note__mark">↳</span>
+        <section id="story" className="story">
+          <div className="story-art" data-float="7"><PainterlyField variant="story" /></div>
+          <div className="section-no">01</div>
+          <div className="story-copy reveal">
+            <p className="micro">Where it began</p>
+            <h2>The medium changed.<br /><em>The questions kept moving.</em></h2>
             <p>
-              Biology, signals, interfaces, automation, research, desktop tools —
-              the subjects change. The instinct does not.
+              Biology made me interested in systems before I knew that word would become important.
+              Instrumentation &amp; Control brought signals, feedback, noise and changing states into view.
+              Software widened the canvas: interfaces, APIs, automation, AI, desktop behaviour and products.
             </p>
-          </div>
-
-          <div className="thread2-word" data-depth="-0.16" aria-hidden="true">thread</div>
-        </section>
-
-        <section id="work" className="work-intro depth-scene">
-          <p className="section-kicker">Selected work</p>
-          <h2>
-            Products as responses
-            <span>to things worth noticing.</span>
-          </h2>
-          <div className="work-bloom" data-depth="0.32" aria-hidden="true" />
-        </section>
-
-        <div className="project-list">
-          {projects.map((project) => (
-            <section className="project-chapter" key={project.title}>
-              <div className="project-index">{project.index}</div>
-              <div className="project-title-ghost" aria-hidden="true">{project.title}</div>
-              <div className="project-grid">
-                <div className="project-copy">
-                  <p className="project-kicker">{project.kicker}</p>
-                  <h3>{project.title}</h3>
-                  <blockquote>{project.thought}</blockquote>
-                  <p>{project.body}</p>
-                  <div className="project-tags">
-                    {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
-                  </div>
-                  <a href={project.href} target="_blank" rel="noreferrer">
-                    Inspect the work <span>↗</span>
-                  </a>
-                </div>
-                <ProjectVisual type={project.visual} />
-              </div>
-            </section>
-          ))}
-        </div>
-
-        <section id="research" className="research-section depth-scene">
-          <div className="research-copy">
-            <p className="section-kicker">Research</p>
-            <h2>Biology and software met again in a signal.</h2>
             <p>
-              Emotion-H Net explored EEG-based emotion recognition on the DEAP dataset.
-              The pipeline reduced 600 engineered features to 164 before a lightweight
-              four-encoder Transformer learned from them.
+              What connects them is not a single technology. It is the habit of looking for relationships,
+              understanding what changes when one part moves, and turning that understanding into something useful.
             </p>
-            <div className="research-metrics">
-              <div><strong>150,244</strong><span>parameters</span></div>
-              <div><strong>86.82%</strong><span>test accuracy</span></div>
-              <div><strong>0.977</strong><span>AUROC</span></div>
-            </div>
-            <a href="https://link.springer.com/chapter/10.1007/978-3-032-15407-1_18" target="_blank" rel="noreferrer">
-              Springer LNNS · ICDSA 2025 ↗
-            </a>
           </div>
-          <div className="research-art" data-depth="0.22" aria-hidden="true">
-            <svg viewBox="0 0 900 500">
-              <path d="M0 260 C72 240 92 95 164 180 S264 398 350 258 454 96 540 258 668 410 734 242 814 160 900 224" />
-              <path className="research-art-soft" d="M0 305 C90 165 150 405 238 274 S390 164 465 300 585 375 666 245 790 164 900 300" />
-            </svg>
-            <span className="research-word research-word--signal">signal</span>
-            <span className="research-word research-word--meaning">meaning</span>
-          </div>
-        </section>
 
-        <section className="capabilities-section">
-          <p className="section-kicker">Engineering, grouped by purpose</p>
-          <div className="capabilities-grid">
-            {capabilities.map(([title, body], index) => (
-              <div className="capability" key={title}>
+          <div className="practice-grid">
+            {practices.map(([title, body], index) => (
+              <article key={title} className="practice reveal">
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{title}</strong>
+                <h3>{title}</h3>
                 <p>{body}</p>
-              </div>
+              </article>
             ))}
           </div>
         </section>
 
-        <section id="about" className="beyond-section depth-scene">
-          <Petals className="beyond-petals" />
+        <section id="work" className="work-head">
+          <div className="section-no">02</div>
+          <p className="micro reveal">Selected work</p>
+          <h2 className="reveal">Ideas become interesting<br /><em>when they have to work.</em></h2>
+          <div className="work-head-art" data-float="-7"><PainterlyField variant="work" /></div>
+        </section>
+
+        <section className="work-list" aria-label="Selected projects">
+          {work.map((item) => (
+            <article className="work-row" key={item.title}>
+              <div className="work-ghost" aria-hidden="true">{item.title}</div>
+              <div className="work-index">{item.no}</div>
+              <div className="work-copy reveal">
+                <p className="micro">{item.eyebrow}</p>
+                <h3>{item.title}</h3>
+                <blockquote>{item.thought}</blockquote>
+                <p>{item.body}</p>
+                <div className="tags">{item.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+                <a href={item.href} target="_blank" rel="noreferrer">Inspect the work <span>↗</span></a>
+              </div>
+              <MiniArt type={item.art} />
+            </article>
+          ))}
+        </section>
+
+        <section id="research" className="research">
+          <div className="research-art" data-float="9"><PainterlyField variant="research" /></div>
+          <div className="section-no">03</div>
+          <div className="research-copy reveal">
+            <p className="micro">Research · Emotion-H Net</p>
+            <h2>Biology and software<br /><em>met again in a signal.</em></h2>
+            <p>
+              EEG emotion recognition on the DEAP dataset using engineered features, recursive feature elimination
+              and a lightweight Transformer architecture. The work was published in Springer LNNS after ICDSA 2025.
+            </p>
+            <div className="metrics">
+              <div><strong>86.82%</strong><span>Test accuracy</span></div>
+              <div><strong>0.977</strong><span>AUROC</span></div>
+              <div><strong>164</strong><span>Selected features</span></div>
+            </div>
+            <a href="https://link.springer.com/chapter/10.1007/978-3-032-15407-1_18" target="_blank" rel="noreferrer">
+              Read the publication <span>↗</span>
+            </a>
+          </div>
+        </section>
+
+        <section id="beyond" className="beyond">
+          <div className="beyond-art" data-float="-6"><PainterlyField variant="beyond" /></div>
+          <Petals />
+          <div className="section-no">04</div>
+          <div className="beyond-copy reveal">
+            <p className="micro">Beyond output</p>
+            <h2>Not everything needs<br />to become a project.</h2>
+            <p>
+              Drawing and painting, music, basketball, biology, nature, architecture, culture and questions about life
+              sit beside the engineering work. Some change how I notice rhythm, movement, structure and detail.
+              Some are simply parts of living.
+            </p>
+          </div>
           <div className="beyond-words" aria-hidden="true">
-            <span data-depth="-0.15">sketch</span>
-            <span data-depth="0.24">sing</span>
-            <span data-depth="-0.08">play</span>
-            <span data-depth="0.18">observe</span>
-          </div>
-          <div className="beyond-copy">
-            <p className="section-kicker">Beyond output</p>
-            <h2>Not everything needs to become a project.</h2>
-            <p>
-              Drawing, painting, music, basketball, biology, nature, architecture,
-              culture, and questions about life all exist outside the project archive.
-              Some influence the work. Some are simply parts of living.
-            </p>
+            <span>sketch</span><span>play</span><span>listen</span><span>observe</span>
           </div>
         </section>
 
-        <section className="current-section">
-          <div>
-            <p className="section-kicker">Current chapter</p>
-            <h2>Building across frontend, backend, data, integrations, and workflow state.</h2>
-          </div>
-          <div className="current-copy">
-            <p>
-              Software Engineering Intern at Wyrd Media Labs since April 2026, working
-              across full-stack business products and the operational edge cases that
-              appear between interfaces, APIs, permissions, data, and external services.
-            </p>
-            <p>
-              B.Tech in Instrumentation and Control Engineering, NSUT, 2021–2025.
-            </p>
-          </div>
-        </section>
-
-        <section className="closing-section">
-          <p className="closing-script" aria-hidden="true">still curious</p>
+        <section className="closing">
+          <p className="script">still curious</p>
+          <p className="micro">Current chapter</p>
           <h2>The questions continue.</h2>
           <p>
-            Explore the code, the research, the practice, or simply start a conversation.
+            I&apos;m building software across product interfaces, backend behaviour, data, integrations and automation —
+            while continuing the research, practice and experiments that brought me here.
           </p>
           <div className="closing-links">
             <a href="https://github.com/Ankit6149" target="_blank" rel="noreferrer">GitHub ↗</a>
             <a href="https://www.linkedin.com/in/ankit-bhardwaj-6b9b62221/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-            <a href="https://leetcode.com/u/ankit_bh_/" target="_blank" rel="noreferrer">LeetCode ↗</a>
             <a href="https://orcid.org/0009-0005-3408-0058" target="_blank" rel="noreferrer">ORCID ↗</a>
             <a href="mailto:ankitbhardwaj80100@gmail.com">Email ↗</a>
           </div>
         </section>
       </main>
 
-      <footer className="v1-footer">
+      <footer>
         <span>© {new Date().getFullYear()} Ankit Bhardwaj</span>
-        <span>V1 · layered 2D study</span>
-        <Link href="/">Current portfolio</Link>
+        <span>V1 · painterly editorial study</span>
+        <a href="#top">Back to top ↑</a>
       </footer>
     </div>
   );

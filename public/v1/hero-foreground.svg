@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" fill="none">
+<defs>
+  <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#B7C892"/><stop offset=".55" stop-color="#6E855C"/><stop offset="1" stop-color="#315D4D"/></linearGradient>
+  <linearGradient id="petal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#F6D4C5"/><stop offset=".56" stop-color="#E88FA5"/><stop offset="1" stop-color="#C55F7A"/></linearGradient>
+  <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="-18" dy="24" stdDeviation="18" flood-color="#123A34" flood-opacity=".16"/></filter>
+  <filter id="rough" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency=".025" numOctaves="3" seed="4" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="7"/>
+  </filter>
+</defs>
+<g filter="url(#shadow)">
+  <path d="M582 598c30-178 124-296 274-380" stroke="#A98B53" stroke-width="4" stroke-linecap="round"/>
+  <path d="M644 456c-79-73-157-72-213-15 68 58 139 64 213 15Z" fill="url(#leaf)" filter="url(#rough)"/>
+  <path d="M703 375c43-110 115-150 190-123-32 92-95 135-190 123Z" fill="url(#leaf)" filter="url(#rough)"/>
+  <path d="M566 544c-24-93-84-131-150-108 19 82 69 121 150 108Z" fill="url(#leaf)" filter="url(#rough)"/>
+  <path d="M686 407c-42-67-108-66-134-16 32 53 76 58 134 16Z" fill="url(#petal)" filter="url(#rough)"/>
+  <path d="M746 339c48-55 109-38 108 12-40 40-78 35-108-12Z" fill="url(#petal)" filter="url(#rough)"/>
+  <path d="M601 480c-30-60-87-65-118-22 21 49 61 57 118 22Z" fill="url(#petal)" filter="url(#rough)"/>
+  <path d="M771 392c31-42 81-32 84 9-31 31-60 28-84-9Z" fill="#E9B3C1" filter="url(#rough)"/>
+  <circle cx="691" cy="404" r="8" fill="#F1D89B"/><circle cx="758" cy="348" r="7" fill="#F1D89B"/><circle cx="607" cy="474" r="7" fill="#F1D89B"/>
+</g>
+</svg>

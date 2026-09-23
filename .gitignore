@@ -42,3 +42,8 @@ pre_grok_*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw archives and reference exports
+*.zip
+v1_scope_reference/
+

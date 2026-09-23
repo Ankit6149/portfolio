@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
+import React from "react";
 import { personalInfo } from "../data/portfolio-content";
-import { artAssets } from "../data/art-assets";
 import FloatingPetals from "./FloatingPetals";
 import styles from "../v1-art.module.css";
 
@@ -17,111 +16,82 @@ export default function HeroScene() {
 
   return (
     <section id="hero" className={styles.heroScene} aria-label="Hero Scene">
-      {/* Layer 1: Distant Botanical Watercolor Wash Plate */}
+      {/* Background Watercolor Painting Plate */}
       <div
-        className={`${styles.heroPlateBackdrop} js-hero-bg-plate`}
-        style={{ backgroundImage: `url('${artAssets.hero.backdropPlate.src}')` }}
+        className={styles.heroPlateBackdrop}
+        style={{ backgroundImage: `url('/v1-art/hero-plate.png')` }}
         aria-hidden="true"
       />
 
-      {/* Layer 2: Foreground Botanical Branch with Delicate Occlusion Depth */}
-      <Image
-        src={artAssets.hero.foregroundBranch.src}
-        alt=""
-        width={720}
-        height={480}
-        priority
-        className={`${styles.heroForegroundBranch} js-hero-fg-branch`}
-        aria-hidden="true"
-      />
-
-      {/* Layer 3: Ambient Drifting Petals */}
+      {/* Ambient Drifting Blossom Petals */}
       <FloatingPetals />
 
-      {/* Layer 4: Main Content Composition */}
+      {/* Main Content Composition */}
       <div className={styles.heroContentGrid}>
         <div className={styles.heroLeftContent}>
-          <span className={`${styles.heroEyebrowTag} js-hero-reveal`}>
+          <span className={styles.heroEyebrowTag}>
             {personalInfo.eyebrow}
           </span>
 
-          <h1 className={`${styles.heroHeadline} js-hero-headline`}>
+          <h1 className={styles.heroHeadline}>
             {personalInfo.headlineMain} <br />
             <span className={styles.heroHeadlineAccent}>
-              {personalInfo.headlineAccent}
-              <span className={`${styles.heroThreadFlourishLine} js-hero-thread-line`} />
+              the <span className={styles.heroScriptWord}>{personalInfo.headlineAccent}</span>
+              {/* Refined Hand-Drawn Flourish Loop */}
+              <svg
+                className={styles.heroFlourishSvg}
+                viewBox="0 0 340 70"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M10,25 Q130,68 270,22 Q315,10 305,34 Q290,62 230,46 Q180,32 140,50"
+                  stroke="#C16E5A"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                />
+              </svg>
             </span>
           </h1>
 
-          <p className={`${styles.heroBio} js-hero-bio`}>{personalInfo.bio}</p>
+          <p className={styles.heroBio}>{personalInfo.bio}</p>
 
-          <div className={`${styles.heroActionsRow} js-hero-cta`}>
+          <div className={styles.heroActionsRow}>
             <a
               href="#work"
               onClick={(e) => scrollTo(e, "#work")}
-              className={styles.editorialActionLink}
+              className={styles.btnPrimaryPill}
             >
-              <span>Explore Selected Work</span>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
+              <span>{personalInfo.ctaPrimary}</span>
+              <span className={styles.btnArrow}>&rarr;</span>
             </a>
 
             <a
               href="#story"
               onClick={(e) => scrollTo(e, "#story")}
-              className={styles.editorialGhostLink}
+              className={styles.btnOutlinePill}
             >
-              <span>The Intellectual Arc &rarr;</span>
+              <span>{personalInfo.ctaSecondary}</span>
             </a>
           </div>
         </div>
 
-        {/* Right Editorial Marginalia Quote */}
-        <div className={`${styles.heroQuoteCol} js-hero-quote`}>
+        {/* Right Floating Quote Card & Vertical Metadata Pillar */}
+        <div className={styles.heroRightSide}>
           <aside className={styles.heroQuoteCard} aria-label="Guiding Observation">
             <p className={styles.quoteText}>{personalInfo.supportingQuote}</p>
             <span className={styles.quoteAuthor}>— {personalInfo.quoteAuthor}</span>
           </aside>
-        </div>
-      </div>
 
-      {/* Scene Footer & Scroll Invitation */}
-      <div className={styles.heroScrollCue}>
-        <span>Ankit Bhardwaj &middot; Software Systems &amp; Bio-Signals</span>
-        <a
-          href="#story"
-          onClick={(e) => scrollTo(e, "#story")}
-          className={styles.heroScrollIndicator}
-          aria-label="Scroll to follow the narrative thread"
-        >
-          <span>Scroll to follow the thread</span>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <polyline points="19 12 12 19 5 12"></polyline>
-          </svg>
-        </a>
+          <div className={styles.heroVerticalTagStrip} aria-hidden="true">
+            {personalInfo.verticalTags.map((tag) => (
+              <span key={tag} className={styles.heroVerticalTagItem}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

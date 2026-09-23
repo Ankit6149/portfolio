@@ -1,28 +1,33 @@
 // Portfolio Content and Verified Data for Ankit Bhardwaj
 // Voice: Grounded, observant, curious, precise, human
+// Structured precisely according to the approved V1 visual reference (01_Curiosity_in_Bloom & 02_image-gen)
 
 export const personalInfo = {
   name: "Ankit Bhardwaj",
   initials: "AB",
-  title: "Software Engineer & Researcher",
-  subtitle: "Working across software systems, bio-signal analysis, and human tools",
-  eyebrow: "OBSERVE · EXPERIMENT · BUILD",
+  title: "Builder · Researcher · Lifelong Learner",
+  roleDescriptor: "SOFTWARE ENGINEER & RESEARCHER",
+  eyebrow: "IDEAS · PEOPLE · SYSTEMS · A KINDER TOMORROW",
   headlineMain: "Curiosity is",
-  headlineAccent: "the thread",
-  bio: "I'm Ankit Bhardwaj — a software engineer and researcher. My path began with questions about living systems and biological feedback, moved through instrumentation and signal analysis, and took form in software as a medium for building tools people can actually rely on.",
+  headlineAccent: "thread",
+  bio: "I'm Ankit Bhardwaj — a builder, researcher, and lifelong learner exploring the intersection of software, systems, and human potential. I build things to understand people, solve real problems, and create a kinder, more curious future.",
   supportingQuote: "“A more curious world is a kinder one.”",
   quoteAuthor: "ANKIT BHARDWAJ",
+  verticalTags: ["SOFTWARE", "SYSTEMS", "RESEARCH", "CREATIVE", "PEOPLE"],
+  ctaPrimary: "Explore My Work",
+  ctaSecondary: "Learn More",
   footerFlourish: "Ideas flow further when we stay curious.",
+  closingScript: "Let's build a kinder, more curious tomorrow.",
   copyright: "ANKIT BHARDWAJ · EST. ∞",
+  email: "ankitbhardwaj80100@gmail.com",
 };
 
 export const primaryNavLinks = [
-  { label: "Arrival", href: "#hero" },
-  { label: "Origin", href: "#story" },
+  { label: "Home", href: "#hero" },
+  { label: "Story", href: "#story" },
   { label: "Work", href: "#work" },
   { label: "Research", href: "#research" },
   { label: "Beyond", href: "#beyond" },
-  { label: "Connect", href: "#connect" },
 ];
 
 export const deepDoorways = [
@@ -33,6 +38,95 @@ export const deepDoorways = [
   { label: "Resume", href: "/resume", description: "Curriculum Vitae and professional history" },
 ];
 
+// The 3 Exploration Pillars directly matching 01_Curiosity_in_Bloom
+export const explorationPillars = [
+  {
+    number: "01.",
+    title: "My Story",
+    tagline: "A JOURNEY OF CURIOSITY",
+    description: "From a small town to global ideas — a journey of questions, lessons, and the moments that keep me curious.",
+    linkText: "Read My Story",
+    targetId: "story",
+    image: "/v1-art/thumb_story.png",
+  },
+  {
+    number: "02.",
+    title: "Selected Work",
+    tagline: "IDEAS INTO REALITY",
+    description: "A few projects that turn questions into products, research into impact, and ideas into real-world value.",
+    linkText: "View All Work",
+    targetId: "work",
+    image: "/v1-art/thumb_work.png",
+  },
+  {
+    number: "03.",
+    title: "Research & Writing",
+    tagline: "DEEPER EXPLORATIONS",
+    description: "Notes, essays, and experiments on people, systems, and what's next.",
+    linkText: "Read My Research",
+    targetId: "research",
+    image: "/v1-art/thumb_research.png",
+  },
+];
+
+// Featured Projects directly matching 01_Curiosity_in_Bloom & 02_image-gen
+export const featuredProjects = [
+  {
+    id: "skribly",
+    name: "Skribly",
+    category: "AI STUDY COMPANION · CONTEXTUAL NOTES",
+    tag: "AI STUDY COMPANION",
+    description: "Turn your notes into understanding with AI-powered learning and contextual workspace capture.",
+    image: "/v1-art/thumb_skribly.png",
+    githubUrl: "https://github.com/Ankit6149/skribly",
+    longSummary:
+      "A contextual Windows sticky-note and workspace system. Rather than forcing you into a separate note-taking application, Skribly attaches notes, ink, and reminders directly to the active application, browser tab, or document, resurfacing them automatically when that context returns.",
+    keyPoints: [
+      "Native Win32 foreground window detection and contextual hook listeners",
+      "Tauri + Rust core managing fast background lifecycle with negligible CPU footprint",
+      "Local-first SQLite storage keeping all private notes completely on-device",
+      "Instant keyboard summons that float over active workspaces without taking window focus",
+    ],
+    techStack: ["Tauri", "Rust", "React", "Windows API", "SQLite"],
+  },
+  {
+    id: "signalflow",
+    name: "SignalFlow Studio",
+    category: "SYSTEMS FOR CREATORS · PIPELINE",
+    tag: "SYSTEMS FOR CREATORS",
+    description: "Tools for clearer thinking, better systems, and creative flow across research and publishing.",
+    image: "/v1-art/thumb_signalflow.png",
+    githubUrl: "https://github.com/Ankit6149/SignalFlow-Studio",
+    longSummary:
+      "An evidence-aware content production studio that unifies raw source material, repository references, editable drafts, and publication packaging into one transparent, human-guided workflow.",
+    keyPoints: [
+      "Structured multi-stage flow: Source Intake → Context Extraction → Human-in-the-Loop Draft → Package",
+      "Interactive canvas timeline displaying reference lineage alongside generated prose",
+      "Direct export pipelines formatting deliverables for multiple technical publishing channels",
+    ],
+    techStack: ["Next.js", "React", "Node.js", "Canvas Pipeline", "Tailwind CSS"],
+  },
+  {
+    id: "emotionhnet",
+    name: "Emotion-H Net",
+    category: "RESEARCH · HUMAN-AI · ICDSA 2025",
+    tag: "RESEARCH · HUMAN-AI",
+    description: "Exploring affective AI for more empathetic technology through hybrid Transformer architectures.",
+    image: "/v1-art/thumb_emotionhnet.png",
+    githubUrl: "https://link.springer.com/chapter/10.1007/978-3-032-15407-1_18",
+    longSummary:
+      "Hybrid Transformer Architecture for Emotion Recognition using physiological bio-signals (EEG). Published in 6th International Conference on Data Sciences and Applications (ICDSA 2025, Springer LNNS).",
+    keyPoints: [
+      "86.82% Classification Accuracy on benchmark DEAP dataset",
+      "0.977 AUROC Metric across continuous arousal and valence states",
+      "164 Spatiotemporal Features extracted across multi-channel frequency bands",
+      "~5 MB Compact Footprint with 4 dedicated parallel Transformer encoder branches",
+    ],
+    techStack: ["PyTorch", "Transformers", "EEG Signal Processing", "DEAP Benchmark"],
+  },
+];
+
+// Story Narrative Arc matching 02_image-gen
 export const storyMilestones = [
   {
     number: "01",
@@ -68,119 +162,45 @@ export const storyMilestones = [
   },
 ];
 
-export const projectChapters = [
+// Beyond Work Pursuits directly matching 02_image-gen
+export const beyondPursuits = [
   {
-    id: "skribly",
-    index: "01",
-    name: "Skribly",
-    category: "SYSTEMS & DESKTOP ARCHITECTURE",
-    statement: "Leave the note exactly where the thought occurred.",
-    summary:
-      "A contextual Windows sticky-note and workspace system. Rather than forcing you into a separate note-taking application, Skribly attaches notes, ink, and reminders directly to the active application, browser tab, or document, resurfacing them automatically when that context returns.",
-    problemContext:
-      "Context switching is the primary friction in knowledge work. When you minimize your active codebase or research document to write a quick reminder, you lose the mental frame of reference that made the note valuable.",
-    realEvidence: {
-      type: "Desktop System Architecture",
-      points: [
-        "Native Win32 foreground window detection and contextual hook listeners",
-        "Tauri + Rust core managing fast background lifecycle with negligible CPU footprint",
-        "Local-first SQLite storage keeping all private notes completely on-device",
-        "Instant keyboard summons that float over active workspaces without taking window focus",
-      ],
-    },
-    technologies: ["Tauri", "Rust", "React", "Windows API", "SQLite"],
-    status: "Active Product Build",
-    href: "https://github.com/Ankit6149/skribly",
-    linkText: "View Repository & Architecture",
+    icon: "📖",
+    title: "Reading",
+    subtitle: "Ideas across worlds",
+    description: "Books spanning systems biology, philosophy of technology, architecture, and enduring scientific literature.",
   },
   {
-    id: "signalflow",
-    index: "02",
-    name: "SignalFlow Studio",
-    category: "CONTENT & PRODUCTION PIPELINE",
-    statement: "Generation should never erase where an idea originated.",
-    summary:
-      "An evidence-aware content production studio that unites raw source material, repository references, editable drafts, and publication packaging into one transparent, human-guided workflow.",
-    problemContext:
-      "Most generative workflows produce isolated blocks of text that sever the connection to raw data, references, and origin reasoning, leaving creators unable to verify claims or preserve their editorial voice.",
-    realEvidence: {
-      type: "Workflow & Provenance Pipeline",
-      points: [
-        "Structured multi-stage flow: Source Intake → Context Extraction → Human-in-the-Loop Draft → Package",
-        "Interactive canvas timeline displaying reference lineage alongside generated prose",
-        "Direct export pipelines formatting deliverables for multiple technical publishing channels",
-      ],
-    },
-    technologies: ["Next.js", "React", "Node.js", "Canvas Pipeline", "Tailwind CSS"],
-    status: "Active Product Build",
-    href: "https://github.com/Ankit6149/SignalFlow-Studio",
-    linkText: "View Repository on GitHub",
+    icon: "⛰️",
+    title: "Nature",
+    subtitle: "A reset button",
+    description: "Walking forest trails and quiet natural landscapes to ground thinking away from glowing rectangles.",
+  },
+  {
+    icon: "📷",
+    title: "Photography",
+    subtitle: "Finding beauty",
+    description: "Capturing light, shadows, and subtle textural rhythms in everyday urban and natural environments.",
+  },
+  {
+    icon: "✍️",
+    title: "Ideas & Observations",
+    subtitle: "Everyday curiosity",
+    description: "Maintaining notebooks of small questions, system diagrams, pencil sketches, and personal essays.",
+  },
+  {
+    icon: "☕",
+    title: "Good Coffee",
+    subtitle: "Essential",
+    description: "Slow pour-over rituals in the morning that mark the transition into deep, undisturbed creative focus.",
   },
 ];
 
-export const researchStudy = {
-  id: "emotion-h-net",
-  index: "03",
-  title: "Emotion-H Net",
-  subtitle: "A Hybrid Transformer Architecture for Emotion Recognition",
-  venue: "6th International Conference on Data Sciences and Applications (ICDSA 2025)",
-  publisher: "Springer — Lecture Notes in Networks and Systems (LNNS)",
-  year: "2025",
-  coreQuestion: "What must a neural model see before noisy physiological voltages carry recognizable emotional valence and arousal?",
-  abstract:
-    "Electroencephalogram (EEG) signals provide an objective window into affective states, but raw recordings suffer from severe noise, high dimensionality, and individual variability. Emotion-H Net introduces a specialized feature selection pipeline combined with four parallel Transformer encoder branches, achieving lightweight inference without sacrificing classification accuracy.",
-  verifiedMetrics: [
-    { label: "Classification Accuracy", value: "86.82%", detail: "On benchmark DEAP dataset" },
-    { label: "AUROC Metric", value: "0.977", detail: "Area under ROC curve" },
-    { label: "Extracted Features", value: "164", detail: "Spatio-temporal spectral components" },
-    { label: "Transformer Branches", value: "4 Encoders", detail: "Dedicated valence/arousal stages" },
-  ],
-  methodology: [
-    "Preprocessing and band-pass filtering (4–45 Hz) across multi-channel EEG recordings",
-    "Extraction of differential asymmetry (DASM) and rational asymmetry (RASM) spectral features",
-    "Transformer self-attention layers capturing long-range inter-channel dependencies",
-    "Rigorous cross-validation on the standard DEAP affective computing benchmark",
-  ],
-  href: "https://link.springer.com/chapter/10.1007/978-3-032-15407-1_18",
-  linkLabel: "View Springer Publication Chapter",
-};
-
-export const humanPursuits = [
-  {
-    topic: "Drawing & Painting",
-    medium: "Botanical watercolor & observational pencil",
-    reflection: "Drawing forces quiet observation. You cannot paint a stem or leaf convincingly until you look at how it actually connects to the branch.",
-  },
-  {
-    topic: "Music & Rhythm",
-    medium: "Acoustic exploration & listening",
-    reflection: "Music is where mathematical timing meets pure human emotion: cadence, space between notes, and harmonic tension that requires no translation.",
-  },
-  {
-    topic: "Basketball",
-    medium: "Full-court play & court vision",
-    reflection: "A fast, honest game. It demands spatial awareness, reading movement two passes ahead, and the physical discipline of staying grounded under pressure.",
-  },
-  {
-    topic: "Living Systems & Nature",
-    medium: "Field botany & biological literature",
-    reflection: "Walking through forest trails or reading cellular physiology reminds me that the most resilient systems are adaptive, quiet, and deeply interconnected.",
-  },
-  {
-    topic: "Architecture & Books",
-    medium: "Physical space, typography & print",
-    reflection: "Appreciating buildings that age gracefully and books set with care. Materials that feel tactile and enduring inspire how software interfaces should feel.",
-  },
+export const socialLinks = [
+  { label: "Email", href: "mailto:ankitbhardwaj80100@gmail.com", external: true },
+  { label: "GitHub", href: "https://github.com/Ankit6149", external: true },
+  { label: "LinkedIn", href: "https://linkedin.com/in/ankit-bhardwaj-", external: true },
+  { label: "ORCID", href: "https://orcid.org/0009-0000-0938-1662", external: true },
+  { label: "LeetCode", href: "https://leetcode.com/u/Ankit_Bhardwaj-/", external: true },
+  { label: "Instagram", href: "https://instagram.com/ankitbhardwaj_26", external: true },
 ];
-
-export const contactDetails = {
-  email: "ankitbhardwaj80100@gmail.com",
-  location: "India · Open to Global Collaborations",
-  links: [
-    { label: "GitHub", href: "https://github.com/Ankit6149", handle: "@Ankit6149" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/ankit-bhardwaj-6b9b62221/", handle: "ankit-bhardwaj" },
-    { label: "ORCID", href: "https://orcid.org/0009-0005-3408-0058", handle: "0009-0005-3408-0058" },
-    { label: "LeetCode", href: "https://leetcode.com/u/ankit_bh_/", handle: "ankit_bh_" },
-    { label: "Instagram", href: "https://www.instagram.com/ankit.bh_/", handle: "@ankit.bh_" },
-  ],
-};

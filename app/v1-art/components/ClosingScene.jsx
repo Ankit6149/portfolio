@@ -1,88 +1,79 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { personalInfo, contactDetails, deepDoorways } from "../data/portfolio-content";
+import { personalInfo, socialLinks, deepDoorways } from "../data/portfolio-content";
 import styles from "../v1-art.module.css";
 
 export default function ClosingScene() {
   return (
-    <footer id="connect" className={styles.closingScene} aria-label="Closing and Contact">
-      <div className={styles.closingContainer}>
-        <p className={styles.closingFlourishText}>&ldquo;{personalInfo.footerFlourish}&rdquo;</p>
-        <p className={styles.closingProse}>
-          Always open to rigorous research conversations, thoughtful software collaborations,
-          and exploratory questions.
-        </p>
+    <footer id="connect" className={styles.closingSectionWrap} aria-label="Closing & Contact">
+      {/* Chapter 07 Title Header Row matching 02_image-gen */}
+      <div className={styles.closingHeaderGrid}>
+        <div className={styles.closingHeaderLeft}>
+          <span className={styles.chapterNumLabel}>07.</span>
+          <h2 className={styles.chapterMainHeading}>Let&apos;s Connect</h2>
+          <span className={styles.chapterSubtitleLabel}>IDEAS ARE BETTER TOGETHER</span>
+          <p className={styles.closingIntroPara}>
+            I&apos;m always open to thoughtful conversations, collaborations, and new ideas.
+          </p>
+        </div>
 
-        {/* Editorial Contact Pills */}
-        <div className={styles.closingContactRow}>
+        {/* Script Callout + Start a Conversation Button */}
+        <div className={styles.closingCalloutRight}>
+          <p className={styles.closingScriptQuote}>
+            {personalInfo.closingScript}
+          </p>
           <a
-            href={`mailto:${contactDetails.email}`}
-            className={styles.contactEditorialPill}
+            href={`mailto:${personalInfo.email}`}
+            className={styles.btnPrimaryPill}
           >
-            <span>{contactDetails.email}</span>
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="7 7 17 7 17 17"></polyline>
-            </svg>
+            <span>Start a Conversation</span>
+            <span className={styles.btnArrow}>&rarr;</span>
           </a>
+        </div>
+      </div>
 
-          {contactDetails.links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noreferrer"
-              className={styles.contactEditorialPill}
-            >
-              <span>{link.label}</span>
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
+      {/* Social Links Row */}
+      <div className={styles.closingSocialRow}>
+        {socialLinks.map((item) => (
+          <a
+            key={item.label}
+            href={item.href}
+            target={item.external ? "_blank" : undefined}
+            rel={item.external ? "noopener noreferrer" : undefined}
+            className={styles.closingSocialLink}
+          >
+            <span>{item.label}</span>
+            <span className={styles.closingSocialArrow}>&#8599;</span>
+          </a>
+        ))}
+      </div>
+
+      {/* Deeper Portals Navigation */}
+      <div className={styles.closingDoorwaysSection}>
+        <span className={styles.doorwaysHeaderLabel}>DEEPER ARCHIVES &amp; PORTALS</span>
+        <div className={styles.doorwaysRowList}>
+          {deepDoorways.map((door) => (
+            <Link key={door.label} href={door.href} className={styles.doorwayLinkCard}>
+              <h4 className={styles.doorwayTitle}>{door.label} &rarr;</h4>
+              <p className={styles.doorwayDesc}>{door.description}</p>
+            </Link>
           ))}
         </div>
+      </div>
 
-        {/* Deep Doorways into existing site routes */}
-        <div className={styles.doorwaysGrid}>
-          <div className={styles.doorwaysHead}>Deeper Portals &amp; Detailed Archives</div>
-          <div className={styles.doorwaysLinksList}>
-            {deepDoorways.map((doorway) => (
-              <Link key={doorway.label} href={doorway.href} className={styles.doorwayCard}>
-                <h4>{doorway.label} &rarr;</h4>
-                <p>{doorway.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Quiet Footer Monogram and Back to Top */}
-        <div className={styles.footerBar}>
-          <span>{personalInfo.copyright}</span>
-          <span>{contactDetails.location}</span>
-          <a href="#hero">Back to Top &uarr;</a>
-        </div>
+      {/* Bottom Editorial Masthead Bar matching 02_image-gen */}
+      <div className={styles.closingFooterMasthead}>
+        <span className={styles.mastheadBrand}>
+          ANKIT BHARDWAJ &nbsp;|&nbsp; BUILDER &middot; RESEARCHER &middot; LIFELONG LEARNER
+        </span>
+        <span className={styles.mastheadFlourish}>
+          {personalInfo.footerFlourish}
+        </span>
+        <span className={styles.mastheadEst}>
+          EST. &infin;
+        </span>
       </div>
     </footer>
   );

@@ -1,4 +1,5 @@
 import { Cormorant_Garamond, Plus_Jakarta_Sans } from "next/font/google";
+import "lenis/dist/lenis.css";
 import "./v1-art.module.css";
 
 const cormorant = Cormorant_Garamond({

@@ -1,36 +1,48 @@
 "use client";
 
+import V1Experience from "./components/V1Experience";
+import ThreadConnector from "./components/ThreadConnector";
 import Navigation from "./components/Navigation";
-import HeroSection from "./components/HeroSection";
-import StorySection from "./components/StorySection";
-import WorkSection from "./components/WorkSection";
-import BeyondSection from "./components/BeyondSection";
-import ClosingSection from "./components/ClosingSection";
+import HeroScene from "./components/HeroScene";
+import StoryNarrative from "./components/StoryNarrative";
+import WorkChapters from "./components/WorkChapters";
+import ResearchScene from "./components/ResearchScene";
+import BeyondScene from "./components/BeyondScene";
+import ClosingScene from "./components/ClosingScene";
 import styles from "./v1-art.module.css";
 
 export default function V1ArtPage() {
   return (
-    <main className={styles.root}>
-      {/* Subtle tactile paper texture and ambient light gradients */}
-      <div className={styles.paperGrainOverlay} aria-hidden="true" />
+    <V1Experience>
+      {/* Tactile Paper Grain Overlay */}
+      <div className={styles.paperGrain} aria-hidden="true" />
 
-      {/* Editorial Navigation */}
+      {/* The Continuous Living Thread Path */}
+      <ThreadConnector />
+
+      {/* Responsive & Accessible Navigation */}
       <Navigation />
 
-      {/* Hero Scene: Curiosity is the Thread */}
-      <HeroSection />
+      {/* Main Continuous Narrative Flow */}
+      <main>
+        {/* Experience 1: ARRIVAL */}
+        <HeroScene />
 
-      {/* Narrative Arc: Biology -> Signals -> Software */}
-      <StorySection />
+        {/* Experience 2: THE THREAD / ORIGIN */}
+        <StoryNarrative />
 
-      {/* Selected Work: Skribly, SignalFlow Studio, Emotion-H Net */}
-      <WorkSection />
+        {/* Experience 3: SELECTED WORK */}
+        <WorkChapters />
 
-      {/* Beyond Work: Creative, physical, and systems dimensions */}
-      <BeyondSection />
+        {/* Experience 4: RESEARCH */}
+        <ResearchScene />
 
-      {/* Closing: Quiet connection and footer */}
-      <ClosingSection />
-    </main>
+        {/* Experience 5: THE PERSON BEYOND OUTPUT */}
+        <BeyondScene />
+
+        {/* Experience 6: CLOSING & CONNECTION */}
+        <ClosingScene />
+      </main>
+    </V1Experience>
   );
 }
